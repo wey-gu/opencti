@@ -41,4 +41,5 @@ import './case/case-task/case-task';
 import './entitySetting/entitySetting';
 import './workspace/workspace';
 import './malwareAnalysis/malwareAnalysis';
+import './exploit/exploit';
 // endregion

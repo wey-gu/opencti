@@ -10778,6 +10778,7 @@ union StixObjectOrStixRelationshipOrCreator =
   | EntitySetting
   | Creator
   | Workspace
+  | Exploit
 union StixObjectOrStixRelationship =
   MarkingDefinition
   | Label
@@ -10855,6 +10856,7 @@ union StixObjectOrStixRelationship =
   | CaseTask
   | EntitySetting
   | Workspace
+  | Exploit
 union StixCoreObjectOrStixCoreRelationship =
     #### Stix Core Objects
   ## Stix Domain Objects
@@ -10927,6 +10929,7 @@ union StixCoreObjectOrStixCoreRelationship =
   | CaseTask
   | EntitySetting
   | Workspace
+  | Exploit
 
 enum StixRelationshipsOrdering {
   entity_type
