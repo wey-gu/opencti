@@ -6563,6 +6563,16 @@ export enum EventsOrdering {
   XOpenctiWorkflowId = 'x_opencti_workflow_id'
 }
 
+export type Exploit = {
+  __typename?: 'Exploit';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+};
+
+export type ExploitAddInput = {
+  id: Scalars['String'];
+};
+
 export type ExternalReference = BasicObject & StixMetaObject & StixObject & {
   __typename?: 'ExternalReference';
   connectors?: Maybe<Array<Maybe<Connector>>>;
@@ -11968,6 +11978,7 @@ export type Mutation = {
   eventFieldPatch?: Maybe<Event>;
   eventRelationAdd?: Maybe<StixRefRelationship>;
   eventRelationDelete?: Maybe<Event>;
+  exploitAdd?: Maybe<Exploit>;
   externalReferenceAdd?: Maybe<ExternalReference>;
   externalReferenceEdit?: Maybe<ExternalReferenceEditMutations>;
   feedAdd?: Maybe<Feed>;
@@ -12547,6 +12558,11 @@ export type MutationEventRelationDeleteArgs = {
   id: Scalars['ID'];
   relationship_type: Scalars['String'];
   toId: Scalars['StixRef'];
+};
+
+
+export type MutationExploitAddArgs = {
+  input: ExploitAddInput;
 };
 
 
@@ -16468,6 +16484,7 @@ export type Query = {
   entitySettings?: Maybe<EntitySettingConnection>;
   event?: Maybe<Event>;
   events?: Maybe<EventConnection>;
+  exploit?: Maybe<Exploit>;
   externalReference?: Maybe<ExternalReference>;
   externalReferences?: Maybe<ExternalReferenceConnection>;
   feed?: Maybe<Feed>;
@@ -17034,6 +17051,11 @@ export type QueryEventsArgs = {
   orderBy?: InputMaybe<EventsOrdering>;
   orderMode?: InputMaybe<OrderingMode>;
   search?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryExploitArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -25942,6 +25964,8 @@ export type ResolversTypes = ResolversObject<{
   EventsFilter: EventsFilter;
   EventsFiltering: EventsFiltering;
   EventsOrdering: EventsOrdering;
+  Exploit: ResolverTypeWrapper<Exploit>;
+  ExploitAddInput: ExploitAddInput;
   ExternalReference: ResolverTypeWrapper<Omit<ExternalReference, 'exportFiles' | 'importFiles' | 'pendingFiles'> & { exportFiles?: Maybe<ResolversTypes['FileConnection']>, importFiles?: Maybe<ResolversTypes['FileConnection']>, pendingFiles?: Maybe<ResolversTypes['FileConnection']> }>;
   ExternalReferenceAddInput: ExternalReferenceAddInput;
   ExternalReferenceConnection: ResolverTypeWrapper<Omit<ExternalReferenceConnection, 'edges'> & { edges: Array<ResolversTypes['ExternalReferenceEdge']> }>;
@@ -26656,6 +26680,8 @@ export type ResolversParentTypes = ResolversObject<{
   EventConnection: Omit<EventConnection, 'edges'> & { edges?: Maybe<Array<Maybe<ResolversParentTypes['EventEdge']>>> };
   EventEdge: Omit<EventEdge, 'node'> & { node: ResolversParentTypes['Event'] };
   EventsFiltering: EventsFiltering;
+  Exploit: Exploit;
+  ExploitAddInput: ExploitAddInput;
   ExternalReference: Omit<ExternalReference, 'exportFiles' | 'importFiles' | 'pendingFiles'> & { exportFiles?: Maybe<ResolversParentTypes['FileConnection']>, importFiles?: Maybe<ResolversParentTypes['FileConnection']>, pendingFiles?: Maybe<ResolversParentTypes['FileConnection']> };
   ExternalReferenceAddInput: ExternalReferenceAddInput;
   ExternalReferenceConnection: Omit<ExternalReferenceConnection, 'edges'> & { edges: Array<ResolversParentTypes['ExternalReferenceEdge']> };
@@ -28971,6 +28997,12 @@ export type EventEdgeResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type ExploitResolvers<ContextType = any, ParentType extends ResolversParentTypes['Exploit'] = ResolversParentTypes['Exploit']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export type ExternalReferenceResolvers<ContextType = any, ParentType extends ResolversParentTypes['ExternalReference'] = ResolversParentTypes['ExternalReference']> = ResolversObject<{
   connectors?: Resolver<Maybe<Array<Maybe<ResolversTypes['Connector']>>>, ParentType, ContextType, Partial<ExternalReferenceConnectorsArgs>>;
   created?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
@@ -30654,6 +30686,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   eventFieldPatch?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<MutationEventFieldPatchArgs, 'id' | 'input'>>;
   eventRelationAdd?: Resolver<Maybe<ResolversTypes['StixRefRelationship']>, ParentType, ContextType, RequireFields<MutationEventRelationAddArgs, 'id' | 'input'>>;
   eventRelationDelete?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<MutationEventRelationDeleteArgs, 'id' | 'relationship_type' | 'toId'>>;
+  exploitAdd?: Resolver<Maybe<ResolversTypes['Exploit']>, ParentType, ContextType, RequireFields<MutationExploitAddArgs, 'input'>>;
   externalReferenceAdd?: Resolver<Maybe<ResolversTypes['ExternalReference']>, ParentType, ContextType, Partial<MutationExternalReferenceAddArgs>>;
   externalReferenceEdit?: Resolver<Maybe<ResolversTypes['ExternalReferenceEditMutations']>, ParentType, ContextType, RequireFields<MutationExternalReferenceEditArgs, 'id'>>;
   feedAdd?: Resolver<Maybe<ResolversTypes['Feed']>, ParentType, ContextType, RequireFields<MutationFeedAddArgs, 'input'>>;
@@ -31655,6 +31688,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   entitySettings?: Resolver<Maybe<ResolversTypes['EntitySettingConnection']>, ParentType, ContextType, Partial<QueryEntitySettingsArgs>>;
   event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<QueryEventArgs, 'id'>>;
   events?: Resolver<Maybe<ResolversTypes['EventConnection']>, ParentType, ContextType, Partial<QueryEventsArgs>>;
+  exploit?: Resolver<Maybe<ResolversTypes['Exploit']>, ParentType, ContextType, RequireFields<QueryExploitArgs, 'id'>>;
   externalReference?: Resolver<Maybe<ResolversTypes['ExternalReference']>, ParentType, ContextType, RequireFields<QueryExternalReferenceArgs, 'id'>>;
   externalReferences?: Resolver<Maybe<ResolversTypes['ExternalReferenceConnection']>, ParentType, ContextType, Partial<QueryExternalReferencesArgs>>;
   feed?: Resolver<Maybe<ResolversTypes['Feed']>, ParentType, ContextType, RequireFields<QueryFeedArgs, 'id'>>;
@@ -34193,6 +34227,7 @@ export type Resolvers<ContextType = any> = ResolversObject<{
   Event?: EventResolvers<ContextType>;
   EventConnection?: EventConnectionResolvers<ContextType>;
   EventEdge?: EventEdgeResolvers<ContextType>;
+  Exploit?: ExploitResolvers<ContextType>;
   ExternalReference?: ExternalReferenceResolvers<ContextType>;
   ExternalReferenceConnection?: ExternalReferenceConnectionResolvers<ContextType>;
   ExternalReferenceEdge?: ExternalReferenceEdgeResolvers<ContextType>;
