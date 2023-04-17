@@ -6566,6 +6566,7 @@ export enum EventsOrdering {
 
 export type Exploit = BasicObject & StixCoreObject & StixDomainObject & StixObject & {
   __typename?: 'Exploit';
+  attackPattern?: Maybe<AttackPatternConnection>;
   cases?: Maybe<CaseConnection>;
   confidence?: Maybe<Scalars['Int']>;
   connectors?: Maybe<Array<Maybe<Connector>>>;
@@ -29182,6 +29183,7 @@ export type EventEdgeResolvers<ContextType = any, ParentType extends ResolversPa
 }>;
 
 export type ExploitResolvers<ContextType = any, ParentType extends ResolversParentTypes['Exploit'] = ResolversParentTypes['Exploit']> = ResolversObject<{
+  attackPattern?: Resolver<Maybe<ResolversTypes['AttackPatternConnection']>, ParentType, ContextType>;
   cases?: Resolver<Maybe<ResolversTypes['CaseConnection']>, ParentType, ContextType, Partial<ExploitCasesArgs>>;
   confidence?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   connectors?: Resolver<Maybe<Array<Maybe<ResolversTypes['Connector']>>>, ParentType, ContextType, Partial<ExploitConnectorsArgs>>;
