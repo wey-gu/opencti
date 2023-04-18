@@ -235,6 +235,9 @@ export const stixCoreRelationshipsMapping: RelationshipMappings = {
   [`${ENTITY_TYPE_CAMPAIGN}_${ENTITY_TYPE_VULNERABILITY}`]: [
     { name: RELATION_TARGETS, type: REL_BUILT_IN }
   ],
+  [`${ENTITY_TYPE_CAMPAIGN}_${ENTITY_TYPE_EXPLOIT}`]: [
+    { name: RELATION_USES, type: REL_EXTENDED }
+  ],
   // endregion
   // region COURSE_OF_ACTION
   [`${ENTITY_TYPE_COURSE_OF_ACTION}_${ENTITY_TYPE_ATTACK_PATTERN}`]: [
