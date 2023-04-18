@@ -88,6 +88,7 @@ import { isInternalRelationship } from '../schema/internalRelationship';
 import { schemaRelationsRefDefinition } from '../schema/schema-relationsRef';
 import { ENTITY_TYPE_CHANNEL } from '../modules/channel/channel-types';
 import { FunctionalError, UnknownError, UnsupportedError } from '../config/errors';
+import { ENTITY_TYPE_EXPLOIT } from '../modules/exploit/exploit-types';
 
 const MAX_TRANSIENT_STIX_IDS = 200;
 export const STIX_SPEC_VERSION = '2.1';
@@ -775,6 +776,9 @@ export const stixCoreRelationshipsMapping: RelationshipMappings = {
     { name: RELATION_TARGETS, type: REL_BUILT_IN }
   ],
   [`${ENTITY_TYPE_THREAT_ACTOR}_${ENTITY_HASHED_OBSERVABLE_STIX_FILE}`]: [
+    { name: RELATION_USES, type: REL_EXTENDED }
+  ],
+  [`${ENTITY_TYPE_THREAT_ACTOR}_${ENTITY_TYPE_EXPLOIT}`]: [
     { name: RELATION_USES, type: REL_EXTENDED }
   ],
   // endregion

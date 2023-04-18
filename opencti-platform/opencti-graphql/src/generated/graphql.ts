@@ -6605,6 +6605,7 @@ export type Exploit = BasicObject & StixCoreObject & StixDomainObject & StixObje
   stixCoreObjectsDistribution?: Maybe<Array<Maybe<Distribution>>>;
   stixCoreRelationships?: Maybe<StixCoreRelationshipConnection>;
   stixCoreRelationshipsDistribution?: Maybe<Array<Maybe<Distribution>>>;
+  threatActor?: Maybe<ThreatActorConnection>;
   toStix?: Maybe<Scalars['String']>;
   updated_at: Scalars['DateTime'];
   vulnerability?: Maybe<VulnerabilityConnection>;
@@ -29229,6 +29230,7 @@ export type ExploitResolvers<ContextType = any, ParentType extends ResolversPare
   stixCoreObjectsDistribution?: Resolver<Maybe<Array<Maybe<ResolversTypes['Distribution']>>>, ParentType, ContextType, RequireFields<ExploitStixCoreObjectsDistributionArgs, 'field' | 'operation'>>;
   stixCoreRelationships?: Resolver<Maybe<ResolversTypes['StixCoreRelationshipConnection']>, ParentType, ContextType, Partial<ExploitStixCoreRelationshipsArgs>>;
   stixCoreRelationshipsDistribution?: Resolver<Maybe<Array<Maybe<ResolversTypes['Distribution']>>>, ParentType, ContextType, RequireFields<ExploitStixCoreRelationshipsDistributionArgs, 'field' | 'operation'>>;
+  threatActor?: Resolver<Maybe<ResolversTypes['ThreatActorConnection']>, ParentType, ContextType>;
   toStix?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updated_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   vulnerability?: Resolver<Maybe<ResolversTypes['VulnerabilityConnection']>, ParentType, ContextType>;
