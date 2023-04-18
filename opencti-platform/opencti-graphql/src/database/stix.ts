@@ -581,6 +581,9 @@ export const stixCoreRelationshipsMapping: RelationshipMappings = {
   [`${ENTITY_TYPE_INTRUSION_SET}_${ENTITY_HASHED_OBSERVABLE_STIX_FILE}`]: [
     { name: RELATION_USES, type: REL_EXTENDED }
   ],
+  [`${ENTITY_TYPE_INTRUSION_SET}_${ENTITY_TYPE_EXPLOIT}`]: [
+    { name: RELATION_USES, type: REL_EXTENDED }
+  ],
   // endregion
   // region POSITION
   [`${ENTITY_TYPE_LOCATION_POSITION}_${ENTITY_TYPE_LOCATION_CITY}`]: [

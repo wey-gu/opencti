@@ -6582,6 +6582,7 @@ export type Exploit = BasicObject & StixCoreObject & StixDomainObject & StixObje
   groupings?: Maybe<GroupingConnection>;
   id: Scalars['ID'];
   importFiles?: Maybe<FileConnection>;
+  intrusionSet?: Maybe<IntrusionSetConnection>;
   is_inferred: Scalars['Boolean'];
   jobs?: Maybe<Array<Maybe<Work>>>;
   lang?: Maybe<Scalars['String']>;
@@ -29207,6 +29208,7 @@ export type ExploitResolvers<ContextType = any, ParentType extends ResolversPare
   groupings?: Resolver<Maybe<ResolversTypes['GroupingConnection']>, ParentType, ContextType, Partial<ExploitGroupingsArgs>>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   importFiles?: Resolver<Maybe<ResolversTypes['FileConnection']>, ParentType, ContextType, Partial<ExploitImportFilesArgs>>;
+  intrusionSet?: Resolver<Maybe<ResolversTypes['IntrusionSetConnection']>, ParentType, ContextType>;
   is_inferred?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   jobs?: Resolver<Maybe<Array<Maybe<ResolversTypes['Work']>>>, ParentType, ContextType, Partial<ExploitJobsArgs>>;
   lang?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

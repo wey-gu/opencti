@@ -10781,6 +10781,7 @@ type Exploit implements BasicObject & StixCoreObject & StixDomainObject & StixOb
   attackPattern: AttackPatternConnection
   vulnerability: VulnerabilityConnection
   threatActor: ThreatActorConnection
+  intrusionSet: IntrusionSetConnection
   creators: [Creator!]
   toStix: String
   importFiles(first: Int): FileConnection
