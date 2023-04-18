@@ -706,6 +706,9 @@ export const stixCoreRelationshipsMapping: RelationshipMappings = {
   [`${ENTITY_TYPE_MALWARE}_${ENTITY_URL}`]: [
     { name: RELATION_COMMUNICATES_WITH, type: REL_BUILT_IN }
   ],
+  [`${ENTITY_TYPE_MALWARE}_${ENTITY_TYPE_EXPLOIT}`]: [
+    { name: RELATION_USES, type: REL_EXTENDED }
+  ],
   // endregion
   // region THREAT_ACTOR
   [`${ENTITY_TYPE_THREAT_ACTOR}_${ENTITY_TYPE_ATTACK_PATTERN}`]: [

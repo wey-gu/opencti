@@ -6586,6 +6586,7 @@ export type Exploit = BasicObject & StixCoreObject & StixDomainObject & StixObje
   is_inferred: Scalars['Boolean'];
   jobs?: Maybe<Array<Maybe<Work>>>;
   lang?: Maybe<Scalars['String']>;
+  malware?: Maybe<MalwareConnection>;
   modified?: Maybe<Scalars['DateTime']>;
   name: Scalars['String'];
   notes?: Maybe<NoteConnection>;
@@ -29212,6 +29213,7 @@ export type ExploitResolvers<ContextType = any, ParentType extends ResolversPare
   is_inferred?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   jobs?: Resolver<Maybe<Array<Maybe<ResolversTypes['Work']>>>, ParentType, ContextType, Partial<ExploitJobsArgs>>;
   lang?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  malware?: Resolver<Maybe<ResolversTypes['MalwareConnection']>, ParentType, ContextType>;
   modified?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   notes?: Resolver<Maybe<ResolversTypes['NoteConnection']>, ParentType, ContextType, Partial<ExploitNotesArgs>>;
