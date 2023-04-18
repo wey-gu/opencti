@@ -8524,6 +8524,8 @@ type Mutation {
   exploitAdd(input: ExploitAddInput!): Exploit
   exploitDelete(id: ID!): ID
   exploitFieldPatch(id: ID!, input: [EditInput]!, commitMessage: String, references: [String]): Exploit
+  exploitContextPatch(id: ID!, input: EditContext!): Exploit
+  exploitContextClean(id: ID!): Exploit
 }
 
 type Channel implements BasicObject & StixObject & StixCoreObject & StixDomainObject {
