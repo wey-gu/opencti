@@ -6567,6 +6567,7 @@ export enum EventsOrdering {
 export type Exploit = BasicObject & StixCoreObject & StixDomainObject & StixObject & {
   __typename?: 'Exploit';
   attackPattern?: Maybe<AttackPatternConnection>;
+  campaign?: Maybe<CampaignConnection>;
   cases?: Maybe<CaseConnection>;
   confidence?: Maybe<Scalars['Int']>;
   connectors?: Maybe<Array<Maybe<Connector>>>;
@@ -12169,6 +12170,7 @@ export type Mutation = {
   eventRelationDelete?: Maybe<Event>;
   exploitAdd?: Maybe<Exploit>;
   exploitDelete?: Maybe<Scalars['ID']>;
+  exploitFieldPatch?: Maybe<Exploit>;
   externalReferenceAdd?: Maybe<ExternalReference>;
   externalReferenceEdit?: Maybe<ExternalReferenceEditMutations>;
   feedAdd?: Maybe<Feed>;
@@ -12758,6 +12760,14 @@ export type MutationExploitAddArgs = {
 
 export type MutationExploitDeleteArgs = {
   id: Scalars['ID'];
+};
+
+
+export type MutationExploitFieldPatchArgs = {
+  commitMessage?: InputMaybe<Scalars['String']>;
+  id: Scalars['ID'];
+  input: Array<InputMaybe<EditInput>>;
+  references?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 
@@ -29194,6 +29204,7 @@ export type EventEdgeResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type ExploitResolvers<ContextType = any, ParentType extends ResolversParentTypes['Exploit'] = ResolversParentTypes['Exploit']> = ResolversObject<{
   attackPattern?: Resolver<Maybe<ResolversTypes['AttackPatternConnection']>, ParentType, ContextType>;
+  campaign?: Resolver<Maybe<ResolversTypes['CampaignConnection']>, ParentType, ContextType>;
   cases?: Resolver<Maybe<ResolversTypes['CaseConnection']>, ParentType, ContextType, Partial<ExploitCasesArgs>>;
   confidence?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   connectors?: Resolver<Maybe<Array<Maybe<ResolversTypes['Connector']>>>, ParentType, ContextType, Partial<ExploitConnectorsArgs>>;
@@ -30930,6 +30941,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   eventRelationDelete?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<MutationEventRelationDeleteArgs, 'id' | 'relationship_type' | 'toId'>>;
   exploitAdd?: Resolver<Maybe<ResolversTypes['Exploit']>, ParentType, ContextType, RequireFields<MutationExploitAddArgs, 'input'>>;
   exploitDelete?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType, RequireFields<MutationExploitDeleteArgs, 'id'>>;
+  exploitFieldPatch?: Resolver<Maybe<ResolversTypes['Exploit']>, ParentType, ContextType, RequireFields<MutationExploitFieldPatchArgs, 'id' | 'input'>>;
   externalReferenceAdd?: Resolver<Maybe<ResolversTypes['ExternalReference']>, ParentType, ContextType, Partial<MutationExternalReferenceAddArgs>>;
   externalReferenceEdit?: Resolver<Maybe<ResolversTypes['ExternalReferenceEditMutations']>, ParentType, ContextType, RequireFields<MutationExternalReferenceEditArgs, 'id'>>;
   feedAdd?: Resolver<Maybe<ResolversTypes['Feed']>, ParentType, ContextType, RequireFields<MutationFeedAddArgs, 'input'>>;

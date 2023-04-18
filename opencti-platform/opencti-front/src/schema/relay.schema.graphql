@@ -8523,6 +8523,7 @@ type Mutation {
   malwareAnalysisRelationDelete(id: ID!, toId: StixRef!, relationship_type: String!): MalwareAnalysis
   exploitAdd(input: ExploitAddInput!): Exploit
   exploitDelete(id: ID!): ID
+  exploitFieldPatch(id: ID!, input: [EditInput]!, commitMessage: String, references: [String]): Exploit
 }
 
 type Channel implements BasicObject & StixObject & StixCoreObject & StixDomainObject {
@@ -10782,6 +10783,7 @@ type Exploit implements BasicObject & StixCoreObject & StixDomainObject & StixOb
   vulnerability: VulnerabilityConnection
   threatActor: ThreatActorConnection
   intrusionSet: IntrusionSetConnection
+  campaign: CampaignConnection
   malware: MalwareConnection
   creators: [Creator!]
   toStix: String
