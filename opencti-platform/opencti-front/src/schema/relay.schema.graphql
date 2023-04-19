@@ -7832,6 +7832,7 @@ type Query {
   malwareAnalysis(id: String!): MalwareAnalysis
   malwareAnalyses(first: Int, after: ID, orderBy: MalwareAnalysesOrdering, orderMode: OrderingMode, filters: [MalwareAnalysesFiltering!], filterMode: FilterMode, search: String): MalwareAnalysisConnection
   exploit(id: String!): Exploit
+  exploits(first: Int, after: ID, orderBy: ExploitsOrdering, orderMode: OrderingMode, filters: [ExploitsFiltering!], filterMode: FilterMode, search: String): ExploitConnection
 }
 
 type Subscription {
@@ -8527,6 +8528,7 @@ type Mutation {
   exploitContextPatch(id: ID!, input: EditContext!): Exploit
   exploitContextClean(id: ID!): Exploit
   exploitRelationAdd(id: ID!, input: StixRefRelationshipAddInput!): StixRefRelationship
+  exploitRelationDelete(id: ID!, toId: StixRef!, relationship_type: String!): Exploit
 }
 
 type Channel implements BasicObject & StixObject & StixCoreObject & StixDomainObject {
@@ -10798,6 +10800,47 @@ type Exploit implements BasicObject & StixCoreObject & StixDomainObject & StixOb
   jobs(first: Int): [Work]
   status: Status
   workflowEnabled: Boolean
+}
+
+enum ExploitsOrdering {
+  name
+  description
+  published_date
+  created_at
+  updated_at
+  confidence
+}
+
+enum ExploitsFilter {
+  name
+  description
+  published_date
+  created
+  modified
+  created_at
+  updated_at
+  createdBy
+  markedBy
+  labelledBy
+  revoked
+  confidence
+}
+
+input ExploitsFiltering {
+  key: [ExploitsFilter!]!
+  values: [String]
+  operator: String
+  filterMode: FilterMode
+}
+
+type ExploitConnection {
+  pageInfo: PageInfo!
+  edges: [ExploitEdge]
+}
+
+type ExploitEdge {
+  cursor: String!
+  node: Exploit!
 }
 
 input ExploitAddInput {
