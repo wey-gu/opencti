@@ -8526,6 +8526,7 @@ type Mutation {
   exploitFieldPatch(id: ID!, input: [EditInput]!, commitMessage: String, references: [String]): Exploit
   exploitContextPatch(id: ID!, input: EditContext!): Exploit
   exploitContextClean(id: ID!): Exploit
+  exploitRelationAdd(id: ID!, input: StixRefRelationshipAddInput!): StixRefRelationship
 }
 
 type Channel implements BasicObject & StixObject & StixCoreObject & StixDomainObject {

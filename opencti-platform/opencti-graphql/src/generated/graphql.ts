@@ -12173,6 +12173,7 @@ export type Mutation = {
   exploitContextPatch?: Maybe<Exploit>;
   exploitDelete?: Maybe<Scalars['ID']>;
   exploitFieldPatch?: Maybe<Exploit>;
+  exploitRelationAdd?: Maybe<StixRefRelationship>;
   externalReferenceAdd?: Maybe<ExternalReference>;
   externalReferenceEdit?: Maybe<ExternalReferenceEditMutations>;
   feedAdd?: Maybe<Feed>;
@@ -12781,6 +12782,12 @@ export type MutationExploitFieldPatchArgs = {
   id: Scalars['ID'];
   input: Array<InputMaybe<EditInput>>;
   references?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type MutationExploitRelationAddArgs = {
+  id: Scalars['ID'];
+  input: StixRefRelationshipAddInput;
 };
 
 
@@ -30957,6 +30964,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   exploitContextPatch?: Resolver<Maybe<ResolversTypes['Exploit']>, ParentType, ContextType, RequireFields<MutationExploitContextPatchArgs, 'id' | 'input'>>;
   exploitDelete?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType, RequireFields<MutationExploitDeleteArgs, 'id'>>;
   exploitFieldPatch?: Resolver<Maybe<ResolversTypes['Exploit']>, ParentType, ContextType, RequireFields<MutationExploitFieldPatchArgs, 'id' | 'input'>>;
+  exploitRelationAdd?: Resolver<Maybe<ResolversTypes['StixRefRelationship']>, ParentType, ContextType, RequireFields<MutationExploitRelationAddArgs, 'id' | 'input'>>;
   externalReferenceAdd?: Resolver<Maybe<ResolversTypes['ExternalReference']>, ParentType, ContextType, Partial<MutationExternalReferenceAddArgs>>;
   externalReferenceEdit?: Resolver<Maybe<ResolversTypes['ExternalReferenceEditMutations']>, ParentType, ContextType, RequireFields<MutationExternalReferenceEditArgs, 'id'>>;
   feedAdd?: Resolver<Maybe<ResolversTypes['Feed']>, ParentType, ContextType, RequireFields<MutationFeedAddArgs, 'input'>>;
