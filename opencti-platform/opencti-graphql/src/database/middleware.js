@@ -3297,6 +3297,7 @@ export const internalDeleteElementById = async (context, user, id, opts = {}) =>
   // - TRANSACTION END
   return { element, event };
 };
+
 const deleteElements = async (context, user, elements, opts = {}) => {
   for (let index = 0; index < elements.length; index += 1) {
     const element = elements[index];
