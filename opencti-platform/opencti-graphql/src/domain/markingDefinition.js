@@ -18,7 +18,7 @@ export const findAll = (context, user, args) => {
   return listEntities(context, user, [ENTITY_TYPE_MARKING_DEFINITION], { ...args, useWildcardPrefix: true });
 };
 
-export const addMarkingDefinition = async (context, user, markingDefinition) => {
+export async function addMarkingDefinitionWithoutBusNotification(markingDefinition, context, user) {
   const markingColor = markingDefinition.x_opencti_color ? markingDefinition.x_opencti_color : '#ffffff';
   const markingToCreate = R.assoc('x_opencti_color', markingColor, markingDefinition);
   const created = await createEntity(context, user, markingToCreate, ENTITY_TYPE_MARKING_DEFINITION);
@@ -35,6 +35,12 @@ export const addMarkingDefinition = async (context, user, markingDefinition) => 
       })
     );
   }
+  return created;
+}
+
+export const addMarkingDefinition = async (context, user, markingDefinition) => {
+  const created = await addMarkingDefinitionWithoutBusNotification(markingDefinition, context, user);
+
   return notify(BUS_TOPICS[ENTITY_TYPE_MARKING_DEFINITION].ADDED_TOPIC, created, user);
 };
 
