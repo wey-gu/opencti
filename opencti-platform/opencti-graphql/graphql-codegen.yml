@@ -33,8 +33,8 @@ generates:
         Trigger: ../modules/notification/notification-types#BasicStoreEntityTrigger
         EntitySetting: ../modules/entitySetting/entitySetting-types#BasicStoreEntityEntitySetting
         Workspace: ../modules/workspace/workspace-types#BasicStoreEntityWorkspace
+        Exploit: ../modules/exploit/exploit-types#BasicStoreEntityExploit
         MalwareAnalysis: ../modules/malwareAnalysis/malwareAnalysis-types#BasicStoreEntityMalwareAnalysis
-        Exploit: ../modules/exploit/exploit-types#BasicStoreExploit
   ./graphql.schema.json:
     plugins:
       - "introspection"
