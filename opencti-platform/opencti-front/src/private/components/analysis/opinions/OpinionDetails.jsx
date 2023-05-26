@@ -6,9 +6,10 @@ import withStyles from '@mui/styles/withStyles';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+
 import remarkParse from 'remark-parse';
 import inject18n from '../../../../components/i18n';
+import { remarkGfm } from "../../../../components/ExpandableMarkdown";
 
 const styles = () => ({
   paper: {
@@ -35,6 +36,8 @@ class OpinionDetailsComponent extends Component {
           <Markdown
             remarkPlugins={[remarkGfm, remarkParse]}
             parserOptions={{ commonmark: true }}
+            disallowedElements={['a']} // disable link redirection
+            unwrapDisallowed={true}
             className="markdown"
           >
             {opinion.opinion}
@@ -49,6 +52,8 @@ class OpinionDetailsComponent extends Component {
           <Markdown
             remarkPlugins={[remarkGfm, remarkParse]}
             parserOptions={{ commonmark: true }}
+            disallowedElements={['a']} // disable link redirection
+            unwrapDisallowed={true}
             className="markdown"
           >
             {opinion.explanation}

@@ -17,7 +17,7 @@ import {
   LocalPlayOutlined,
   Flag,
 } from '@mui/icons-material';
-import remarkGfm from 'remark-gfm';
+
 import remarkParse from 'remark-parse';
 import Tooltip from '@mui/material/Tooltip';
 import { AutoFix } from 'mdi-material-ui';
@@ -27,6 +27,7 @@ import StixCoreRelationshipPopover from '../stix_core_relationships/StixCoreRela
 import ItemYears from '../../../../components/ItemYears';
 import ItemIcon from '../../../../components/ItemIcon';
 import ItemMarkings from '../../../../components/ItemMarkings';
+import { remarkGfm } from "../../../../components/ExpandableMarkdown";
 
 const styles = (theme) => ({
   container: {
@@ -339,6 +340,8 @@ class StixDomainObjectVictimologyRegionsList extends Component {
                               <Markdown
                                 remarkPlugins={[remarkGfm, remarkParse]}
                                 parserOptions={{ commonmark: true }}
+                                disallowedElements={['a']} // disable link redirection
+                                unwrapDisallowed={true}
                                 className="markdown"
                               >
                                 {stixCoreRelationship.description}
@@ -469,6 +472,8 @@ class StixDomainObjectVictimologyRegionsList extends Component {
                                             remarkParse,
                                           ]}
                                           parserOptions={{ commonmark: true }}
+                                          disallowedElements={['a']} // disable link redirection
+                                          unwrapDisallowed={true}
                                           className="markdown"
                                         >
                                           {stixCoreRelationship.description}
@@ -581,6 +586,8 @@ class StixDomainObjectVictimologyRegionsList extends Component {
                                                   parserOptions={{
                                                     commonmark: true,
                                                   }}
+                                                  disallowedElements={['a']} // disable link redirection
+                                                  unwrapDisallowed={true}
                                                   className="markdown"
                                                 >
                                                   {

@@ -4,10 +4,11 @@ import { useField } from 'formik';
 import Markdown from 'react-markdown';
 import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
-import remarkGfm from 'remark-gfm';
+
 import remarkParse from 'remark-parse';
 import * as R from 'ramda';
 import inject18n from './i18n';
+import { remarkGfm } from './ExpandableMarkdown';
 
 const MarkDownField = (props) => {
   const {
@@ -59,6 +60,8 @@ const MarkDownField = (props) => {
             <Markdown
               remarkPlugins={[remarkGfm, remarkParse]}
               parserOptions={{ commonmark: true }}
+              disallowedElements={['a']} // disable link redirection
+              unwrapDisallowed={true}
             >
               {markdown}
             </Markdown>,

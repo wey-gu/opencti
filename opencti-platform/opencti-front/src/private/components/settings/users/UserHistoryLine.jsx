@@ -31,9 +31,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
-import remarkGfm from 'remark-gfm';
+
 import remarkParse from 'remark-parse';
 import inject18n from '../../../../components/i18n';
+import { remarkGfm } from "../../../../components/ExpandableMarkdown";
 
 const styles = (theme) => ({
   container: {
@@ -284,6 +285,8 @@ class UserHistoryLineComponent extends Component {
                 <Markdown
                   remarkPlugins={[remarkGfm, remarkParse]}
                   parserOptions={{ commonmark: true }}
+                  disallowedElements={['a']} // disable link redirection
+                  unwrapDisallowed={true}
                   className="markdown"
                 >
                   {`\`${node.user.name}\` ${node.context_data?.message}`}
@@ -294,6 +297,8 @@ class UserHistoryLineComponent extends Component {
                 <Markdown
                   remarkPlugins={[remarkGfm, remarkParse]}
                   parserOptions={{ commonmark: true }}
+                  disallowedElements={['a']} // disable link redirection
+                  unwrapDisallowed={true}
                   className="markdown"
                 >
                   {`\`${node.user.name}\` ${node.context_data?.message}`}
@@ -314,6 +319,8 @@ class UserHistoryLineComponent extends Component {
             <Markdown
               remarkPlugins={[remarkGfm, remarkParse]}
               parserOptions={{ commonmark: true }}
+              disallowedElements={['a']} // disable link redirection
+              unwrapDisallowed={true}
               className="markdown"
             >
               {node.context_data?.commit}

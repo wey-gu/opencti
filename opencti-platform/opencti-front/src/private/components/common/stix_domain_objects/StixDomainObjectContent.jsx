@@ -16,7 +16,7 @@ import { pdfjs, Document, Page } from 'react-pdf';
 import 'react-pdf/dist/esm/Page/TextLayer.css';
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+
 import remarkParse from 'remark-parse';
 import ReactMde from 'react-mde';
 import { Subject, timer } from 'rxjs';
@@ -37,6 +37,7 @@ import {
 import Loader from '../../../../components/Loader';
 import StixDomainObjectContentBar from './StixDomainObjectContentBar';
 import { isEmptyField } from '../../../../utils/utils';
+import { remarkGfm } from '../../../../components/ExpandableMarkdown';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `${APP_BASE_PATH}/static/ext/pdf.worker.js`;
 
@@ -520,6 +521,8 @@ class StixDomainObjectContentComponent extends Component {
                       <Markdown
                         remarkPlugins={[remarkGfm, remarkParse]}
                         parserOptions={{ commonmark: true }}
+                        disallowedElements={['a']} // disable link redirection
+                        unwrapDisallowed={true}
                       >
                         {markdown}
                       </Markdown>,

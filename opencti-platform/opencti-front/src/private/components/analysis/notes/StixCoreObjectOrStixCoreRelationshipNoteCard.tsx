@@ -14,7 +14,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import remarkGfm from 'remark-gfm';
+
 import remarkParse from 'remark-parse';
 import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/styles';
@@ -34,6 +34,7 @@ import ItemConfidence from '../../../../components/ItemConfidence';
 import StixCoreObjectLabelsView from '../../common/stix_core_objects/StixCoreObjectLabelsView';
 import ItemLikelihood from '../../../../components/ItemLikelihood';
 import ItemMarkings from '../../../../components/ItemMarkings';
+import { remarkGfm } from '../../../../components/ExpandableMarkdown';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   card: {
@@ -257,6 +258,8 @@ StixCoreObjectOrStixCoreRelationshipNoteCardComponentProps
             {note.attribute_abstract && (
               <Markdown
                 remarkPlugins={[remarkGfm, remarkParse]}
+                disallowedElements={['a']} // disable link redirection
+                unwrapDisallowed={true}
                 className="markdown"
               >
                 {note.attribute_abstract}
@@ -272,6 +275,8 @@ StixCoreObjectOrStixCoreRelationshipNoteCardComponentProps
             {note.content && (
               <Markdown
                 remarkPlugins={[remarkGfm, remarkParse]}
+                disallowedElements={['a']} // disable link redirection
+                unwrapDisallowed={true}
                 className="markdown"
               >
                 {note.content}
