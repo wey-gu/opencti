@@ -28,6 +28,7 @@ import Loader from '../../../../components/Loader';
 import StixDomainObjectContentBar from './StixDomainObjectContentBar';
 import { isEmptyField } from '../../../../utils/utils';
 import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
+import ExternalLinkPopover from '../../../../components/ExternalLinkPopover';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `${APP_BASE_PATH}/static/ext/pdf.worker.js`;
 
@@ -175,6 +176,8 @@ class StixDomainObjectContentComponent extends Component {
       currentContent: props.t('Write something awesome...'),
       navOpen: localStorage.getItem('navOpen') === 'true',
       readOnly: true,
+      displayExternalLink: false,
+      externalLink: undefined,
     };
   }
 
@@ -396,6 +399,26 @@ class StixDomainObjectContentComponent extends Component {
     });
   }
 
+  browseLinkWarning(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    if (event.target.localName === 'a') { // if the user clicks on a link
+      this.handleOpenExternalLink(event.target.href);
+    }
+  }
+
+  setDisplayExternalLink(value) {
+    this.setState({ displayExternalLink: value });
+  }
+
+  setExternalLink(value) {
+    this.setState({ externalLink: value });
+  }
+
+  handleOpenExternalLink(url) {
+    this.setState({ displayExternalLink: true, externalLink: url });
+  }
+
   render() {
     const { classes, stixDomainObject, t } = this.props;
     const {
@@ -406,7 +429,10 @@ class StixDomainObjectContentComponent extends Component {
       markdownSelectedTab,
       navOpen,
       readOnly,
+      displayExternalLink,
+      externalLink,
     } = this.state;
+
     const files = getFiles(stixDomainObject);
     const currentUrl = currentFileId
       && `${APP_BASE_PATH}/storage/view/${encodeURIComponent(currentFileId)}`;
@@ -416,6 +442,7 @@ class StixDomainObjectContentComponent extends Component {
     const currentFileType = currentFile && currentFile.metaData.mimetype;
     const { innerHeight } = window;
     const height = innerHeight - 190;
+
     return (
       <div className={classes.container}>
         <StixDomainObjectContentFiles
@@ -466,6 +493,7 @@ class StixDomainObjectContentComponent extends Component {
               className={classes.editorContainer}
               style={{ minHeight: height, height }}
             >
+              <div onClick={(event) => this.browseLinkWarning(event)}>
               <CKEditor
                 editor={Editor}
                 config={{
@@ -482,6 +510,13 @@ class StixDomainObjectContentComponent extends Component {
                 onBlur={this.saveFile.bind(this)}
                 disabled={readOnly}
               />
+              </div>
+              <ExternalLinkPopover
+                displayExternalLink={displayExternalLink}
+                externalLink={externalLink}
+                setDisplayExternalLink={this.setDisplayExternalLink.bind(this)}
+                setExternalLink={this.setExternalLink.bind(this)}
+              ></ExternalLinkPopover>
             </div>
           </div>
         )}
