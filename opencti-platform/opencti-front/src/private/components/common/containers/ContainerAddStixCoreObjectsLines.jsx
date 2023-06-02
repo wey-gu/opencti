@@ -22,7 +22,7 @@ import {
   reportKnowledgeGraphtMutationRelationAddMutation,
 } from '../../analysis/reports/ReportKnowledgeGraphQuery';
 import ItemMarkings from '../../../../components/ItemMarkings';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = (theme) => ({
   container: {
@@ -317,12 +317,13 @@ class ContainerAddStixCoreObjectsLinesContainer extends Component {
                             60,
                           )}`}
                           secondary={
-                            <RemarkGfmMarkdown
+                            <MarkdownWithRedirectionWarning
                               content={stixCoreObject.description
                                 || fd(stixCoreObject.created_at)}
                               limit={200}
+                              remarkGfmPlugin={true}
                               commonmark={true}
-                            ></RemarkGfmMarkdown>
+                            ></MarkdownWithRedirectionWarning>
                           }
                         />
                         <div style={{ marginLeft: 10 }}>

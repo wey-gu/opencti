@@ -16,7 +16,7 @@ import { commitMutation } from '../../../../relay/environment';
 import { truncate } from '../../../../utils/String';
 import ItemIcon from '../../../../components/ItemIcon';
 import inject18n from '../../../../components/i18n';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = (theme) => ({
   investigation: {
@@ -256,12 +256,13 @@ class InvestigationAddStixCoreObjectsLinesInvestigation extends Component {
                             )}`
                           }`}
                           secondary={
-                            <RemarkGfmMarkdown
+                            <MarkdownWithRedirectionWarning
                               content={stixCoreObject.description
                                 || fd(stixCoreObject.created_at)}
                               limit={200}
+                              remarkGfmPlugin={true}
                               commonmark={true}
-                            ></RemarkGfmMarkdown>
+                            ></MarkdownWithRedirectionWarning>
                           }
                         />
                       </ListItem>

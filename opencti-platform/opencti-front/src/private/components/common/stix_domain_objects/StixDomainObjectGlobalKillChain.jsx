@@ -20,7 +20,7 @@ import ItemYears from '../../../../components/ItemYears';
 import ItemIcon from '../../../../components/ItemIcon';
 import { stixDomainObjectThreatKnowledgeStixRelationshipsQuery } from './StixDomainObjectThreatKnowledgeQuery';
 import ItemMarkings from '../../../../components/ItemMarkings';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = (theme) => ({
   itemIcon: {
@@ -194,10 +194,11 @@ class StixDomainObjectGlobalKillChainComponent extends Component {
                               secondary={
                                 stixDomainObject.description
                                 && stixDomainObject.description.length > 0 ? (
-                                  <RemarkGfmMarkdown
+                                  <MarkdownWithRedirectionWarning
                                     content={stixDomainObject.description}
+                                    remarkGfmPlugin={true}
                                     commonmark={true}
-                                  ></RemarkGfmMarkdown>
+                                  ></MarkdownWithRedirectionWarning>
                                   ) : (
                                     t('No description of this usage')
                                   )

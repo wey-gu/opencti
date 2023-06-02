@@ -12,6 +12,7 @@ import OTPForm from './OTPForm';
 import OtpActivationComponent from './OtpActivation';
 import { Theme } from '../../components/Theme';
 import { LoginRootPublicQuery$data } from '../__generated__/LoginRootPublicQuery.graphql';
+import MarkdownWithRedirectionWarning from '../../components/MarkdownWithRedirectionWarning';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   container: {
@@ -187,7 +188,9 @@ const Login: FunctionComponent<LoginProps> = ({ type, settings }) => {
       />
       {loginMessage && loginMessage.length > 0 && (
         <Paper classes={{ root: classes.paper }} variant="outlined">
-          <Markdown>{loginMessage}</Markdown>
+          <MarkdownWithRedirectionWarning
+            content={loginMessage}
+          />
         </Paper>
       )}
       {isAuthForm && (

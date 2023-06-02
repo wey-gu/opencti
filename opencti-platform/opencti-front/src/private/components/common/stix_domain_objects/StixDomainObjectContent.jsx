@@ -27,7 +27,7 @@ import { buildViewParamsFromUrlAndStorage, saveViewParameters } from '../../../.
 import Loader from '../../../../components/Loader';
 import StixDomainObjectContentBar from './StixDomainObjectContentBar';
 import { isEmptyField } from '../../../../utils/utils';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `${APP_BASE_PATH}/static/ext/pdf.worker.js`;
 
@@ -508,10 +508,11 @@ class StixDomainObjectContentComponent extends Component {
                   selectedTab={markdownSelectedTab}
                   onTabChange={this.onMarkdownChangeTab.bind(this)}
                   generateMarkdownPreview={(markdown) => Promise.resolve(
-                    <RemarkGfmMarkdown
+                    <MarkdownWithRedirectionWarning
                       content={markdown}
+                      remarkGfmPlugin={true}
                       commonmark={true}
-                    ></RemarkGfmMarkdown>,
+                    ></MarkdownWithRedirectionWarning>,
                   )
                   }
                   l18n={{

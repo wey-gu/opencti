@@ -6,7 +6,7 @@ import withStyles from '@mui/styles/withStyles';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import inject18n from '../../../../components/i18n';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = () => ({
   paper: {
@@ -30,10 +30,11 @@ class OpinionDetailsComponent extends Component {
           <Typography variant="h3" gutterBottom={true}>
             {t('Opinion')}
           </Typography>
-          <RemarkGfmMarkdown
+          <MarkdownWithRedirectionWarning
             content={opinion.opinion}
+            remarkGfmPlugin={true}
             commonmark={true}
-          ></RemarkGfmMarkdown>
+          ></MarkdownWithRedirectionWarning>
           <Typography
             variant="h3"
             gutterBottom={true}
@@ -41,10 +42,11 @@ class OpinionDetailsComponent extends Component {
           >
             {t('Explanation')}
           </Typography>
-          <RemarkGfmMarkdown
+          <MarkdownWithRedirectionWarning
             content={opinion.explanation}
+            remarkGfmPlugin={true}
             commonmark={true}
-          ></RemarkGfmMarkdown>
+          ></MarkdownWithRedirectionWarning>
         </Paper>
       </div>
     );

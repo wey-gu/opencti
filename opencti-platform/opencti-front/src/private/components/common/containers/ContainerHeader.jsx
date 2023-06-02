@@ -34,7 +34,7 @@ import { containerAddStixCoreObjectsLinesRelationAddMutation } from './Container
 import StixCoreObjectSharing from '../stix_core_objects/StixCoreObjectSharing';
 import useGranted, { KNOWLEDGE_KNUPDATE } from '../../../../utils/hooks/useGranted';
 import StixCoreObjectEnrichment from '../stix_core_objects/StixCoreObjectEnrichment';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const useStyles = makeStyles(() => ({
   title: {
@@ -755,11 +755,12 @@ const ContainerHeader = (props) => {
                             >
                               <ListItemText
                                 primary={
-                                  <RemarkGfmMarkdown
+                                  <MarkdownWithRedirectionWarning
                                     content={t(`suggestion_${suggestion.type}`)}
+                                    remarkGfmPlugin={true}
                                     commonmark={true}
                                     markdownComponents={true}
-                                  ></RemarkGfmMarkdown>
+                                  ></MarkdownWithRedirectionWarning>
                                 }
                               />
                               <Select

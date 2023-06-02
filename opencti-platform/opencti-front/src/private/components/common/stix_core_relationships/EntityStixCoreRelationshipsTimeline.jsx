@@ -15,14 +15,13 @@ import { Link } from 'react-router-dom';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
-import Markdown from 'react-markdown';
 import { defaultValue } from '../../../../utils/Graph';
 import ItemIcon from '../../../../components/ItemIcon';
 import { resolveLink } from '../../../../utils/Entity';
 import inject18n from '../../../../components/i18n';
 import { QueryRenderer } from '../../../../relay/environment';
-import { truncate } from '../../../../utils/String';
 import { itemColor } from '../../../../utils/Colors';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = (theme) => ({
   container: {
@@ -1339,9 +1338,10 @@ class EntityStixCoreRelationshipsTimeline extends Component {
                                 {defaultValue(remoteNode)}
                               </Typography>
                               <div style={{ marginTop: -5, color: '#a8a8a8' }}>
-                                <Markdown>
-                                  {truncate(remoteNode.description, 150)}
-                                </Markdown>
+                                <MarkdownWithRedirectionWarning
+                                  content={remoteNode.description}
+                                  limit={150}
+                                />
                               </div>
                             </Paper>
                           </TimelineContent>

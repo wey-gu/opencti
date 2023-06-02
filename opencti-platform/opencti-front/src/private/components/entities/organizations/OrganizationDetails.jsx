@@ -10,7 +10,7 @@ import Grid from '@mui/material/Grid';
 import inject18n from '../../../../components/i18n';
 import ItemReliability from '../../../../components/ItemReliability';
 import ExpandableMarkdown from '../../../../components/ExpandableMarkdown';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = () => ({
   paper: {
@@ -88,10 +88,11 @@ class OrganizationDetailsComponent extends Component {
               >
                 {t('Contact information')}
               </Typography>
-              <RemarkGfmMarkdown
+              <MarkdownWithRedirectionWarning
                 content={organization.contact_information}
+                remarkGfmPlugin={true}
                 commonmark={true}
-              ></RemarkGfmMarkdown>
+              ></MarkdownWithRedirectionWarning>
             </Grid>
           </Grid>
         </Paper>

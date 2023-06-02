@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import inject18n from '../../../../components/i18n';
 import ExpandableMarkdown from '../../../../components/ExpandableMarkdown';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = () => ({
   paper: {
@@ -42,10 +42,11 @@ class CampaignDetailsComponent extends Component {
               >
                 {t('Objective')}
               </Typography>
-              <RemarkGfmMarkdown
+              <MarkdownWithRedirectionWarning
                 content={campaign.objective}
+                remarkGfmPlugin={true}
                 commonmark={true}
-              ></RemarkGfmMarkdown>
+              ></MarkdownWithRedirectionWarning>
             </Grid>
             <Grid item={true} xs={6}>
               <Typography variant="h3" gutterBottom={true}>

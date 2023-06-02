@@ -35,7 +35,7 @@ import ItemConfidence from '../../../../components/ItemConfidence';
 import StixCoreObjectLabelsView from '../../common/stix_core_objects/StixCoreObjectLabelsView';
 import ItemLikelihood from '../../../../components/ItemLikelihood';
 import ItemMarkings from '../../../../components/ItemMarkings';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   card: {
@@ -257,9 +257,10 @@ StixCoreObjectOrStixCoreRelationshipNoteCardComponentProps
               {t('Abstract')}
             </Typography>
             {note.attribute_abstract && (
-              <RemarkGfmMarkdown
+              <MarkdownWithRedirectionWarning
                 content={note.attribute_abstract}
-              ></RemarkGfmMarkdown>
+                remarkGfmPlugin={true}
+              ></MarkdownWithRedirectionWarning>
             )}
             <Typography
               variant="h3"
@@ -269,9 +270,10 @@ StixCoreObjectOrStixCoreRelationshipNoteCardComponentProps
               {t('Content')}
             </Typography>
             {note.content && (
-              <RemarkGfmMarkdown
+              <MarkdownWithRedirectionWarning
                 content={note.content}
-              ></RemarkGfmMarkdown>
+                remarkGfmPlugin={true}
+              ></MarkdownWithRedirectionWarning>
             )}
           </Grid>
           <Grid item={true} xs={3}>

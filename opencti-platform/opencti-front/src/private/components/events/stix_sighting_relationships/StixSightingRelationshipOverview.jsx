@@ -44,7 +44,7 @@ import StixCoreObjectOrStixRelationshipLastContainers
   from '../../common/containers/StixCoreObjectOrStixRelationshipLastContainers';
 import StixSightingRelationshipLabelsView from './StixSightingRelationshipLabelsView';
 import Transition from '../../../../components/Transition';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = (theme) => ({
   container: {
@@ -440,15 +440,16 @@ class StixSightingRelationshipContainer extends Component {
                       >
                         {t('Description')}
                       </Typography>
-                      <RemarkGfmMarkdown
+                      <MarkdownWithRedirectionWarning
                         content={stixSightingRelationship.x_opencti_inferences
                         !== null ? (
                           <i>{t('Inferred knowledge')}</i>
                           ) : (
                             stixSightingRelationship.description
                           )}
+                        remarkGfmPlugin={true}
                         commonmark={true}
-                      ></RemarkGfmMarkdown>
+                      ></MarkdownWithRedirectionWarning>
                     </div>
                   </Grid>
                 </Grid>

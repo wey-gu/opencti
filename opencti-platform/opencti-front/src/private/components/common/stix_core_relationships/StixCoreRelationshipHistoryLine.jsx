@@ -31,7 +31,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import Slide from '@mui/material/Slide';
 import { truncate } from '../../../../utils/String';
 import inject18n from '../../../../components/i18n';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const Transition = React.forwardRef((props, ref) => (
   <Slide direction="up" ref={ref} {...props} />
@@ -312,17 +312,19 @@ class StixCoreRelationshipHistoryLineComponent extends Component {
             <Tooltip
               classes={{ tooltip: classes.tooltip }}
               title={
-                <RemarkGfmMarkdown
+                <MarkdownWithRedirectionWarning
                   content={`\`${node.user.name}\` ${node.context_data.message}`}
+                  remarkGfmPlugin={true}
                   commonmark={true}
-                ></RemarkGfmMarkdown>
+                ></MarkdownWithRedirectionWarning>
               }
             >
               <div className={classes.description}>
-                <RemarkGfmMarkdown
+                <MarkdownWithRedirectionWarning
                   content={`\`${node.user.name}\` ${node.context_data.message}`}
+                  remarkGfmPlugin={true}
                   commonmark={true}
-                ></RemarkGfmMarkdown>
+                ></MarkdownWithRedirectionWarning>
               </div>
             </Tooltip>
             {node.context_data.external_references
@@ -406,10 +408,11 @@ class StixCoreRelationshipHistoryLineComponent extends Component {
         >
           <DialogTitle>{t('Commit message')}</DialogTitle>
           <DialogContent>
-            <RemarkGfmMarkdown
+            <MarkdownWithRedirectionWarning
               content={node.context_data.commit}
+              remarkGfmPlugin={true}
               commonmark={true}
-            ></RemarkGfmMarkdown>
+            ></MarkdownWithRedirectionWarning>
           </DialogContent>
           <DialogActions>
             <Button color="primary" onClick={this.handleClose.bind(this)}>

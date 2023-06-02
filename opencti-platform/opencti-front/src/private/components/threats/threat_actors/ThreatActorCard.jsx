@@ -15,7 +15,7 @@ import Skeleton from '@mui/material/Skeleton';
 import inject18n from '../../../../components/i18n';
 import StixCoreObjectLabels from '../../common/stix_core_objects/StixCoreObjectLabels';
 import { addBookmark, deleteBookMark } from '../../common/stix_domain_objects/StixDomainObjectBookmark';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = (theme) => ({
   card: {
@@ -115,10 +115,11 @@ class ThreatActorCardComponent extends Component {
           />
           <CardContent className={classes.content}>
             <div className={classes.description}>
-              <RemarkGfmMarkdown
+              <MarkdownWithRedirectionWarning
                 content={node.description}
+                remarkGfmPlugin={true}
                 commonmark={true}
-              ></RemarkGfmMarkdown>
+              ></MarkdownWithRedirectionWarning>
             </div>
             <div className={classes.objectLabel}>
               <StixCoreObjectLabels

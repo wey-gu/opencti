@@ -22,7 +22,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import inject18n from '../../../../components/i18n';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = (theme) => ({
   container: {
@@ -270,17 +270,19 @@ class UserHistoryLineComponent extends Component {
             <Tooltip
               classes={{ tooltip: classes.tooltip }}
               title={
-                <RemarkGfmMarkdown
+                <MarkdownWithRedirectionWarning
                   content={`\`${node.user.name}\` ${node.context_data?.message}`}
+                  remarkGfmPlugin={true}
                   commonmark={true}
-                ></RemarkGfmMarkdown>
+                ></MarkdownWithRedirectionWarning>
               }
             >
               <div className={classes.description}>
-                <RemarkGfmMarkdown
+                <MarkdownWithRedirectionWarning
                   content={`\`${node.user.name}\` ${node.context_data?.message}`}
+                  remarkGfmPlugin={true}
                   commonmark={true}
-                ></RemarkGfmMarkdown>
+                ></MarkdownWithRedirectionWarning>
               </div>
             </Tooltip>
           </Paper>
@@ -294,10 +296,11 @@ class UserHistoryLineComponent extends Component {
         >
           <DialogTitle>{t('Commit message')}</DialogTitle>
           <DialogContent>
-            <RemarkGfmMarkdown
+            <MarkdownWithRedirectionWarning
               content={node.context_data?.commit}
+              remarkGfmPlugin={true}
               commonmark={true}
-            ></RemarkGfmMarkdown>
+            ></MarkdownWithRedirectionWarning>
           </DialogContent>
           <DialogActions>
             <Button color="primary" onClick={this.handleClose.bind(this)}>

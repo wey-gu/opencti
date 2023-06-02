@@ -45,7 +45,7 @@ import StixCoreObjectOrStixRelationshipLastContainers
   from '../containers/StixCoreObjectOrStixRelationshipLastContainers';
 import StixCoreRelationshipObjectLabelsView from './StixCoreRelationshipLabelsView';
 import Transition from '../../../../components/Transition';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = (theme) => ({
   container: {
@@ -418,14 +418,15 @@ class StixCoreRelationshipContainer extends Component {
                       >
                         {t('Description')}
                       </Typography>
-                      <RemarkGfmMarkdown
+                      <MarkdownWithRedirectionWarning
                         content={stixCoreRelationship.x_opencti_inferences !== null ? (
                           <i>{t('Inferred knowledge')}</i>
                         ) : (
                           stixCoreRelationship.description
                         )}
+                        remarkGfmPlugin={true}
                         commonmark={true}
-                      ></RemarkGfmMarkdown>
+                      ></MarkdownWithRedirectionWarning>
                       <StixCoreObjectKillChainPhasesView killChainPhasesEdges={stixCoreRelationship.killChainPhases.edges}/>
                     </div>
                   </Grid>

@@ -17,7 +17,7 @@ import inject18n from '../../../../components/i18n';
 import StixCoreRelationshipPopover from '../stix_core_relationships/StixCoreRelationshipPopover';
 import ItemYears from '../../../../components/ItemYears';
 import ItemMarkings from '../../../../components/ItemMarkings';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = (theme) => ({
   container: {
@@ -202,10 +202,11 @@ class StixDomainObjectAttackPatternsKillChainLines extends Component {
                                 secondary={
                                   attackPattern.description
                                   && attackPattern.description.length > 0 ? (
-                                      <RemarkGfmMarkdown
+                                      <MarkdownWithRedirectionWarning
                                         content={attackPattern.description}
+                                        remarkGfmPlugin={true}
                                         commonmark={true}
-                                      ></RemarkGfmMarkdown>
+                                      ></MarkdownWithRedirectionWarning>
                                     ) : (
                                       t('No description of this usage')
                                     )
@@ -285,10 +286,11 @@ class StixDomainObjectAttackPatternsKillChainLines extends Component {
                                               courseOfAction.description
                                               && courseOfAction.description
                                                 .length > 0 ? (
-                                                  <RemarkGfmMarkdown
+                                                  <MarkdownWithRedirectionWarning
                                                     content={courseOfAction.description}
+                                                    remarkGfmPlugin={true}
                                                     commonmark={true}
-                                                  ></RemarkGfmMarkdown>
+                                                  ></MarkdownWithRedirectionWarning>
                                                 ) : (
                                                   t(
                                                     'No description of this course of action',

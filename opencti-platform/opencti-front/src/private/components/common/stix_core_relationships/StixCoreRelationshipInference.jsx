@@ -11,7 +11,7 @@ import inject18n from '../../../../components/i18n';
 import { buildGraphData, linkPaint, nodeAreaPaint, nodePaint } from '../../../../utils/Graph';
 import { resolveLink } from '../../../../utils/Entity';
 import { isEmptyField } from '../../../../utils/utils';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = () => ({
   container: {
@@ -107,11 +107,12 @@ class StixCoreRelationshipInference extends Component {
         <Typography variant="h3" gutterBottom={true}>
           {t(inference.rule.name)}
         </Typography>
-        <RemarkGfmMarkdown
+        <MarkdownWithRedirectionWarning
           content={inference.rule.description}
+          remarkGfmPlugin={true}
           commonmark={true}
         >
-        </RemarkGfmMarkdown>
+        </MarkdownWithRedirectionWarning>
         <ForceGraph2D
           ref={this.graph}
           width={width}

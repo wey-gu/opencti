@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import IconButton from '@mui/material/IconButton';
-import RemarkGfmMarkdown from './RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from './MarkdownWithRedirectionWarning';
 
 interface ExpandableMarkdownProps {
   source: string | null,
@@ -26,12 +26,13 @@ const ExpandableMarkdown: FunctionComponent<ExpandableMarkdownProps> = ({ source
           </div>
         )}
         <div style={{ marginTop: 10 }}>
-          <RemarkGfmMarkdown
+          <MarkdownWithRedirectionWarning
             expand={expand}
             content={source}
             limit={limit}
+            remarkGfmPlugin={true}
             markdownComponents={true}
-          ></RemarkGfmMarkdown>
+          ></MarkdownWithRedirectionWarning>
         </div>
         <div className="clearfix"/>
       </div>

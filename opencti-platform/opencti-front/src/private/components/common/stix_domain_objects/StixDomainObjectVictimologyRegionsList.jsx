@@ -19,7 +19,7 @@ import StixCoreRelationshipPopover from '../stix_core_relationships/StixCoreRela
 import ItemYears from '../../../../components/ItemYears';
 import ItemIcon from '../../../../components/ItemIcon';
 import ItemMarkings from '../../../../components/ItemMarkings';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = (theme) => ({
   container: {
@@ -329,10 +329,11 @@ class StixDomainObjectVictimologyRegionsList extends Component {
                             // eslint-disable-next-line no-nested-ternary
                             stixCoreRelationship.description
                             && stixCoreRelationship.description.length > 0 ? (
-                                <RemarkGfmMarkdown
+                                <MarkdownWithRedirectionWarning
                                   content={stixCoreRelationship.description}
+                                  remarkGfmPlugin={true}
                                   commonmark={true}
-                                ></RemarkGfmMarkdown>
+                                ></MarkdownWithRedirectionWarning>
                               ) : (
                                 t('No description of this targeting')
                               )
@@ -453,10 +454,11 @@ class StixDomainObjectVictimologyRegionsList extends Component {
                                       stixCoreRelationship.description
                                       && stixCoreRelationship.description.length
                                         > 0 ? (
-                                          <RemarkGfmMarkdown
+                                          <MarkdownWithRedirectionWarning
                                             content={stixCoreRelationship.description}
+                                            remarkGfmPlugin={true}
                                             commonmark={true}
-                                          ></RemarkGfmMarkdown>
+                                          ></MarkdownWithRedirectionWarning>
                                         ) : stixCoreRelationship.inferred ? (
                                         <i>{t('This relation is inferred')}</i>
                                         ) : (
@@ -557,10 +559,11 @@ class StixDomainObjectVictimologyRegionsList extends Component {
                                               stixCoreRelationship.description
                                               && stixCoreRelationship.description
                                                 .length > 0 ? (
-                                                  <RemarkGfmMarkdown
+                                                  <MarkdownWithRedirectionWarning
                                                     content={stixCoreRelationship.description}
+                                                    remarkGfmPlugin={true}
                                                     commonmark={true}
-                                                  ></RemarkGfmMarkdown>
+                                                  ></MarkdownWithRedirectionWarning>
                                                 ) : stixCoreRelationship.inferred ? (
                                                 <i>
                                                   {t(

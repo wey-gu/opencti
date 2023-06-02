@@ -15,7 +15,7 @@ import { itemColor } from '../../../../utils/Colors';
 import { Theme } from '../../../../components/Theme';
 import { IncidentCard_node$key } from './__generated__/IncidentCard_node.graphql';
 import { useFormatter } from '../../../../components/i18n';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   card: {
@@ -149,9 +149,10 @@ export const IncidentCard: FunctionComponent<IncidentCardProps> = ({
         />
         <CardContent className={classes.content}>
           <div className={classes.description}>
-            <RemarkGfmMarkdown
+            <MarkdownWithRedirectionWarning
               content={data.description ?? ''}
-            ></RemarkGfmMarkdown>
+              remarkGfmPlugin={true}
+            ></MarkdownWithRedirectionWarning>
           </div>
           <div className={classes.objectLabel}>
             <StixCoreObjectLabels

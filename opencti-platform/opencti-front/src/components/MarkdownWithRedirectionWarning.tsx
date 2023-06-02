@@ -101,11 +101,12 @@ interface RemarkGfmMarkdownProps {
   content: string,
   expand?: boolean,
   limit?: number,
+  remarkGfmPlugin?: boolean
   markdownComponents?: boolean,
   commonmark?: boolean,
 }
 
-const RemarkGfmMarkdown: FunctionComponent<RemarkGfmMarkdownProps> = ({ content, expand, limit, markdownComponents, commonmark }) => {
+const MarkdownWithRedirectionWarning: FunctionComponent<RemarkGfmMarkdownProps> = ({ content, expand, limit, remarkGfmPlugin, markdownComponents, commonmark }) => {
   const theme = useTheme<Theme>();
   const [displayExternalLink, setDisplayExternalLink] = useState(false);
   const [externalLink, setExternalLink] = useState<string | URL | undefined>(undefined);
@@ -116,6 +117,14 @@ const RemarkGfmMarkdown: FunctionComponent<RemarkGfmMarkdownProps> = ({ content,
   };
 
   const markdownElement = () => {
+    return (
+      <Markdown>
+        {limit ? truncate(content, limit) : content}
+      </Markdown>
+    );
+  };
+
+  const remarkGfmMarkdownElement = () => {
     if (markdownComponents) {
       return (
         <Markdown
@@ -149,7 +158,7 @@ const RemarkGfmMarkdown: FunctionComponent<RemarkGfmMarkdownProps> = ({ content,
   return (
     <div>
       <div onClick={(event) => browseLinkWarning(event)}>
-        {markdownElement()}
+        {remarkGfmPlugin ? remarkGfmMarkdownElement() : markdownElement()}
       </div>
       <ExternalLinkPopover
         displayExternalLink={displayExternalLink}
@@ -161,4 +170,4 @@ const RemarkGfmMarkdown: FunctionComponent<RemarkGfmMarkdownProps> = ({ content,
   );
 };
 
-export default RemarkGfmMarkdown;
+export default MarkdownWithRedirectionWarning;

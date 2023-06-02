@@ -29,7 +29,7 @@ import { buildViewParamsFromUrlAndStorage, saveViewParameters } from '../../../.
 import StixCoreRelationshipsExports from '../stix_core_relationships/StixCoreRelationshipsExports';
 import ItemMarkings from '../../../../components/ItemMarkings';
 import { export_max_size } from '../../../../utils/utils';
-import RemarkGfmMarkdown from '../../../../components/RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from '../../../../components/MarkdownWithRedirectionWarning';
 
 const styles = (theme) => ({
   container: {
@@ -433,10 +433,11 @@ class StixDomainObjectVictimologySectorsComponent extends Component {
                               // eslint-disable-next-line no-nested-ternary
                               stixCoreRelationship.description
                               && stixCoreRelationship.description.length > 0 ? (
-                                  <RemarkGfmMarkdown
+                                  <MarkdownWithRedirectionWarning
                                     content={stixCoreRelationship.description}
+                                    remarkGfmPlugin={true}
                                     commonmark={true}
-                                  ></RemarkGfmMarkdown>
+                                  ></MarkdownWithRedirectionWarning>
                                 ) : (
                                   t('No description of this targeting')
                                 )
@@ -561,10 +562,11 @@ class StixDomainObjectVictimologySectorsComponent extends Component {
                                           stixCoreRelationship.description
                                           && stixCoreRelationship.description
                                             .length > 0 ? (
-                                              <RemarkGfmMarkdown
+                                              <MarkdownWithRedirectionWarning
                                                 content={stixCoreRelationship.description}
+                                                remarkGfmPlugin={true}
                                                 commonmark={true}
-                                              ></RemarkGfmMarkdown>
+                                              ></MarkdownWithRedirectionWarning>
                                             ) : stixCoreRelationship.inferred ? (
                                             <i>
                                               {t('This relation is inferred')}

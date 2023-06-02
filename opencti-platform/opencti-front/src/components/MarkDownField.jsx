@@ -5,7 +5,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import * as R from 'ramda';
 import inject18n from './i18n';
-import RemarkGfmMarkdown from './RemarkGfmMarkdown';
+import MarkdownWithRedirectionWarning from './MarkdownWithRedirectionWarning';
 
 const MarkDownField = (props) => {
   const {
@@ -54,10 +54,11 @@ const MarkDownField = (props) => {
         selectedTab={selectedTab}
         onTabChange={setSelectedTab}
         generateMarkdownPreview={(markdown) => Promise.resolve(
-          <RemarkGfmMarkdown
+          <MarkdownWithRedirectionWarning
             content={markdown}
+            remarkGfmPlugin={true}
             commonmark={true}
-          ></RemarkGfmMarkdown>,
+          ></MarkdownWithRedirectionWarning>,
         )
         }
         l18n={{
