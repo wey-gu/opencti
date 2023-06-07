@@ -1,22 +1,9 @@
 import Markdown from 'react-markdown';
-import { gfmFootnoteFromMarkdown, gfmFootnoteToMarkdown } from 'mdast-util-gfm-footnote';
-import { gfmStrikethroughFromMarkdown, gfmStrikethroughToMarkdown } from 'mdast-util-gfm-strikethrough';
-import { gfmTableFromMarkdown, gfmTableToMarkdown } from 'mdast-util-gfm-table';
-import { gfmTaskListItemFromMarkdown, gfmTaskListItemToMarkdown } from 'mdast-util-gfm-task-list-item';
 import remarkParse from 'remark-parse';
 import { useTheme } from '@mui/styles';
-import { combineExtensions } from 'micromark-util-combine-extensions';
-import { gfmFootnote } from 'micromark-extension-gfm-footnote';
-import { gfmStrikethrough } from 'micromark-extension-gfm-strikethrough';
-import { gfmTable } from 'micromark-extension-gfm-table';
-import { gfmTaskListItem } from 'micromark-extension-gfm-task-list-item';
-import { Options as TableOptions } from 'mdast-util-gfm-table/lib';
-import { Options as ToMarkdownOptions } from 'mdast-util-to-markdown/lib';
-import { Extension } from 'micromark-extension-gfm';
-import Config from 'remark-parse/lib';
 import { PluggableList } from 'react-markdown/lib/react-markdown';
-import { FrozenProcessor } from 'unified';
 import React, { FunctionComponent, SyntheticEvent, useState } from 'react';
+import remarkGfm from 'remark-gfm';
 import { Theme } from './Theme';
 import { truncate } from '../utils/String';
 import ExternalLinkPopover from './ExternalLinkPopover';
@@ -55,49 +42,7 @@ export const MarkDownComponents = (theme: Theme): Record<string, FunctionCompone
   ),
 });
 
-const gfmFromMarkdown = () => {
-  return [
-    gfmFootnoteFromMarkdown(),
-    gfmStrikethroughFromMarkdown,
-    gfmTableFromMarkdown,
-    gfmTaskListItemFromMarkdown,
-  ];
-};
-
-const gfmToMarkdown = (options?: TableOptions | null | undefined) => {
-  return {
-    extensions: [
-      gfmFootnoteToMarkdown(),
-      gfmStrikethroughToMarkdown,
-      gfmTableToMarkdown(options),
-      gfmTaskListItemToMarkdown,
-    ],
-  };
-};
-
-export function remarkGfm(this: FrozenProcessor, options = {}) {
-  const data = this.data();
-
-  function add(field: string, value: Extension | Partial<typeof Config>[] | { extensions: ToMarkdownOptions[] }) {
-    const list = (
-      data[field] ? data[field] : (data[field] = [])
-    ) as (Extension | Partial<typeof Config>[] | { extensions: ToMarkdownOptions[] })[];
-
-    list.push(value);
-  }
-  const micromarkExtensions = combineExtensions([
-    gfmFootnote(),
-    gfmStrikethrough(options),
-    gfmTable,
-    gfmTaskListItem,
-  ]);
-
-  add('micromarkExtensions', micromarkExtensions);
-  add('fromMarkdownExtensions', gfmFromMarkdown());
-  add('toMarkdownExtensions', gfmToMarkdown(options));
-}
-
-interface RemarkGfmMarkdownProps {
+interface MarkdownWithRedirectionWarningProps {
   content: string,
   expand?: boolean,
   limit?: number,
@@ -106,7 +51,7 @@ interface RemarkGfmMarkdownProps {
   commonmark?: boolean,
 }
 
-const MarkdownWithRedirectionWarning: FunctionComponent<RemarkGfmMarkdownProps> = ({ content, expand, limit, remarkGfmPlugin, markdownComponents, commonmark }) => {
+const MarkdownWithRedirectionWarning: FunctionComponent<MarkdownWithRedirectionWarningProps> = ({ content, expand, limit, remarkGfmPlugin, markdownComponents, commonmark }) => {
   const theme = useTheme<Theme>();
   const [displayExternalLink, setDisplayExternalLink] = useState(false);
   const [externalLink, setExternalLink] = useState<string | URL | undefined>(undefined);
