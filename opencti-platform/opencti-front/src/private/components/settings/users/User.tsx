@@ -51,6 +51,7 @@ import Triggers from '../common/Triggers';
 import { UserLogsTimeSeriesQuery$data } from './__generated__/UserLogsTimeSeriesQuery.graphql';
 import { UserPopoverEditionQuery$data } from './__generated__/UserPopoverEditionQuery.graphql';
 import { UserOtpDeactivationMutation } from './__generated__/UserOtpDeactivationMutation.graphql';
+import UserDashboard from './dashboard/UserDashboard';
 
 Transition.displayName = 'TransitionSlide';
 
@@ -175,6 +176,7 @@ const userFragment = graphql`
     language
     api_token
     otp_activated
+    dashboard_id
     roles(orderBy: $rolesOrderBy, orderMode: $rolesOrderMode) {
       id
       name
@@ -560,6 +562,15 @@ const User: FunctionComponent<UserProps> = ({ userData, refetch }) => {
                       label={name}
                     />
                   ))}
+              </Grid>
+              <Grid item={true} xs={12}>
+                <Typography variant="h3" gutterBottom={true}>
+                  {t('dashboard')}
+                </Typography>
+                {user.dashboard_id
+                  ? (<UserDashboard dashboardId={user.dashboard_id} />)
+                  : 'default'
+                }
               </Grid>
             </Grid>
           </Paper>
