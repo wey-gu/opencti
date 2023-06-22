@@ -1176,7 +1176,7 @@ type User implements BasicObject & InternalObject {
   theme: String
   language: String
   external: Boolean
-  dashboard: Workspace
+  dashboard_id: ID
   roles(
     orderBy: RolesOrdering
     orderMode: OrderingMode
