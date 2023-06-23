@@ -11525,6 +11525,7 @@ export type MeUser = BasicObject & InternalObject & {
   allowed_marking?: Maybe<Array<MarkingDefinition>>;
   api_token: Scalars['String'];
   capabilities: Array<Capability>;
+  dashboard_id?: Maybe<Scalars['ID']>;
   default_hidden_types: Array<Maybe<Scalars['String']>>;
   default_marking?: Maybe<Array<DefaultMarking>>;
   description?: Maybe<Scalars['String']>;
@@ -30751,6 +30752,7 @@ export type MeUserResolvers<ContextType = any, ParentType extends ResolversParen
   allowed_marking?: Resolver<Maybe<Array<ResolversTypes['MarkingDefinition']>>, ParentType, ContextType>;
   api_token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   capabilities?: Resolver<Array<ResolversTypes['Capability']>, ParentType, ContextType>;
+  dashboard_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   default_hidden_types?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
   default_marking?: Resolver<Maybe<Array<ResolversTypes['DefaultMarking']>>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

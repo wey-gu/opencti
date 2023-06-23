@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { assoc, head, last, map, pathOr, pluck } from 'ramda';
 import { makeStyles, useTheme } from '@mui/styles';
@@ -12,13 +12,9 @@ import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
 import { DescriptionOutlined } from '@mui/icons-material';
-import {
-  Database,
-  GraphOutline,
-  HexagonMultipleOutline,
-} from 'mdi-material-ui';
+import { Database, GraphOutline, HexagonMultipleOutline } from 'mdi-material-ui';
 import Slide from '@mui/material/Slide';
-import { graphql, useLazyLoadQuery } from 'react-relay';
+import { graphql, useLazyLoadQuery, useMutation } from 'react-relay';
 import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
 import { dayAgo, monthsAgo, yearsAgo } from '../../utils/Time';
@@ -42,6 +38,7 @@ import ErrorNotFound from '../../components/ErrorNotFound';
 import { areaChartOptions, polarAreaChartOptions } from '../../utils/Charts';
 import { defaultValue } from '../../utils/Graph';
 import Chart from './common/charts/Chart';
+import { UserContext } from '../../utils/hooks/useAuth';
 
 // region styles
 const Transition = React.forwardRef((props, ref) => (
@@ -908,12 +905,37 @@ const CustomDashboard = ({ dashboard, timeField }) => {
     </Security>
   );
 };
+
+const changeDashboardPref = graphql`
+  mutation DashboardPrefMutation($input: [EditInput]!) {
+    meEdit(input: $input) {
+      dashboard_id
+    }
+  }
+`;
+
 const Dashboard = () => {
   const classes = useStyles();
   const [view, saveView] = useViewStorage('view-dashboard');
+  const [commit, _] = useMutation(changeDashboardPref);
   const { dashboard = 'default', timeField = 'technical' } = view;
   const handleChangeTimeField = (event) => saveView({ dashboard, timeField: event.target.value });
-  const handleChangeDashboard = (event) => saveView({ dashboard: event.target.value, timeField });
+
+  const handleChangeDashboard = (event) => {
+    commit({
+      variables: {
+        input: [{
+          key: 'dashboard_id',
+          value: (event.target.value === 'default' ? [null] : event.target.value),
+        }],
+      },
+    });
+
+    console.log(event.target.value);
+
+    saveView({ dashboard: event.target.value, timeField });
+  };
+
   return (
     <div className={classes.root}>
       <TopBar

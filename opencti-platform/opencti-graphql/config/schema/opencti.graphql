@@ -1214,6 +1214,7 @@ type MeUser implements BasicObject & InternalObject {
   external: Boolean
   individual_id: String
   api_token: String!
+  dashboard_id: ID
   objectOrganization: MeOrganizationConnection
   capabilities: [Capability!]!
   default_hidden_types: [String]!
