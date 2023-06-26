@@ -32,13 +32,13 @@ import LocationMiniMapTargets from './common/location/LocationMiniMapTargets';
 import { computeLevel, simpleNumberFormat } from '../../utils/Number';
 import ItemMarkings from '../../components/ItemMarkings';
 import DashboardView from './workspaces/dashboards/Dashboard';
-import { useViewStorage } from '../../utils/ListParameters';
 import TopBar from './nav/TopBar';
 import ErrorNotFound from '../../components/ErrorNotFound';
 import { areaChartOptions, polarAreaChartOptions } from '../../utils/Charts';
 import { defaultValue } from '../../utils/Graph';
 import Chart from './common/charts/Chart';
 import { UserContext } from '../../utils/hooks/useAuth';
+import useLocalStorage from '../../utils/hooks/useLocalStorage';
 
 // region styles
 const Transition = React.forwardRef((props, ref) => (
@@ -917,11 +917,10 @@ const changeDashboardPref = graphql`
 const Dashboard = () => {
   const classes = useStyles();
   const { me: { dashboard_id: dashboardId } } = useContext(UserContext);
-  const [view, saveView] = useViewStorage('view-dashboard');
   const [changeDashboard] = useMutation(changeDashboardPref);
-  const { timeField = 'technical' } = view;
-  const handleChangeTimeField = (event) => saveView({ dashboard: dashboardId, timeField: event.target.value });
-
+  const [localDashboardPreferences, saveLocalDashboardPreferences] = useLocalStorage('view-dashboard', {});
+  const { timeField = 'technical' } = localDashboardPreferences;
+  const handleChangeTimeField = (event) => saveLocalDashboardPreferences({ dashboard: dashboardId, timeField: event.target.value });
   const handleChangeDashboard = (event) => {
     changeDashboard({
       variables: {
@@ -932,7 +931,7 @@ const Dashboard = () => {
       },
     });
 
-    saveView({ dashboard: event.target.value, timeField });
+    saveLocalDashboardPreferences({ dashboard: event.target.value, timeField });
   };
 
   return (
