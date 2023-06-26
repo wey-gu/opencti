@@ -1177,6 +1177,7 @@ type User implements BasicObject & InternalObject {
   language: String
   external: Boolean
   dashboard_id: ID
+  dashboard: Workspace
   roles(
     orderBy: RolesOrdering
     orderMode: OrderingMode
@@ -1215,6 +1216,7 @@ type MeUser implements BasicObject & InternalObject {
   individual_id: String
   api_token: String!
   dashboard_id: ID
+  dashboard: Workspace
   objectOrganization: MeOrganizationConnection
   capabilities: [Capability!]!
   default_hidden_types: [String]!

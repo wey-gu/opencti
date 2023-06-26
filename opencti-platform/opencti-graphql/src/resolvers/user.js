@@ -55,6 +55,7 @@ import { executionContext, REDACTED_USER } from '../utils/access';
 import { findSessions, findUserSessions, killSession, killUserSessions } from '../database/session';
 import { publishUserAction } from '../listener/UserActionListener';
 import { internalLoadById } from '../database/middleware-loader';
+import { findById as findWorskpaceById } from '../modules/workspace/workspace-domain';
 
 const groupsLoader = batchLoader(batchGroups);
 const organizationsLoader = batchLoader(batchOrganizations);
@@ -84,6 +85,9 @@ const userResolvers = {
     objectOrganization: (current, args, context) => organizationsLoader.load(current.id, context, context.user, { ...args, withInferences: false }),
     editContext: (current) => fetchEditContext(current.id),
     sessions: (current) => findUserSessions(current.id),
+    dashboard: (current, _, context) => {
+      return current.dashboard_id ? findWorskpaceById(context, context.user, current.dashboard_id) : null;
+    }
   },
   Member: {
     name: (current, _, context) => {

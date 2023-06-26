@@ -49,6 +49,11 @@ const READ_QUERY = gql`
       standard_id
       name
       description
+      dashboard_id
+      dashboard {
+        id
+        name
+      }
       groups {
           edges {
               node {
@@ -146,6 +151,89 @@ describe('User resolver standard behavior', () => {
     expect(queryResult.data.user).not.toBeNull();
     expect(queryResult.data.user.id).toEqual(userInternalId);
   });
+  describe('dashboard preferences', () => {
+    describe('when a user has the default dashboard', () => {
+      it('does not have any dashboard associated', async () => {
+        const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: userInternalId } });
+
+        expect(queryResult.data.user.dashboard).toBeNull();
+      });
+
+      it('does not have reference to a dashboard', async () => {
+        const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: userInternalId } });
+
+        expect(queryResult.data.user.dashboard_id).toBeNull();
+      });
+    });
+
+    describe('when a user has a preferred dashboard', () => {
+      it('can have a reference to it', async () => {
+        const dashboardCreationQuery = await queryAsAdmin({
+          query: gql`
+            mutation CreateDashboard($input: WorkspaceAddInput!){
+              workspaceAdd(input: $input){
+                id
+              }
+            }`,
+          variables: {
+            input: {
+              type: 'dashboard',
+              name: 'dashboard de test'
+            }
+          }
+        });
+        const dashboardId = dashboardCreationQuery.data.workspaceAdd.id;
+        const addDashboardPreference = await queryAsAdmin({
+          query: gql`
+            mutation AddDashboardPreference($userId: ID!, $editInput: [EditInput]!) {
+              userEdit(id: $userId) {
+                fieldPatch(input: $editInput) {
+                  dashboard_id
+                }
+              }
+            }`,
+          variables: {
+            userId: userInternalId,
+            editInput: [{
+              key: 'dashboard_id',
+              value: dashboardId
+            }]
+          }
+        });
+
+        expect(addDashboardPreference.data.userEdit.fieldPatch.dashboard_id).toEqual(dashboardId);
+      });
+
+      it('has a reference to the dashboard', async () => {
+        const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: userInternalId } });
+
+        expect(queryResult.data.user.dashboard.name).toEqual('dashboard de test');
+      });
+
+      it('can removes its preference', async () => {
+        const removeDashboardPreference = await queryAsAdmin({
+          query: gql`
+            mutation RemoveDashboardPreference($userId: ID!, $editInput: [EditInput]!) {
+              userEdit(id: $userId) {
+                fieldPatch(input: $editInput) {
+                  dashboard_id
+                }
+              }
+            }`,
+          variables: {
+            userId: userInternalId,
+            editInput: [{
+              key: 'dashboard_id',
+              value: [null]
+            }]
+          }
+        });
+
+        expect(removeDashboardPreference.data.userEdit.fieldPatch.dashboard_id).toBeNull();
+      });
+    });
+  });
+
   it('should user login', async () => {
     const res = await queryAsAdmin({
       query: LOGIN_QUERY,
