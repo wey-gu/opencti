@@ -916,11 +916,11 @@ const changeDashboardPref = graphql`
 
 const Dashboard = () => {
   const classes = useStyles();
-  const { me: { dashboard_id: dashboard } } = useContext(UserContext);
+  const { me: { dashboard_id: dashboardId } } = useContext(UserContext);
   const [view, saveView] = useViewStorage('view-dashboard');
   const [changeDashboard] = useMutation(changeDashboardPref);
   const { timeField = 'technical' } = view;
-  const handleChangeTimeField = (event) => saveView({ dashboard, timeField: event.target.value });
+  const handleChangeTimeField = (event) => saveView({ dashboard: dashboardId, timeField: event.target.value });
 
   const handleChangeDashboard = (event) => {
     changeDashboard({
@@ -941,10 +941,10 @@ const Dashboard = () => {
         handleChangeTimeField={handleChangeTimeField}
         timeField={timeField}
         handleChangeDashboard={handleChangeDashboard}
-        dashboard={dashboard}
+        dashboard={dashboardId}
       />
-      {dashboard
-        ? <CustomDashboard dashboard={dashboard} timeField={timeField}/>
+      {dashboardId
+        ? <CustomDashboard dashboard={dashboardId} timeField={timeField}/>
         : <DefaultDashboard timeField={timeField}/>
       }
     </div>
