@@ -1,4 +1,4 @@
-import React, { Suspense, useContext } from 'react';
+import React, { Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { assoc, head, last, map, pathOr, pluck } from 'ramda';
 import { makeStyles, useTheme } from '@mui/styles';
@@ -37,7 +37,7 @@ import ErrorNotFound from '../../components/ErrorNotFound';
 import { areaChartOptions, polarAreaChartOptions } from '../../utils/Charts';
 import { defaultValue } from '../../utils/Graph';
 import Chart from './common/charts/Chart';
-import { UserContext } from '../../utils/hooks/useAuth';
+import useAuth from '../../utils/hooks/useAuth';
 import useLocalStorage from '../../utils/hooks/useLocalStorage';
 
 // region styles
@@ -916,7 +916,7 @@ const changeDashboardPref = graphql`
 
 const Dashboard = () => {
   const classes = useStyles();
-  const { me: { dashboard_id: dashboardId } } = useContext(UserContext);
+  const { me: { dashboard_id: dashboardId } } = useAuth();
   const [changeDashboard] = useMutation(changeDashboardPref);
   const [localDashboardPreferences, saveLocalDashboardPreferences] = useLocalStorage('view-dashboard', {});
   const { timeField = 'technical' } = localDashboardPreferences;
