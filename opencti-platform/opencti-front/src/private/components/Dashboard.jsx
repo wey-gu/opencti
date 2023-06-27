@@ -918,9 +918,9 @@ const Dashboard = () => {
   const classes = useStyles();
   const { me: { dashboard_id: dashboardId } } = useAuth();
   const [changeDashboard] = useMutation(changeDashboardPref);
-  const [localDashboardPreferences, saveLocalDashboardPreferences] = useLocalStorage('view-dashboard', {});
-  const { timeField = 'technical' } = localDashboardPreferences;
-  const handleChangeTimeField = (event) => saveLocalDashboardPreferences({ dashboard: dashboardId, timeField: event.target.value });
+  const [localTimeFieldPreferences, saveTimeFieldPreferences] = useLocalStorage('view-dashboard', {});
+  const { timeField = 'technical' } = localTimeFieldPreferences;
+  const handleChangeTimeField = (event) => saveTimeFieldPreferences({ timeField: event.target.value });
   const handleChangeDashboard = (event) => {
     changeDashboard({
       variables: {
@@ -930,8 +930,6 @@ const Dashboard = () => {
         }],
       },
     });
-
-    saveLocalDashboardPreferences({ dashboard: event.target.value, timeField });
   };
 
   return (
