@@ -1,5 +1,6 @@
 import { withFilter } from 'graphql-subscriptions';
 import {
+  assignDefaultDashboard,
   batchMarkingDefinitions,
   batchMembers,
   batchRoles,
@@ -46,6 +47,7 @@ const groupResolvers = {
       relationAdd: ({ input }) => groupAddRelation(context, context.user, id, input),
       relationDelete: ({ fromId, toId, relationship_type: relationshipType }) => groupDeleteRelation(context, context.user, id, fromId, toId, relationshipType),
       editDefaultMarking: ({ input }) => groupEditDefaultMarking(context, context.user, id, input),
+      assignDefaultDashboard: ({ dashboardId }) => assignDefaultDashboard(context, context.user, id, dashboardId),
     }),
     groupAdd: (_, { input }, context) => addGroup(context, context.user, input),
   },

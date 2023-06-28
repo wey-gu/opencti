@@ -55,6 +55,35 @@ describe('Group resolver standard behavior', () => {
     expect(group.data.groupAdd.name).toEqual('Group');
     groupInternalId = group.data.groupAdd.id;
   });
+
+  describe('default dashboards', async () => {
+    describe('when assigning a default dashboard that does not exists', async () => {
+      it('fails with an error', async () => {
+        const nonExistingDashboardId = '1b021e22-c622-43f1-bb51-343f3085eb87';
+
+        const assignDefaultDashboardToGroup = await queryAsAdmin({
+          query: gql`
+            mutation assignDefaultDashboardToGroup($id: ID!, $dashboardId: ID!) {
+              groupEdit(id: $id) {
+                assignDefaultDashboard(dashboardId: $dashboardId) {
+                  default_dashboard {
+                    name
+                  }
+                }
+              }
+            }
+          `,
+          variables: {
+            id: groupInternalId,
+            dashboardId: nonExistingDashboardId
+          }
+        });
+
+        expect(assignDefaultDashboardToGroup.errors).toHaveLength(1);
+      });
+    });
+  });
+
   it('should group loaded by internal id', async () => {
     const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: groupInternalId } });
     expect(queryResult).not.toBeNull();

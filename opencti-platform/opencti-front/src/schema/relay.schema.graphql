@@ -1114,6 +1114,7 @@ type Group implements InternalObject & BasicObject {
   default_assignation: Boolean
   auto_new_marking: Boolean
   description: String
+  default_dashboard: Workspace
   members: UserConnection
   created_at: DateTime
   updated_at: DateTime
@@ -7940,6 +7941,7 @@ type GroupEditMutations {
   relationAdd(input: InternalRelationshipAddInput!): InternalRelationship
   relationDelete(fromId: StixRef, toId: StixRef, relationship_type: String!): Group
   editDefaultMarking(input: DefaultMarkingInput!): Group
+  assignDefaultDashboard(dashboardId: ID!): Group
 }
 
 type UserEditMutations {
