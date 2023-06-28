@@ -6987,7 +6987,9 @@ export type Group = BasicObject & InternalObject & {
   allowed_marking?: Maybe<Array<MarkingDefinition>>;
   auto_new_marking?: Maybe<Scalars['Boolean']>;
   created_at?: Maybe<Scalars['DateTime']>;
+  defaultDashboard?: Maybe<Workspace>;
   default_assignation?: Maybe<Scalars['Boolean']>;
+  default_dashboard_id?: Maybe<Scalars['ID']>;
   default_marking?: Maybe<Array<DefaultMarking>>;
   description?: Maybe<Scalars['String']>;
   editContext?: Maybe<Array<EditUserContext>>;
@@ -11525,6 +11527,9 @@ export type MeUser = BasicObject & InternalObject & {
   allowed_marking?: Maybe<Array<MarkingDefinition>>;
   api_token: Scalars['String'];
   capabilities: Array<Capability>;
+  defaultDashboard?: Maybe<Workspace>;
+  defaultDashboards: Array<Workspace>;
+  default_dashboard_id?: Maybe<Scalars['ID']>;
   default_hidden_types: Array<Maybe<Scalars['String']>>;
   default_marking?: Maybe<Array<DefaultMarking>>;
   description?: Maybe<Scalars['String']>;
@@ -24191,7 +24196,9 @@ export type User = BasicObject & InternalObject & {
   api_token: Scalars['String'];
   capabilities: Array<Maybe<Capability>>;
   created_at: Scalars['DateTime'];
-  dashboard?: Maybe<Scalars['String']>;
+  defaultDashboard?: Maybe<Workspace>;
+  defaultDashboards: Array<Workspace>;
+  default_dashboard_id?: Maybe<Scalars['ID']>;
   default_hidden_types: Array<Maybe<Scalars['String']>>;
   description?: Maybe<Scalars['String']>;
   editContext?: Maybe<Array<EditUserContext>>;
@@ -26230,7 +26237,7 @@ export type ResolversTypes = ResolversObject<{
   FilterMode: FilterMode;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   GetMetrics: ResolverTypeWrapper<GetMetrics>;
-  Group: ResolverTypeWrapper<Omit<Group, 'members'> & { members?: Maybe<ResolversTypes['UserConnection']> }>;
+  Group: ResolverTypeWrapper<Omit<Group, 'defaultDashboard' | 'members'> & { defaultDashboard?: Maybe<ResolversTypes['Workspace']>, members?: Maybe<ResolversTypes['UserConnection']> }>;
   GroupAddInput: GroupAddInput;
   GroupConnection: ResolverTypeWrapper<Omit<GroupConnection, 'edges'> & { edges?: Maybe<Array<Maybe<ResolversTypes['GroupEdge']>>> }>;
   GroupEdge: ResolverTypeWrapper<Omit<GroupEdge, 'node'> & { node: ResolversTypes['Group'] }>;
@@ -26377,7 +26384,7 @@ export type ResolversTypes = ResolversObject<{
   MeOrganization: ResolverTypeWrapper<MeOrganization>;
   MeOrganizationConnection: ResolverTypeWrapper<MeOrganizationConnection>;
   MeOrganizationEdge: ResolverTypeWrapper<MeOrganizationEdge>;
-  MeUser: ResolverTypeWrapper<MeUser>;
+  MeUser: ResolverTypeWrapper<Omit<MeUser, 'defaultDashboard' | 'defaultDashboards'> & { defaultDashboard?: Maybe<ResolversTypes['Workspace']>, defaultDashboards: Array<ResolversTypes['Workspace']> }>;
   MediaContent: ResolverTypeWrapper<Omit<MediaContent, 'cases' | 'createdBy' | 'exportFiles' | 'externalReferences' | 'groupings' | 'importFiles' | 'indicators' | 'notes' | 'objectOrganization' | 'observedData' | 'opinions' | 'pendingFiles' | 'reports' | 'stixCoreRelationships'> & { cases?: Maybe<ResolversTypes['CaseConnection']>, createdBy?: Maybe<ResolversTypes['Identity']>, exportFiles?: Maybe<ResolversTypes['FileConnection']>, externalReferences?: Maybe<ResolversTypes['ExternalReferenceConnection']>, groupings?: Maybe<ResolversTypes['GroupingConnection']>, importFiles?: Maybe<ResolversTypes['FileConnection']>, indicators?: Maybe<ResolversTypes['IndicatorConnection']>, notes?: Maybe<ResolversTypes['NoteConnection']>, objectOrganization?: Maybe<ResolversTypes['OrganizationConnection']>, observedData?: Maybe<ResolversTypes['ObservedDataConnection']>, opinions?: Maybe<ResolversTypes['OpinionConnection']>, pendingFiles?: Maybe<ResolversTypes['FileConnection']>, reports?: Maybe<ResolversTypes['ReportConnection']>, stixCoreRelationships?: Maybe<ResolversTypes['StixCoreRelationshipConnection']> }>;
   MediaContentAddInput: MediaContentAddInput;
   Member: ResolverTypeWrapper<Member>;
@@ -26702,7 +26709,7 @@ export type ResolversTypes = ResolversObject<{
   Upload: ResolverTypeWrapper<Scalars['Upload']>;
   Url: ResolverTypeWrapper<Omit<Url, 'cases' | 'createdBy' | 'exportFiles' | 'externalReferences' | 'groupings' | 'importFiles' | 'indicators' | 'notes' | 'objectOrganization' | 'observedData' | 'opinions' | 'pendingFiles' | 'reports' | 'stixCoreRelationships'> & { cases?: Maybe<ResolversTypes['CaseConnection']>, createdBy?: Maybe<ResolversTypes['Identity']>, exportFiles?: Maybe<ResolversTypes['FileConnection']>, externalReferences?: Maybe<ResolversTypes['ExternalReferenceConnection']>, groupings?: Maybe<ResolversTypes['GroupingConnection']>, importFiles?: Maybe<ResolversTypes['FileConnection']>, indicators?: Maybe<ResolversTypes['IndicatorConnection']>, notes?: Maybe<ResolversTypes['NoteConnection']>, objectOrganization?: Maybe<ResolversTypes['OrganizationConnection']>, observedData?: Maybe<ResolversTypes['ObservedDataConnection']>, opinions?: Maybe<ResolversTypes['OpinionConnection']>, pendingFiles?: Maybe<ResolversTypes['FileConnection']>, reports?: Maybe<ResolversTypes['ReportConnection']>, stixCoreRelationships?: Maybe<ResolversTypes['StixCoreRelationshipConnection']> }>;
   UrlAddInput: UrlAddInput;
-  User: ResolverTypeWrapper<Omit<User, 'groups' | 'objectOrganization'> & { groups?: Maybe<ResolversTypes['GroupConnection']>, objectOrganization?: Maybe<ResolversTypes['OrganizationConnection']> }>;
+  User: ResolverTypeWrapper<Omit<User, 'defaultDashboard' | 'defaultDashboards' | 'groups' | 'objectOrganization'> & { defaultDashboard?: Maybe<ResolversTypes['Workspace']>, defaultDashboards: Array<ResolversTypes['Workspace']>, groups?: Maybe<ResolversTypes['GroupConnection']>, objectOrganization?: Maybe<ResolversTypes['OrganizationConnection']> }>;
   UserAccount: ResolverTypeWrapper<Omit<UserAccount, 'cases' | 'createdBy' | 'exportFiles' | 'externalReferences' | 'groupings' | 'importFiles' | 'indicators' | 'notes' | 'objectOrganization' | 'observedData' | 'opinions' | 'pendingFiles' | 'reports' | 'stixCoreRelationships'> & { cases?: Maybe<ResolversTypes['CaseConnection']>, createdBy?: Maybe<ResolversTypes['Identity']>, exportFiles?: Maybe<ResolversTypes['FileConnection']>, externalReferences?: Maybe<ResolversTypes['ExternalReferenceConnection']>, groupings?: Maybe<ResolversTypes['GroupingConnection']>, importFiles?: Maybe<ResolversTypes['FileConnection']>, indicators?: Maybe<ResolversTypes['IndicatorConnection']>, notes?: Maybe<ResolversTypes['NoteConnection']>, objectOrganization?: Maybe<ResolversTypes['OrganizationConnection']>, observedData?: Maybe<ResolversTypes['ObservedDataConnection']>, opinions?: Maybe<ResolversTypes['OpinionConnection']>, pendingFiles?: Maybe<ResolversTypes['FileConnection']>, reports?: Maybe<ResolversTypes['ReportConnection']>, stixCoreRelationships?: Maybe<ResolversTypes['StixCoreRelationshipConnection']> }>;
   UserAccountAddInput: UserAccountAddInput;
   UserAddInput: UserAddInput;
@@ -26948,7 +26955,7 @@ export type ResolversParentTypes = ResolversObject<{
   FileMetadata: Omit<FileMetadata, 'entity'> & { entity?: Maybe<ResolversParentTypes['StixCoreObject']> };
   Float: Scalars['Float'];
   GetMetrics: GetMetrics;
-  Group: Omit<Group, 'members'> & { members?: Maybe<ResolversParentTypes['UserConnection']> };
+  Group: Omit<Group, 'defaultDashboard' | 'members'> & { defaultDashboard?: Maybe<ResolversParentTypes['Workspace']>, members?: Maybe<ResolversParentTypes['UserConnection']> };
   GroupAddInput: GroupAddInput;
   GroupConnection: Omit<GroupConnection, 'edges'> & { edges?: Maybe<Array<Maybe<ResolversParentTypes['GroupEdge']>>> };
   GroupEdge: Omit<GroupEdge, 'node'> & { node: ResolversParentTypes['Group'] };
@@ -27063,7 +27070,7 @@ export type ResolversParentTypes = ResolversObject<{
   MeOrganization: MeOrganization;
   MeOrganizationConnection: MeOrganizationConnection;
   MeOrganizationEdge: MeOrganizationEdge;
-  MeUser: MeUser;
+  MeUser: Omit<MeUser, 'defaultDashboard' | 'defaultDashboards'> & { defaultDashboard?: Maybe<ResolversParentTypes['Workspace']>, defaultDashboards: Array<ResolversParentTypes['Workspace']> };
   MediaContent: Omit<MediaContent, 'cases' | 'createdBy' | 'exportFiles' | 'externalReferences' | 'groupings' | 'importFiles' | 'indicators' | 'notes' | 'objectOrganization' | 'observedData' | 'opinions' | 'pendingFiles' | 'reports' | 'stixCoreRelationships'> & { cases?: Maybe<ResolversParentTypes['CaseConnection']>, createdBy?: Maybe<ResolversParentTypes['Identity']>, exportFiles?: Maybe<ResolversParentTypes['FileConnection']>, externalReferences?: Maybe<ResolversParentTypes['ExternalReferenceConnection']>, groupings?: Maybe<ResolversParentTypes['GroupingConnection']>, importFiles?: Maybe<ResolversParentTypes['FileConnection']>, indicators?: Maybe<ResolversParentTypes['IndicatorConnection']>, notes?: Maybe<ResolversParentTypes['NoteConnection']>, objectOrganization?: Maybe<ResolversParentTypes['OrganizationConnection']>, observedData?: Maybe<ResolversParentTypes['ObservedDataConnection']>, opinions?: Maybe<ResolversParentTypes['OpinionConnection']>, pendingFiles?: Maybe<ResolversParentTypes['FileConnection']>, reports?: Maybe<ResolversParentTypes['ReportConnection']>, stixCoreRelationships?: Maybe<ResolversParentTypes['StixCoreRelationshipConnection']> };
   MediaContentAddInput: MediaContentAddInput;
   Member: Member;
@@ -27324,7 +27331,7 @@ export type ResolversParentTypes = ResolversObject<{
   Upload: Scalars['Upload'];
   Url: Omit<Url, 'cases' | 'createdBy' | 'exportFiles' | 'externalReferences' | 'groupings' | 'importFiles' | 'indicators' | 'notes' | 'objectOrganization' | 'observedData' | 'opinions' | 'pendingFiles' | 'reports' | 'stixCoreRelationships'> & { cases?: Maybe<ResolversParentTypes['CaseConnection']>, createdBy?: Maybe<ResolversParentTypes['Identity']>, exportFiles?: Maybe<ResolversParentTypes['FileConnection']>, externalReferences?: Maybe<ResolversParentTypes['ExternalReferenceConnection']>, groupings?: Maybe<ResolversParentTypes['GroupingConnection']>, importFiles?: Maybe<ResolversParentTypes['FileConnection']>, indicators?: Maybe<ResolversParentTypes['IndicatorConnection']>, notes?: Maybe<ResolversParentTypes['NoteConnection']>, objectOrganization?: Maybe<ResolversParentTypes['OrganizationConnection']>, observedData?: Maybe<ResolversParentTypes['ObservedDataConnection']>, opinions?: Maybe<ResolversParentTypes['OpinionConnection']>, pendingFiles?: Maybe<ResolversParentTypes['FileConnection']>, reports?: Maybe<ResolversParentTypes['ReportConnection']>, stixCoreRelationships?: Maybe<ResolversParentTypes['StixCoreRelationshipConnection']> };
   UrlAddInput: UrlAddInput;
-  User: Omit<User, 'groups' | 'objectOrganization'> & { groups?: Maybe<ResolversParentTypes['GroupConnection']>, objectOrganization?: Maybe<ResolversParentTypes['OrganizationConnection']> };
+  User: Omit<User, 'defaultDashboard' | 'defaultDashboards' | 'groups' | 'objectOrganization'> & { defaultDashboard?: Maybe<ResolversParentTypes['Workspace']>, defaultDashboards: Array<ResolversParentTypes['Workspace']>, groups?: Maybe<ResolversParentTypes['GroupConnection']>, objectOrganization?: Maybe<ResolversParentTypes['OrganizationConnection']> };
   UserAccount: Omit<UserAccount, 'cases' | 'createdBy' | 'exportFiles' | 'externalReferences' | 'groupings' | 'importFiles' | 'indicators' | 'notes' | 'objectOrganization' | 'observedData' | 'opinions' | 'pendingFiles' | 'reports' | 'stixCoreRelationships'> & { cases?: Maybe<ResolversParentTypes['CaseConnection']>, createdBy?: Maybe<ResolversParentTypes['Identity']>, exportFiles?: Maybe<ResolversParentTypes['FileConnection']>, externalReferences?: Maybe<ResolversParentTypes['ExternalReferenceConnection']>, groupings?: Maybe<ResolversParentTypes['GroupingConnection']>, importFiles?: Maybe<ResolversParentTypes['FileConnection']>, indicators?: Maybe<ResolversParentTypes['IndicatorConnection']>, notes?: Maybe<ResolversParentTypes['NoteConnection']>, objectOrganization?: Maybe<ResolversParentTypes['OrganizationConnection']>, observedData?: Maybe<ResolversParentTypes['ObservedDataConnection']>, opinions?: Maybe<ResolversParentTypes['OpinionConnection']>, pendingFiles?: Maybe<ResolversParentTypes['FileConnection']>, reports?: Maybe<ResolversParentTypes['ReportConnection']>, stixCoreRelationships?: Maybe<ResolversParentTypes['StixCoreRelationshipConnection']> };
   UserAccountAddInput: UserAccountAddInput;
   UserAddInput: UserAddInput;
@@ -29455,7 +29462,9 @@ export type GroupResolvers<ContextType = any, ParentType extends ResolversParent
   allowed_marking?: Resolver<Maybe<Array<ResolversTypes['MarkingDefinition']>>, ParentType, ContextType>;
   auto_new_marking?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   created_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  defaultDashboard?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
   default_assignation?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  default_dashboard_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   default_marking?: Resolver<Maybe<Array<ResolversTypes['DefaultMarking']>>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   editContext?: Resolver<Maybe<Array<ResolversTypes['EditUserContext']>>, ParentType, ContextType>;
@@ -30751,6 +30760,9 @@ export type MeUserResolvers<ContextType = any, ParentType extends ResolversParen
   allowed_marking?: Resolver<Maybe<Array<ResolversTypes['MarkingDefinition']>>, ParentType, ContextType>;
   api_token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   capabilities?: Resolver<Array<ResolversTypes['Capability']>, ParentType, ContextType>;
+  defaultDashboard?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
+  defaultDashboards?: Resolver<Array<ResolversTypes['Workspace']>, ParentType, ContextType>;
+  default_dashboard_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   default_hidden_types?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
   default_marking?: Resolver<Maybe<Array<ResolversTypes['DefaultMarking']>>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -33928,7 +33940,9 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   api_token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   capabilities?: Resolver<Array<Maybe<ResolversTypes['Capability']>>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  dashboard?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  defaultDashboard?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
+  defaultDashboards?: Resolver<Array<ResolversTypes['Workspace']>, ParentType, ContextType>;
+  default_dashboard_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   default_hidden_types?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   editContext?: Resolver<Maybe<Array<ResolversTypes['EditUserContext']>>, ParentType, ContextType>;

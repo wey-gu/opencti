@@ -20,6 +20,7 @@ import withCancel from '../graphql/subscriptionWrapper';
 import { ENTITY_TYPE_GROUP } from '../schema/internalObject';
 import { batchLoader } from '../database/middleware';
 import { addGroup } from '../domain/grant';
+import { findById as findWorskpaceById } from '../modules/workspace/workspace-domain';
 
 const markingsLoader = batchLoader(batchMarkingDefinitions);
 const membersLoader = batchLoader(batchMembers);
@@ -36,6 +37,9 @@ const groupResolvers = {
     roles: (stixCoreObject, _, context) => rolesLoader.load(stixCoreObject.id, context, context.user),
     members: (group, _, context) => membersLoader.load(group.id, context, context.user),
     editContext: (group) => fetchEditContext(group.id),
+    defaultDashboard: (current, _, context) => {
+      return current.default_dashboard_id ? findWorskpaceById(context, context.user, current.default_dashboard_id) : [];
+    }
   },
   Mutation: {
     groupEdit: (_, { id }, context) => ({

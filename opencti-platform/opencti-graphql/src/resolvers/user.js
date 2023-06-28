@@ -5,11 +5,12 @@ import {
   addUser,
   assignOrganizationToUser,
   authenticateUser,
+  batchCreator,
   batchGroups,
   batchOrganizations,
   batchRoleCapabilities,
   batchRolesForGroups,
-  batchCreator,
+  batchRolesForUsers,
   bookmarks,
   deleteBookmark,
   findAll,
@@ -18,6 +19,7 @@ import {
   findById,
   findCapabilities,
   findCreators,
+  findDefaultDashboards,
   findRoleById,
   findRoles,
   logout,
@@ -41,7 +43,6 @@ import {
   userIdDeleteRelation,
   userRenewToken,
   userWithOrigin,
-  batchRolesForUsers,
 } from '../domain/user';
 import { BUS_TOPICS, ENABLED_DEMO_MODE, logApp } from '../config/conf';
 import passport, { PROVIDERS } from '../config/providers';

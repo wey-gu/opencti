@@ -3,12 +3,14 @@ import { createFragmentContainer, graphql, useMutation } from 'react-relay';
 import { Field, Form, Formik } from 'formik';
 import { pick } from 'ramda';
 import * as Yup from 'yup';
+import MenuItem from '@mui/material/MenuItem';
 import { useFormatter } from '../../../../components/i18n';
 import TextField from '../../../../components/TextField';
 import MarkdownField from '../../../../components/MarkdownField';
 import { SubscriptionFocus } from '../../../../components/Subscription';
 import SwitchField from '../../../../components/SwitchField';
 import { GroupEditionOverview_group$data } from './__generated__/GroupEditionOverview_group.graphql';
+import SelectField from '../../../../components/SelectField';
 
 export const groupMutationFieldPatch = graphql`
   mutation GroupEditionOverviewFieldPatchMutation(
@@ -88,7 +90,8 @@ const GroupEditionOverviewComponent: FunctionComponent<GroupEditionOverviewCompo
         enableReinitialize={true}
         initialValues={initialValues}
         validationSchema={groupValidation(t)}
-        onSubmit={() => {}}
+        onSubmit={() => {
+        }}
       >
         {() => (
           <Form style={{ margin: '20px 0 20px 0' }}>
@@ -121,6 +124,20 @@ const GroupEditionOverviewComponent: FunctionComponent<GroupEditionOverviewCompo
                 />
               }
             />
+
+            <Field
+              component={SelectField}
+              variant="standard"
+              name="default_dashboard_id"
+              onChange={handleSubmitField}
+              label={t('Custom dashboard')}
+              fullWidth={true}
+              multiple={true}
+              containerstyle={{ width: '100%', marginTop: 20 }}
+            >
+              {/*<MenuItem value="Default">"Item"</MenuItem>*/}
+            </Field>
+
             <Field
               component={SwitchField}
               type="checkbox"
@@ -168,6 +185,7 @@ const GroupEditionOverview = createFragmentContainer(
         description
         default_assignation
         auto_new_marking
+        default_dashboard_id
       }
     `,
   },

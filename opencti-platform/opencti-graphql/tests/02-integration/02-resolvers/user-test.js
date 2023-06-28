@@ -1,10 +1,13 @@
-import { describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import gql from 'graphql-tag';
 import { ADMIN_USER, editorQuery, queryAsAdmin, testContext } from '../../utils/testQuery';
 import { generateStandardId } from '../../../src/schema/identifier';
 import { ENTITY_TYPE_CAPABILITY, ENTITY_TYPE_GROUP, ENTITY_TYPE_USER } from '../../../src/schema/internalObject';
 import { ENTITY_TYPE_IDENTITY_ORGANIZATION } from '../../../src/schema/stixDomainObject';
 import { elLoadById } from '../../../src/database/engine';
+import { addWorkspace, workspaceDelete } from '../../../src/modules/workspace/workspace-domain';
+import { addGroup } from '../../../src/domain/grant';
+import { groupAddRelation, groupDelete, groupEditField } from '../../../src/domain/group';
 
 const LIST_QUERY = gql`
   query users(
