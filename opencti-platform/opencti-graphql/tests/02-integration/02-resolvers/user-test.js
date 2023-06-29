@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, beforeAll, afterAll } from 'vitest';
 import gql from 'graphql-tag';
 import { ADMIN_USER, editorQuery, queryAsAdmin, testContext } from '../../utils/testQuery';
 import { generateStandardId } from '../../../src/schema/identifier';
@@ -152,7 +152,7 @@ describe('User resolver standard behavior', () => {
     expect(queryResult.data.user.id).toEqual(userInternalId);
   });
   describe('dashboard preferences', () => {
-    describe('when a user has the default dashboard', () => {
+    describe('when a user does not have a default dashboard', () => {
       it('does not have any dashboard associated', async () => {
         const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: userInternalId } });
 
@@ -166,8 +166,10 @@ describe('User resolver standard behavior', () => {
       });
     });
 
-    describe('when a user has a preferred dashboard', () => {
-      it('can have a reference to it', async () => {
+    describe('when a user has a default dashboard', () => {
+      let dashboardId = '';
+
+      beforeAll(async () => {
         const dashboardCreationQuery = await queryAsAdmin({
           query: gql`
             mutation CreateDashboard($input: WorkspaceAddInput!){
@@ -182,7 +184,22 @@ describe('User resolver standard behavior', () => {
             }
           }
         });
-        const dashboardId = dashboardCreationQuery.data.workspaceAdd.id;
+        dashboardId = dashboardCreationQuery.data.workspaceAdd.id;
+      });
+
+      afterAll(async () => {
+        await queryAsAdmin({
+          query: gql`
+            mutation workspaceDelete($id: ID!) {
+              workspaceDelete(id: $id)
+            }`,
+          variables: {
+            id: dashboardId
+          }
+        });
+      });
+
+      it('can have a reference to it', async () => {
         const addDashboardPreference = await queryAsAdmin({
           query: gql`
             mutation AddDashboardPreference($userId: ID!, $editInput: [EditInput]!) {
@@ -204,13 +221,13 @@ describe('User resolver standard behavior', () => {
         expect(addDashboardPreference.data.userEdit.fieldPatch.dashboard_id).toEqual(dashboardId);
       });
 
-      it('has a reference to the dashboard', async () => {
+      it('has the associated dashboard', async () => {
         const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: userInternalId } });
 
         expect(queryResult.data.user.dashboard.name).toEqual('dashboard de test');
       });
 
-      it('can removes its preference', async () => {
+      it('can removes the reference to the dashboard', async () => {
         const removeDashboardPreference = await queryAsAdmin({
           query: gql`
             mutation RemoveDashboardPreference($userId: ID!, $editInput: [EditInput]!) {
