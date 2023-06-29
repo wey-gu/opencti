@@ -87,6 +87,9 @@ const groupFragment = graphql`
         }
       }
     }
+    default_dashboard {
+      name
+    }
     roles(orderBy: $rolesOrderBy, orderMode: $rolesOrderMode) {
       id
       name
@@ -253,6 +256,12 @@ const Group = ({ groupData }: { groupData: Group_group$key }) => {
                     </ListItem>
                   ))}
                 </List>
+              </Grid>
+              <Grid item={true} xs={6}>
+                <Typography variant="h3">
+                  {t('dashboard')}
+                </Typography>
+                {group.default_dashboard?.name ?? 'default'}
               </Grid>
               <Grid item={true} xs={6}>
                 <Typography variant="h3" gutterBottom={true}>
