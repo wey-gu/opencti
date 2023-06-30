@@ -225,18 +225,6 @@ export const groupEditDefaultMarking = async (context, user, groupId, defaultMar
   return notify(BUS_TOPICS[ENTITY_TYPE_WORKSPACE].EDIT_TOPIC, element, user);
 };
 
-export const assignDefaultDashboard = async (context, user, groupId, dashboardId) => {
-  const dashboard = await findWorkspaceById(context, user, dashboardId);
-
-  if (!dashboard) {
-    throw FunctionalError(`Cannot assign default dashboard. Dashboard matching id '${dashboardId}' not found.`);
-  }
-
-  const patch = { default_dashboard: dashboard };
-  const { element } = await patchAttribute(context, user, groupId, ENTITY_TYPE_GROUP, patch);
-
-  return notify(BUS_TOPICS[ENTITY_TYPE_WORKSPACE].EDIT_TOPIC, element, user);
-};
 // -- CONTEXT --
 
 export const groupCleanContext = async (context, user, groupId) => {

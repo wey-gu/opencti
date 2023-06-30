@@ -1,4 +1,4 @@
-import { expect, it, describe } from 'vitest';
+import { expect, it, describe, beforeAll, afterAll } from 'vitest';
 import gql from 'graphql-tag';
 import { queryAsAdmin } from '../../utils/testQuery';
 import { OPENCTI_ADMIN_UUID } from '../../../src/schema/general';
@@ -23,6 +23,10 @@ const READ_QUERY = gql`
       id
       name
       description
+      default_dashboard_id
+      defaultDashboard {
+        name
+      }
     }
   }
 `;
@@ -56,30 +60,99 @@ describe('Group resolver standard behavior', () => {
     groupInternalId = group.data.groupAdd.id;
   });
 
-  describe('default dashboards', async () => {
-    describe('when assigning a default dashboard that does not exists', async () => {
-      it('fails with an error', async () => {
-        const nonExistingDashboardId = '1b021e22-c622-43f1-bb51-343f3085eb87';
+  describe('dashboard preferences', () => {
+    describe('when a group does not have a default dashboard', () => {
+      it('returns "null"', async () => {
+        const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: groupInternalId } });
 
-        const assignDefaultDashboardToGroup = await queryAsAdmin({
+        expect(queryResult.data.group.default_dashboard_id).toBeNull();
+        expect(queryResult.data.group.defaultDashboard).toBeNull();
+      });
+    });
+
+    describe('when a group has a default dashboard', () => {
+      let dashboardId = '';
+
+      beforeAll(async () => {
+        const dashboardCreationQuery = await queryAsAdmin({
           query: gql`
-            mutation assignDefaultDashboardToGroup($id: ID!, $dashboardId: ID!) {
-              groupEdit(id: $id) {
-                assignDefaultDashboard(dashboardId: $dashboardId) {
-                  default_dashboard {
+            mutation CreateDashboard($input: WorkspaceAddInput!){
+              workspaceAdd(input: $input){
+                id
+              }
+            }`,
+          variables: {
+            input: {
+              type: 'dashboard',
+              name: 'dashboard de test'
+            }
+          }
+        });
+        dashboardId = dashboardCreationQuery.data.workspaceAdd.id;
+      });
+
+      afterAll(async () => {
+        await queryAsAdmin({
+          query: gql`
+            mutation workspaceDelete($id: ID!) {
+              workspaceDelete(id: $id)
+            }`,
+          variables: {
+            id: dashboardId
+          }
+        });
+      });
+
+      it('can have a reference to it', async () => {
+        const setDefaultDashboardMutation = await queryAsAdmin({
+          query: gql`
+            mutation setDefaultDashboard($groupId: ID!, $editInput: [EditInput]!) {
+              groupEdit(id: $groupId) {
+                fieldPatch(input: $editInput) {
+                  default_dashboard_id
+                  defaultDashboard {
                     name
                   }
                 }
               }
-            }
-          `,
+            }`,
           variables: {
-            id: groupInternalId,
-            dashboardId: nonExistingDashboardId
+            groupId: groupInternalId,
+            editInput: [{
+              key: 'default_dashboard_id',
+              value: dashboardId
+            }]
           }
         });
 
-        expect(assignDefaultDashboardToGroup.errors).toHaveLength(1);
+        expect(setDefaultDashboardMutation.data.groupEdit.fieldPatch.default_dashboard_id).toEqual(dashboardId);
+        expect(setDefaultDashboardMutation.data.groupEdit.fieldPatch.defaultDashboard.name).toEqual('dashboard de test');
+      });
+
+      it('can remove the reference to the default dashboard', async () => {
+        const removeDefaultDashboardMutation = await queryAsAdmin({
+          query: gql`
+            mutation removeDefaultDashboardMutation($groupId: ID!, $editInput: [EditInput]!) {
+              groupEdit(id: $groupId) {
+                fieldPatch(input: $editInput) {
+                  default_dashboard_id
+                  defaultDashboard {
+                    name
+                  }
+                }
+              }
+            }`,
+          variables: {
+            groupId: groupInternalId,
+            editInput: [{
+              key: 'default_dashboard_id',
+              value: [null]
+            }]
+          }
+        });
+
+        expect(removeDefaultDashboardMutation.data.groupEdit.fieldPatch.default_dashboard_id).toBeNull();
+        expect(removeDefaultDashboardMutation.data.groupEdit.fieldPatch.defaultDashboard).toBeNull();
       });
     });
   });

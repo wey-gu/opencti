@@ -1,6 +1,5 @@
 import { withFilter } from 'graphql-subscriptions';
 import {
-  assignDefaultDashboard,
   batchMarkingDefinitions,
   batchMembers,
   batchRoles,
@@ -21,6 +20,7 @@ import withCancel from '../graphql/subscriptionWrapper';
 import { ENTITY_TYPE_GROUP } from '../schema/internalObject';
 import { batchLoader } from '../database/middleware';
 import { addGroup } from '../domain/grant';
+import { findById as findWorskpaceById } from '../modules/workspace/workspace-domain';
 
 const markingsLoader = batchLoader(batchMarkingDefinitions);
 const membersLoader = batchLoader(batchMembers);
@@ -37,6 +37,9 @@ const groupResolvers = {
     roles: (stixCoreObject, _, context) => rolesLoader.load(stixCoreObject.id, context, context.user),
     members: (group, _, context) => membersLoader.load(group.id, context, context.user),
     editContext: (group) => fetchEditContext(group.id),
+    defaultDashboard: (current, _, context) => {
+      return current.default_dashboard_id ? findWorskpaceById(context, context.user, current.default_dashboard_id) : null;
+    }
   },
   Mutation: {
     groupEdit: (_, { id }, context) => ({
@@ -47,7 +50,6 @@ const groupResolvers = {
       relationAdd: ({ input }) => groupAddRelation(context, context.user, id, input),
       relationDelete: ({ fromId, toId, relationship_type: relationshipType }) => groupDeleteRelation(context, context.user, id, fromId, toId, relationshipType),
       editDefaultMarking: ({ input }) => groupEditDefaultMarking(context, context.user, id, input),
-      assignDefaultDashboard: ({ dashboardId }) => assignDefaultDashboard(context, context.user, id, dashboardId),
     }),
     groupAdd: (_, { input }, context) => addGroup(context, context.user, input),
   },

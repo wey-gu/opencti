@@ -87,7 +87,7 @@ const groupFragment = graphql`
         }
       }
     }
-    default_dashboard {
+    defaultDashboard {
       name
     }
     roles(orderBy: $rolesOrderBy, orderMode: $rolesOrderMode) {
@@ -261,7 +261,7 @@ const Group = ({ groupData }: { groupData: Group_group$key }) => {
                 <Typography variant="h3">
                   {t('dashboard')}
                 </Typography>
-                {group.default_dashboard?.name ?? 'default'}
+                {group.defaultDashboard?.name ?? 'default'}
               </Grid>
               <Grid item={true} xs={6}>
                 <Typography variant="h3" gutterBottom={true}>

@@ -6987,8 +6987,9 @@ export type Group = BasicObject & InternalObject & {
   allowed_marking?: Maybe<Array<MarkingDefinition>>;
   auto_new_marking?: Maybe<Scalars['Boolean']>;
   created_at?: Maybe<Scalars['DateTime']>;
+  defaultDashboard?: Maybe<Workspace>;
   default_assignation?: Maybe<Scalars['Boolean']>;
-  default_dashboard?: Maybe<Workspace>;
+  default_dashboard_id?: Maybe<Scalars['ID']>;
   default_marking?: Maybe<Array<DefaultMarking>>;
   description?: Maybe<Scalars['String']>;
   editContext?: Maybe<Array<EditUserContext>>;
@@ -7030,7 +7031,6 @@ export type GroupEdge = {
 
 export type GroupEditMutations = {
   __typename?: 'GroupEditMutations';
-  assignDefaultDashboard?: Maybe<Group>;
   contextClean?: Maybe<Group>;
   contextPatch?: Maybe<Group>;
   delete?: Maybe<Scalars['ID']>;
@@ -7038,11 +7038,6 @@ export type GroupEditMutations = {
   fieldPatch?: Maybe<Group>;
   relationAdd?: Maybe<InternalRelationship>;
   relationDelete?: Maybe<Group>;
-};
-
-
-export type GroupEditMutationsAssignDefaultDashboardArgs = {
-  dashboardId: Scalars['ID'];
 };
 
 
@@ -26240,11 +26235,11 @@ export type ResolversTypes = ResolversObject<{
   FilterMode: FilterMode;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   GetMetrics: ResolverTypeWrapper<GetMetrics>;
-  Group: ResolverTypeWrapper<Omit<Group, 'default_dashboard' | 'members'> & { default_dashboard?: Maybe<ResolversTypes['Workspace']>, members?: Maybe<ResolversTypes['UserConnection']> }>;
+  Group: ResolverTypeWrapper<Omit<Group, 'defaultDashboard' | 'members'> & { defaultDashboard?: Maybe<ResolversTypes['Workspace']>, members?: Maybe<ResolversTypes['UserConnection']> }>;
   GroupAddInput: GroupAddInput;
   GroupConnection: ResolverTypeWrapper<Omit<GroupConnection, 'edges'> & { edges?: Maybe<Array<Maybe<ResolversTypes['GroupEdge']>>> }>;
   GroupEdge: ResolverTypeWrapper<Omit<GroupEdge, 'node'> & { node: ResolversTypes['Group'] }>;
-  GroupEditMutations: ResolverTypeWrapper<Omit<GroupEditMutations, 'assignDefaultDashboard' | 'contextClean' | 'contextPatch' | 'editDefaultMarking' | 'fieldPatch' | 'relationDelete'> & { assignDefaultDashboard?: Maybe<ResolversTypes['Group']>, contextClean?: Maybe<ResolversTypes['Group']>, contextPatch?: Maybe<ResolversTypes['Group']>, editDefaultMarking?: Maybe<ResolversTypes['Group']>, fieldPatch?: Maybe<ResolversTypes['Group']>, relationDelete?: Maybe<ResolversTypes['Group']> }>;
+  GroupEditMutations: ResolverTypeWrapper<Omit<GroupEditMutations, 'contextClean' | 'contextPatch' | 'editDefaultMarking' | 'fieldPatch' | 'relationDelete'> & { contextClean?: Maybe<ResolversTypes['Group']>, contextPatch?: Maybe<ResolversTypes['Group']>, editDefaultMarking?: Maybe<ResolversTypes['Group']>, fieldPatch?: Maybe<ResolversTypes['Group']>, relationDelete?: Maybe<ResolversTypes['Group']> }>;
   Grouping: ResolverTypeWrapper<BasicStoreEntityGrouping>;
   GroupingAddInput: GroupingAddInput;
   GroupingConnection: ResolverTypeWrapper<Omit<GroupingConnection, 'edges'> & { edges?: Maybe<Array<Maybe<ResolversTypes['GroupingEdge']>>> }>;
@@ -26958,11 +26953,11 @@ export type ResolversParentTypes = ResolversObject<{
   FileMetadata: Omit<FileMetadata, 'entity'> & { entity?: Maybe<ResolversParentTypes['StixCoreObject']> };
   Float: Scalars['Float'];
   GetMetrics: GetMetrics;
-  Group: Omit<Group, 'default_dashboard' | 'members'> & { default_dashboard?: Maybe<ResolversParentTypes['Workspace']>, members?: Maybe<ResolversParentTypes['UserConnection']> };
+  Group: Omit<Group, 'defaultDashboard' | 'members'> & { defaultDashboard?: Maybe<ResolversParentTypes['Workspace']>, members?: Maybe<ResolversParentTypes['UserConnection']> };
   GroupAddInput: GroupAddInput;
   GroupConnection: Omit<GroupConnection, 'edges'> & { edges?: Maybe<Array<Maybe<ResolversParentTypes['GroupEdge']>>> };
   GroupEdge: Omit<GroupEdge, 'node'> & { node: ResolversParentTypes['Group'] };
-  GroupEditMutations: Omit<GroupEditMutations, 'assignDefaultDashboard' | 'contextClean' | 'contextPatch' | 'editDefaultMarking' | 'fieldPatch' | 'relationDelete'> & { assignDefaultDashboard?: Maybe<ResolversParentTypes['Group']>, contextClean?: Maybe<ResolversParentTypes['Group']>, contextPatch?: Maybe<ResolversParentTypes['Group']>, editDefaultMarking?: Maybe<ResolversParentTypes['Group']>, fieldPatch?: Maybe<ResolversParentTypes['Group']>, relationDelete?: Maybe<ResolversParentTypes['Group']> };
+  GroupEditMutations: Omit<GroupEditMutations, 'contextClean' | 'contextPatch' | 'editDefaultMarking' | 'fieldPatch' | 'relationDelete'> & { contextClean?: Maybe<ResolversParentTypes['Group']>, contextPatch?: Maybe<ResolversParentTypes['Group']>, editDefaultMarking?: Maybe<ResolversParentTypes['Group']>, fieldPatch?: Maybe<ResolversParentTypes['Group']>, relationDelete?: Maybe<ResolversParentTypes['Group']> };
   Grouping: BasicStoreEntityGrouping;
   GroupingAddInput: GroupingAddInput;
   GroupingConnection: Omit<GroupingConnection, 'edges'> & { edges?: Maybe<Array<Maybe<ResolversParentTypes['GroupingEdge']>>> };
@@ -29465,8 +29460,9 @@ export type GroupResolvers<ContextType = any, ParentType extends ResolversParent
   allowed_marking?: Resolver<Maybe<Array<ResolversTypes['MarkingDefinition']>>, ParentType, ContextType>;
   auto_new_marking?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   created_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
+  defaultDashboard?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
   default_assignation?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  default_dashboard?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
+  default_dashboard_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   default_marking?: Resolver<Maybe<Array<ResolversTypes['DefaultMarking']>>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   editContext?: Resolver<Maybe<Array<ResolversTypes['EditUserContext']>>, ParentType, ContextType>;
@@ -29494,7 +29490,6 @@ export type GroupEdgeResolvers<ContextType = any, ParentType extends ResolversPa
 }>;
 
 export type GroupEditMutationsResolvers<ContextType = any, ParentType extends ResolversParentTypes['GroupEditMutations'] = ResolversParentTypes['GroupEditMutations']> = ResolversObject<{
-  assignDefaultDashboard?: Resolver<Maybe<ResolversTypes['Group']>, ParentType, ContextType, RequireFields<GroupEditMutationsAssignDefaultDashboardArgs, 'dashboardId'>>;
   contextClean?: Resolver<Maybe<ResolversTypes['Group']>, ParentType, ContextType>;
   contextPatch?: Resolver<Maybe<ResolversTypes['Group']>, ParentType, ContextType, Partial<GroupEditMutationsContextPatchArgs>>;
   delete?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
