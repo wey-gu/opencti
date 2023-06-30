@@ -5,15 +5,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import Drawer from '@mui/material/Drawer';
 import Fab from '@mui/material/Fab';
-import {
-  AccountBalanceOutlined,
-  Delete,
-  DeleteForeverOutlined,
-  Edit,
-  GroupOutlined,
-  ReceiptOutlined,
-  SecurityOutlined,
-} from '@mui/icons-material';
+import { AccountBalanceOutlined, Delete, DeleteForeverOutlined, Edit, GroupOutlined, ReceiptOutlined, SecurityOutlined, } from '@mui/icons-material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -51,8 +43,6 @@ import Triggers from '../common/Triggers';
 import { UserLogsTimeSeriesQuery$data } from './__generated__/UserLogsTimeSeriesQuery.graphql';
 import { UserPopoverEditionQuery$data } from './__generated__/UserPopoverEditionQuery.graphql';
 import { UserOtpDeactivationMutation } from './__generated__/UserOtpDeactivationMutation.graphql';
-import UserDashboard from './dashboard/UserDashboard';
-import TriggerLineTitles from '../../profile/TriggerLineTitles';
 
 Transition.displayName = 'TransitionSlide';
 
