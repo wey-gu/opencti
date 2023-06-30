@@ -909,14 +909,14 @@ const CustomDashboard = ({ dashboard, timeField }) => {
 const changeDashboardPref = graphql`
   mutation DashboardPrefMutation($input: [EditInput]!) {
     meEdit(input: $input) {
-      dashboard_id
+      default_dashboard_id
     }
   }
 `;
 
 const Dashboard = () => {
   const classes = useStyles();
-  const { me: { dashboard_id: dashboardId } } = useAuth();
+  const { me: { default_dashboard_id: dashboardId } } = useAuth();
   const [changeDashboard] = useMutation(changeDashboardPref);
   const [localTimeFieldPreferences, saveTimeFieldPreferences] = useLocalStorage('view-dashboard', {});
   const { timeField = 'technical' } = localTimeFieldPreferences;
@@ -925,7 +925,7 @@ const Dashboard = () => {
     changeDashboard({
       variables: {
         input: [{
-          key: 'dashboard_id',
+          key: 'default_dashboard_id',
           value: (event.target.value === 'default' ? [null] : event.target.value),
         }],
       },

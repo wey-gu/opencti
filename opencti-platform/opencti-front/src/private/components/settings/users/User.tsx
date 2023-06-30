@@ -167,7 +167,7 @@ const userFragment = graphql`
     language
     api_token
     otp_activated
-    dashboard {
+    defaultDashboard {
       name
     }
     roles(orderBy: $rolesOrderBy, orderMode: $rolesOrderMode) {
@@ -560,7 +560,7 @@ const User: FunctionComponent<UserProps> = ({ userData, refetch }) => {
                 <Typography variant="h3" gutterBottom={true}>
                   {t('dashboard')}
                 </Typography>
-                {user.dashboard?.name ?? 'default'}
+                {user.defaultDashboard?.name ?? 'default'}
               </Grid>
             </Grid>
           </Paper>

@@ -81,7 +81,8 @@ const internalObjectsAttributes: { [k: string]: Array<AttributeDefinition> } = {
   ],
   [ENTITY_TYPE_USER]: [
     { name: 'user_email', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
-    { name: 'dashboard_id', type: 'string', mandatoryType: 'no', multiple: false, upsert: true },
+    { name: 'default_dashboard_id', type: 'string', mandatoryType: 'no', multiple: false, upsert: true },
+    { name: 'defaultDashboard', type: 'json', mandatoryType: 'no', multiple: false, upsert: true },
     { name: 'password', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'name', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
     { name: 'description', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },

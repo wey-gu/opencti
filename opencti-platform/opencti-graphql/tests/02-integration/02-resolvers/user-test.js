@@ -49,9 +49,8 @@ const READ_QUERY = gql`
       standard_id
       name
       description
-      dashboard_id
-      dashboard {
-        id
+      default_dashboard_id
+      defaultDashboard {
         name
       }
       groups {
@@ -153,16 +152,11 @@ describe('User resolver standard behavior', () => {
   });
   describe('dashboard preferences', () => {
     describe('when a user does not have a default dashboard', () => {
-      it('does not have any dashboard associated', async () => {
+      it('returns "null"', async () => {
         const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: userInternalId } });
 
-        expect(queryResult.data.user.dashboard).toBeNull();
-      });
-
-      it('does not have reference to a dashboard', async () => {
-        const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: userInternalId } });
-
-        expect(queryResult.data.user.dashboard_id).toBeNull();
+        expect(queryResult.data.user.default_dashboard_id).toBeNull();
+        expect(queryResult.data.user.defaultDashboard).toBeNull();
       });
     });
 
@@ -200,53 +194,55 @@ describe('User resolver standard behavior', () => {
       });
 
       it('can have a reference to it', async () => {
-        const addDashboardPreference = await queryAsAdmin({
+        const setDefaultDashboardMutation = await queryAsAdmin({
           query: gql`
-            mutation AddDashboardPreference($userId: ID!, $editInput: [EditInput]!) {
+            mutation setDefaultDashboard($userId: ID!, $editInput: [EditInput]!) {
               userEdit(id: $userId) {
                 fieldPatch(input: $editInput) {
-                  dashboard_id
+                  default_dashboard_id
+                  defaultDashboard {
+                    name
+                  }
                 }
               }
             }`,
           variables: {
             userId: userInternalId,
             editInput: [{
-              key: 'dashboard_id',
+              key: 'default_dashboard_id',
               value: dashboardId
             }]
           }
         });
 
-        expect(addDashboardPreference.data.userEdit.fieldPatch.dashboard_id).toEqual(dashboardId);
+        expect(setDefaultDashboardMutation.data.userEdit.fieldPatch.default_dashboard_id).toEqual(dashboardId);
+        expect(setDefaultDashboardMutation.data.userEdit.fieldPatch.defaultDashboard.name).toEqual('dashboard de test');
       });
 
-      it('has the associated dashboard', async () => {
-        const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: userInternalId } });
-
-        expect(queryResult.data.user.dashboard.name).toEqual('dashboard de test');
-      });
-
-      it('can removes the reference to the dashboard', async () => {
-        const removeDashboardPreference = await queryAsAdmin({
+      it('can remove the reference to the default dashboard', async () => {
+        const removeDefaultDashboardMutation = await queryAsAdmin({
           query: gql`
-            mutation RemoveDashboardPreference($userId: ID!, $editInput: [EditInput]!) {
+            mutation removeDefaultDashboardMutation($userId: ID!, $editInput: [EditInput]!) {
               userEdit(id: $userId) {
                 fieldPatch(input: $editInput) {
-                  dashboard_id
+                  default_dashboard_id
+                  defaultDashboard {
+                    name
+                  }
                 }
               }
             }`,
           variables: {
             userId: userInternalId,
             editInput: [{
-              key: 'dashboard_id',
+              key: 'default_dashboard_id',
               value: [null]
             }]
           }
         });
 
-        expect(removeDashboardPreference.data.userEdit.fieldPatch.dashboard_id).toBeNull();
+        expect(removeDefaultDashboardMutation.data.userEdit.fieldPatch.default_dashboard_id).toBeNull();
+        expect(removeDefaultDashboardMutation.data.userEdit.fieldPatch.defaultDashboard).toBeNull();
       });
     });
   });

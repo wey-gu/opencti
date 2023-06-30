@@ -85,8 +85,8 @@ const userResolvers = {
     objectOrganization: (current, args, context) => organizationsLoader.load(current.id, context, context.user, { ...args, withInferences: false }),
     editContext: (current) => fetchEditContext(current.id),
     sessions: (current) => findUserSessions(current.id),
-    dashboard: (current, _, context) => {
-      return current.dashboard_id ? findWorskpaceById(context, context.user, current.dashboard_id) : null;
+    defaultDashboard: (current, _, context) => {
+      return current.default_dashboard_id ? findWorskpaceById(context, context.user, current.default_dashboard_id) : null;
     }
   },
   Member: {

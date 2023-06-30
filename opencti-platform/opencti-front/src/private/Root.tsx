@@ -21,7 +21,7 @@ const rootPrivateQuery = graphql`
       theme
       user_email
       individual_id
-      dashboard_id
+      default_dashboard_id
       capabilities {
         name
       }
