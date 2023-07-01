@@ -14,7 +14,8 @@ import {
   deleteRelationsByFromAndTo,
   listThroughGetTo,
   patchAttribute,
-  updateAttribute, updatedInputsToData,
+  updateAttribute,
+  updatedInputsToData,
 } from '../database/middleware';
 import {
   listAllEntities,
@@ -62,6 +63,7 @@ import { addIndividual } from './individual';
 import { ASSIGNEE_FILTER, CREATOR_FILTER } from '../utils/filtering';
 import { publishUserAction } from '../listener/UserActionListener';
 import { addGroup } from './grant';
+import { findById as findWorkspaceById } from '../modules/workspace/workspace-domain';
 
 const BEARER = 'Bearer ';
 const BASIC = 'Basic ';
@@ -1123,3 +1125,35 @@ export const userEditContext = async (context, user, userId, input) => {
   return storeLoadById(context, user, userId, ENTITY_TYPE_USER).then((userToReturn) => notify(BUS_TOPICS[ENTITY_TYPE_USER].EDIT_TOPIC, userToReturn, user));
 };
 // endregion
+
+async function findDefaultDashboardById(context, user, defaultDashboardId) {
+  return await findWorkspaceById(context, user, defaultDashboardId) ?? null;
+}
+
+async function findGroupDefaultDashboard(current, context, user) {
+  const groupDefaultDashboardIds = current.groups
+    .filter((group) => !!group.default_dashboard_id)
+    .map((group) => group.default_dashboard_id);
+
+  if (groupDefaultDashboardIds.length > 0) {
+    const groupDefaultDashboardId = groupDefaultDashboardIds[0];
+
+    return await findDefaultDashboardById(context, user, groupDefaultDashboardId);
+  }
+
+  return null;
+}
+
+async function findUserDefaultDashboard(current, context, user) {
+  const userDefaultDashboardId = current.default_dashboard_id;
+
+  if (userDefaultDashboardId) {
+    return await findDefaultDashboardById(context, user, userDefaultDashboardId);
+  }
+
+  return null;
+}
+
+export const findDefaultDashboard = async (context, user, current) => {
+  return await findUserDefaultDashboard(current, context, user) || await findGroupDefaultDashboard(current, context, user);
+};

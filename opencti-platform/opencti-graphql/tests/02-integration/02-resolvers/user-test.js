@@ -1,10 +1,13 @@
-import { describe, expect, it, beforeAll, afterAll } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import gql from 'graphql-tag';
 import { ADMIN_USER, editorQuery, queryAsAdmin, testContext } from '../../utils/testQuery';
 import { generateStandardId } from '../../../src/schema/identifier';
 import { ENTITY_TYPE_CAPABILITY, ENTITY_TYPE_GROUP, ENTITY_TYPE_USER } from '../../../src/schema/internalObject';
 import { ENTITY_TYPE_IDENTITY_ORGANIZATION } from '../../../src/schema/stixDomainObject';
 import { elLoadById } from '../../../src/database/engine';
+import { addWorkspace, workspaceDelete } from '../../../src/modules/workspace/workspace-domain';
+import { addGroup } from '../../../src/domain/grant';
+import { groupAddRelation, groupDelete, groupEditField } from '../../../src/domain/group';
 
 const LIST_QUERY = gql`
   query users(
@@ -51,6 +54,7 @@ const READ_QUERY = gql`
       description
       default_dashboard_id
       defaultDashboard {
+        id
         name
       }
       groups {
@@ -158,6 +162,45 @@ describe('User resolver standard behavior', () => {
         expect(queryResult.data.user.default_dashboard_id).toBeNull();
         expect(queryResult.data.user.defaultDashboard).toBeNull();
       });
+
+      describe('user is part of a group that has a default dashboard', async () => {
+        let defaultGroupDashboardId = '';
+        let groupId = '';
+
+        beforeAll(async () => {
+          const dashboard = await addWorkspace(testContext, ADMIN_USER, {
+            name: 'dashboard de test',
+            type: 'dashboard'
+          });
+          defaultGroupDashboardId = dashboard.id;
+
+          const group = await addGroup(testContext, ADMIN_USER, {
+            name: 'group de test'
+          });
+          groupId = group.id;
+
+          await groupEditField(testContext, ADMIN_USER, groupId, [{
+            key: 'default_dashboard_id',
+            value: defaultGroupDashboardId
+          }]);
+
+          await groupAddRelation(testContext, ADMIN_USER, groupId, {
+            relationship_type: 'member-of',
+            fromId: userInternalId
+          });
+        });
+
+        afterAll(async () => {
+          await groupDelete(testContext, ADMIN_USER, groupId);
+          await workspaceDelete(testContext, ADMIN_USER, defaultGroupDashboardId);
+        });
+
+        it('returns the group default dashboard', async () => {
+          const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: userInternalId } });
+
+          expect(queryResult.data.defaultDashboard.id).toEqual(defaultGroupDashboardId);
+        });
+      });
     });
 
     describe('when a user has a default dashboard', () => {
@@ -166,7 +209,7 @@ describe('User resolver standard behavior', () => {
       beforeAll(async () => {
         const dashboardCreationQuery = await queryAsAdmin({
           query: gql`
-            mutation CreateDashboard($input: WorkspaceAddInput!){
+            mutation CreateDashboard($input: WorkspaceAddInput!) {
               workspaceAdd(input: $input){
                 id
               }
