@@ -19,7 +19,7 @@ import {
   findById,
   findCapabilities,
   findCreators,
-  findDefaultDashboard,
+  findDefaultDashboards,
   findRoleById,
   findRoles,
   logout,
@@ -85,7 +85,7 @@ const userResolvers = {
     objectOrganization: (current, args, context) => organizationsLoader.load(current.id, context, context.user, { ...args, withInferences: false }),
     editContext: (current) => fetchEditContext(current.id),
     sessions: (current) => findUserSessions(current.id),
-    defaultDashboard: async (current, _, context) => findDefaultDashboard(context, context.user, current)
+    defaultDashboards: async (current, _, context) => findDefaultDashboards(context, context.user, current)
   },
   Member: {
     name: (current, _, context) => {

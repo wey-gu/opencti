@@ -37,7 +37,7 @@ const groupResolvers = {
     roles: (stixCoreObject, _, context) => rolesLoader.load(stixCoreObject.id, context, context.user),
     members: (group, _, context) => membersLoader.load(group.id, context, context.user),
     editContext: (group) => fetchEditContext(group.id),
-    defaultDashboard: (current, _, context) => {
+    defaultDashboards: (current, _, context) => {
       return current.default_dashboard_id ? findWorskpaceById(context, context.user, current.default_dashboard_id) : null;
     }
   },

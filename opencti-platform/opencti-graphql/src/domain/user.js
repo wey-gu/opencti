@@ -1124,6 +1124,7 @@ export const userEditContext = async (context, user, userId, input) => {
   await setEditContext(user, userId, input);
   return storeLoadById(context, user, userId, ENTITY_TYPE_USER).then((userToReturn) => notify(BUS_TOPICS[ENTITY_TYPE_USER].EDIT_TOPIC, userToReturn, user));
 };
+
 // endregion
 
 async function findDefaultDashboardById(context, user, defaultDashboardId) {
@@ -1132,7 +1133,7 @@ async function findDefaultDashboardById(context, user, defaultDashboardId) {
 
 async function findGroupDefaultDashboard(current, context, user) {
   const groupDefaultDashboardIds = current.groups
-    .filter((group) => !!group.default_dashboard_id)
+    .filter((group) => group.default_dashboard_id)
     .map((group) => group.default_dashboard_id);
 
   if (groupDefaultDashboardIds.length > 0) {
@@ -1154,6 +1155,16 @@ async function findUserDefaultDashboard(current, context, user) {
   return null;
 }
 
-export const findDefaultDashboard = async (context, user, current) => {
-  return await findUserDefaultDashboard(current, context, user) || await findGroupDefaultDashboard(current, context, user);
+export const findDefaultDashboards = async (context, user, current) => {
+// liste tous les groupes + orga du user & renvoi liste de tous les dashboards de ces groupes et orga
+  const userDefaultDashboardId = current.default_dashboard_id;
+  // const groupDefaultDashboardIds = current.groups
+  //   .filter((group) => group.default_dashboard_id)
+  //   .map((group) => group.default_dashboard_id);
+  // console.log("ALL GROUPS Id", groupDefaultDashboardIds)
+  // const organizationDefaultDashboardIds = current.objectOrganization
+  //   .filter((organization) => organization.id)
+  //   .map((organization) => organization.id);
+  // console.log("ALL ORGANIZATION Id", organizationDefaultDashboardIds)
+  return [];
 };
