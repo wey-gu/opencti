@@ -1115,7 +1115,7 @@ type Group implements InternalObject & BasicObject {
   auto_new_marking: Boolean
   description: String
   default_dashboard_id: ID
-  defaultDashboards: [Workspace!]!
+  defaultDashboard: Workspace
   members: UserConnection
   created_at: DateTime
   updated_at: DateTime
