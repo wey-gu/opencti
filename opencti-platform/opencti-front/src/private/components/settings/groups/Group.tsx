@@ -87,7 +87,9 @@ const groupFragment = graphql`
         }
       }
     }
+    default_dashboard_id
     defaultDashboard {
+      id
       name
     }
     roles(orderBy: $rolesOrderBy, orderMode: $rolesOrderMode) {
