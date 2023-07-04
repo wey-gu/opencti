@@ -1179,6 +1179,7 @@ type User implements BasicObject & InternalObject {
   language: String
   external: Boolean
   default_dashboard_id: ID
+  defaultDashboard: Workspace
   defaultDashboards: [Workspace!]!
   roles(
     orderBy: RolesOrdering
@@ -1218,6 +1219,7 @@ type MeUser implements BasicObject & InternalObject {
   individual_id: String
   api_token: String!
   default_dashboard_id: ID
+  defaultDashboard: Workspace
   defaultDashboards: [Workspace!]!
   objectOrganization: MeOrganizationConnection
   capabilities: [Capability!]!

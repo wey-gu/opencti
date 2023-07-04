@@ -18,6 +18,7 @@ import {
   updatedInputsToData,
 } from '../database/middleware';
 import {
+  internalFindByIds,
   listAllEntities,
   listAllEntitiesForFilter,
   listAllRelations,
@@ -1126,45 +1127,30 @@ export const userEditContext = async (context, user, userId, input) => {
 };
 
 // endregion
-
-async function findDefaultDashboardById(context, user, defaultDashboardId) {
-  return await findWorkspaceById(context, user, defaultDashboardId) ?? null;
-}
-
-async function findGroupDefaultDashboard(current, context, user) {
+const findGroupDefaultDashboards = async (current, context, user) => {
   const groupDefaultDashboardIds = current.groups
     .filter((group) => group.default_dashboard_id)
     .map((group) => group.default_dashboard_id);
 
   if (groupDefaultDashboardIds.length > 0) {
-    const groupDefaultDashboardId = groupDefaultDashboardIds[0];
-
-    return await findDefaultDashboardById(context, user, groupDefaultDashboardId);
+    return await internalFindByIds(context, user, groupDefaultDashboardIds);
   }
-
   return null;
-}
+};
 
-async function findUserDefaultDashboard(current, context, user) {
-  const userDefaultDashboardId = current.default_dashboard_id;
+// async function findUserDefaultDashboard(current, context, user) {
+//   const userDefaultDashboardId = current.default_dashboard_id;
+//
+//   if (userDefaultDashboardId) {
+//     return await findDefaultDashboardById(context, user, userDefaultDashboardId);
+//   }
+//
+//   return null;
+// }
 
-  if (userDefaultDashboardId) {
-    return await findDefaultDashboardById(context, user, userDefaultDashboardId);
-  }
+export const findDefaultDashboards = async (context, user, currentUser) => {
 
-  return null;
-}
+  const groupsDefaultDashboards = await findGroupDefaultDashboards(currentUser, context, user);
 
-export const findDefaultDashboards = async (context, user, current) => {
-// liste tous les groupes + orga du user & renvoi liste de tous les dashboards de ces groupes et orga
-  const userDefaultDashboardId = current.default_dashboard_id;
-  // const groupDefaultDashboardIds = current.groups
-  //   .filter((group) => group.default_dashboard_id)
-  //   .map((group) => group.default_dashboard_id);
-  // console.log("ALL GROUPS Id", groupDefaultDashboardIds)
-  // const organizationDefaultDashboardIds = current.objectOrganization
-  //   .filter((organization) => organization.id)
-  //   .map((organization) => organization.id);
-  // console.log("ALL ORGANIZATION Id", organizationDefaultDashboardIds)
-  return [];
+  return [...groupsDefaultDashboards];
 };
