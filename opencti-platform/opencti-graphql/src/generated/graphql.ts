@@ -6987,7 +6987,7 @@ export type Group = BasicObject & InternalObject & {
   allowed_marking?: Maybe<Array<MarkingDefinition>>;
   auto_new_marking?: Maybe<Scalars['Boolean']>;
   created_at?: Maybe<Scalars['DateTime']>;
-  defaultDashboards: Array<Workspace>;
+  defaultDashboard?: Maybe<Workspace>;
   default_assignation?: Maybe<Scalars['Boolean']>;
   default_dashboard_id?: Maybe<Scalars['ID']>;
   default_marking?: Maybe<Array<DefaultMarking>>;
@@ -26237,7 +26237,7 @@ export type ResolversTypes = ResolversObject<{
   FilterMode: FilterMode;
   Float: ResolverTypeWrapper<Scalars['Float']>;
   GetMetrics: ResolverTypeWrapper<GetMetrics>;
-  Group: ResolverTypeWrapper<Omit<Group, 'defaultDashboards' | 'members'> & { defaultDashboards: Array<ResolversTypes['Workspace']>, members?: Maybe<ResolversTypes['UserConnection']> }>;
+  Group: ResolverTypeWrapper<Omit<Group, 'defaultDashboard' | 'members'> & { defaultDashboard?: Maybe<ResolversTypes['Workspace']>, members?: Maybe<ResolversTypes['UserConnection']> }>;
   GroupAddInput: GroupAddInput;
   GroupConnection: ResolverTypeWrapper<Omit<GroupConnection, 'edges'> & { edges?: Maybe<Array<Maybe<ResolversTypes['GroupEdge']>>> }>;
   GroupEdge: ResolverTypeWrapper<Omit<GroupEdge, 'node'> & { node: ResolversTypes['Group'] }>;
@@ -26955,7 +26955,7 @@ export type ResolversParentTypes = ResolversObject<{
   FileMetadata: Omit<FileMetadata, 'entity'> & { entity?: Maybe<ResolversParentTypes['StixCoreObject']> };
   Float: Scalars['Float'];
   GetMetrics: GetMetrics;
-  Group: Omit<Group, 'defaultDashboards' | 'members'> & { defaultDashboards: Array<ResolversParentTypes['Workspace']>, members?: Maybe<ResolversParentTypes['UserConnection']> };
+  Group: Omit<Group, 'defaultDashboard' | 'members'> & { defaultDashboard?: Maybe<ResolversParentTypes['Workspace']>, members?: Maybe<ResolversParentTypes['UserConnection']> };
   GroupAddInput: GroupAddInput;
   GroupConnection: Omit<GroupConnection, 'edges'> & { edges?: Maybe<Array<Maybe<ResolversParentTypes['GroupEdge']>>> };
   GroupEdge: Omit<GroupEdge, 'node'> & { node: ResolversParentTypes['Group'] };
@@ -29462,7 +29462,7 @@ export type GroupResolvers<ContextType = any, ParentType extends ResolversParent
   allowed_marking?: Resolver<Maybe<Array<ResolversTypes['MarkingDefinition']>>, ParentType, ContextType>;
   auto_new_marking?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   created_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
-  defaultDashboards?: Resolver<Array<ResolversTypes['Workspace']>, ParentType, ContextType>;
+  defaultDashboard?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
   default_assignation?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   default_dashboard_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   default_marking?: Resolver<Maybe<Array<ResolversTypes['DefaultMarking']>>, ParentType, ContextType>;
