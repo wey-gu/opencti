@@ -1135,7 +1135,7 @@ const findGroupDefaultDashboards = async (current, context, user) => {
   if (groupDefaultDashboardIds.length > 0) {
     return await internalFindByIds(context, user, groupDefaultDashboardIds);
   }
-  return null;
+  return [];
 };
 
 // async function findUserDefaultDashboard(current, context, user) {
@@ -1149,8 +1149,6 @@ const findGroupDefaultDashboards = async (current, context, user) => {
 // }
 
 export const findDefaultDashboards = async (context, user, currentUser) => {
-
   const groupsDefaultDashboards = await findGroupDefaultDashboards(currentUser, context, user);
-
   return [...groupsDefaultDashboards];
 };
