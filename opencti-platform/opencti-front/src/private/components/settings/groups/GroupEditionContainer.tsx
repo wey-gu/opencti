@@ -20,6 +20,7 @@ import { GroupEditionContainerQuery } from './__generated__/GroupEditionContaine
 import { GroupEditionContainer_group$key } from './__generated__/GroupEditionContainer_group.graphql';
 import ErrorNotFound from '../../../../components/ErrorNotFound';
 import GroupEditionMarkings from './GroupEditionMarkings';
+import { RootGroupQuery$data } from './__generated__/RootGroupQuery.graphql';
 
 const useStyles = makeStyles<Theme>((theme) => ({
   header: {
@@ -78,9 +79,10 @@ const GroupEditionContainerFragment = graphql`
 interface GroupEditionContainerProps {
   groupQueryRef: PreloadedQuery<GroupEditionContainerQuery>,
   handleClose: () => void,
+  workspaces: RootGroupQuery$data['workspaces'],
 }
 
-const GroupEditionContainer: FunctionComponent<GroupEditionContainerProps> = ({ groupQueryRef, handleClose }) => {
+const GroupEditionContainer: FunctionComponent<GroupEditionContainerProps> = ({ groupQueryRef, handleClose, workspaces }) => {
   const classes = useStyles();
   const { t } = useFormatter();
   const [currentTab, setTab] = useState(0);
@@ -120,7 +122,7 @@ const GroupEditionContainer: FunctionComponent<GroupEditionContainerProps> = ({ 
             </Tabs>
           </Box>
           {currentTab === 0 && (
-            <GroupEditionOverview group={group} context={editContext}/>
+            <GroupEditionOverview group={group} context={editContext} workspaces={workspaces}/>
           )}
           {currentTab === 1 && roleQueryRef && (
             <React.Suspense

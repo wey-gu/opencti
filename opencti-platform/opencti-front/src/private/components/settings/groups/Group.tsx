@@ -17,6 +17,7 @@ import { InformationOutline } from 'mdi-material-ui';
 import Tooltip from '@mui/material/Tooltip';
 import AccessesMenu from '../AccessesMenu';
 import { Group_group$key } from './__generated__/Group_group.graphql';
+import { RootGroupQuery$data } from './__generated__/RootGroupQuery.graphql';
 import GroupPopover from './GroupPopover';
 import { useFormatter } from '../../../../components/i18n';
 import ItemBoolean from '../../../../components/ItemBoolean';
@@ -90,6 +91,9 @@ const groupFragment = graphql`
     default_dashboard {
       id
       name
+      authorizedMembers {
+        id
+      }
     }
     roles(orderBy: $rolesOrderBy, orderMode: $rolesOrderMode) {
       id
@@ -113,8 +117,7 @@ const groupFragment = graphql`
     }
   }
 `;
-
-const Group = ({ groupData }: { groupData: Group_group$key }) => {
+const Group = ({ groupData, workspacesData }: { groupData: Group_group$key, workspacesData: RootGroupQuery$data['workspaces'] }) => {
   const classes = useStyles();
   const { t } = useFormatter();
   const [displayUpdate, setDisplayUpdate] = useState(false);
@@ -295,7 +298,7 @@ const Group = ({ groupData }: { groupData: Group_group$key }) => {
           classes={{ container: classes.gridContainer }}
           style={{ marginTop: 10, marginLeft: 0 }}
         >
-          <Triggers recipientId={group.id} filter={filter}/>
+          <Triggers recipientId={group.id} filter={filter} />
           <MembersList members={members} />
         </Grid>
       </Grid>
@@ -316,7 +319,7 @@ const Group = ({ groupData }: { groupData: Group_group$key }) => {
         classes={{ paper: classes.drawerPaper }}
         onClose={handleCloseUpdate}
       >
-        <GroupEdition groupId={group.id} handleClose={handleCloseUpdate} />
+        <GroupEdition groupId={group.id} handleClose={handleCloseUpdate} workspaces={workspacesData} />
       </Drawer>
     </div>
   );

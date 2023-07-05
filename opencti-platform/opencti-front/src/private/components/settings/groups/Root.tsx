@@ -43,6 +43,18 @@ const groupQuery = graphql`
         rolesOrderMode: $rolesOrderMode
       )
     }
+    workspaces {
+      edges {
+        node {
+          id
+          name
+          authorizedMembers {
+            id
+            name
+          }
+        }
+      }
+    }
   }
 `;
 
@@ -61,7 +73,7 @@ const RootGroupComponent: FunctionComponent<RootGroupComponentProps> = ({ queryR
   );
   useSubscription(subConfig);
   const data = usePreloadedQuery(groupQuery, queryRef);
-  const { group } = data;
+  const { group, workspaces } = data;
 
   return (
     <Security needs={[SETTINGS_SETACCESSES]}>
@@ -71,7 +83,7 @@ const RootGroupComponent: FunctionComponent<RootGroupComponentProps> = ({ queryR
             exact
             path="/dashboard/settings/accesses/groups/:groupId"
             render={(routeProps) => (
-              <Group {...routeProps} groupData={group} />
+              <Group {...routeProps} groupData={group} workspacesData={workspaces} />
             )}
           />
         </Switch>

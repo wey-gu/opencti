@@ -11,6 +11,7 @@ import { SubscriptionFocus } from '../../../../components/Subscription';
 import SwitchField from '../../../../components/SwitchField';
 import { GroupEditionOverview_group$data } from './__generated__/GroupEditionOverview_group.graphql';
 import SelectField from '../../../../components/SelectField';
+import { RootGroupQuery$data } from './__generated__/RootGroupQuery.graphql';
 
 export const groupMutationFieldPatch = graphql`
   mutation GroupEditionOverviewFieldPatchMutation(
@@ -45,23 +46,23 @@ const groupValidation = (t: (value: string) => string) => Yup.object().shape({
 interface GroupEditionOverviewComponentProps {
   group: GroupEditionOverview_group$data,
   context:
-  | readonly ({
+    | readonly ({
     readonly focusOn: string | null;
     readonly name: string;
   } | null)[]
-  | null;
+    | null;
+  workspaces: RootGroupQuery$data['workspaces']
 }
 
-const GroupEditionOverviewComponent: FunctionComponent<GroupEditionOverviewComponentProps> = ({ group, context }) => {
+const GroupEditionOverviewComponent: FunctionComponent<GroupEditionOverviewComponentProps> = ({ group, context, workspaces }) => {
   const { t } = useFormatter();
   const [commitFocus] = useMutation(groupEditionOverviewFocus);
   const [commitFieldPatch] = useMutation(groupMutationFieldPatch);
 
   const initialValues = pick(
-    ['name', 'description', 'default_assignation', 'auto_new_marking'],
+    ['name', 'description', 'default_assignation', 'auto_new_marking', 'default_dashboard_id'],
     group,
   );
-
   const handleChangeFocus = (name: string) => {
     commitFocus({
       variables: {
@@ -128,14 +129,22 @@ const GroupEditionOverviewComponent: FunctionComponent<GroupEditionOverviewCompo
             <Field
               component={SelectField}
               variant="standard"
-              name="default_dashboard_id"
+              name="default_dashboard"
               onChange={handleSubmitField}
-              label={t('Custom dashboard')}
+              label={t('Default dashboard')}
+              inputProps={{
+                id: 'default_dashboard_id',
+              }}
               fullWidth={true}
-              multiple={true}
               containerstyle={{ width: '100%', marginTop: 20 }}
+              helperText={
+                <SubscriptionFocus context={context} fieldName="default_dashboard_id" />
+              }
             >
-              {/*<MenuItem value="Default">"Item"</MenuItem>*/}
+              {[
+                ...(workspaces?.edges ?? []),
+                { node: { id: 'b9bea5e1-027d-47ef-9a12-02beaae6ba9d', name: 'Default' } },
+              ].map(({ node }) => (<MenuItem value={node.id}>{node.name}</MenuItem>))}
             </Field>
 
             <Field
