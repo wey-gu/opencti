@@ -64,7 +64,6 @@ import { addIndividual } from './individual';
 import { ASSIGNEE_FILTER, CREATOR_FILTER } from '../utils/filtering';
 import { publishUserAction } from '../listener/UserActionListener';
 import { addGroup } from './grant';
-import { findById as findWorkspaceById } from '../modules/workspace/workspace-domain';
 
 const BEARER = 'Bearer ';
 const BASIC = 'Basic ';
@@ -1137,16 +1136,6 @@ const findGroupDefaultDashboards = async (current, context, user) => {
   }
   return [];
 };
-
-// async function findUserDefaultDashboard(current, context, user) {
-//   const userDefaultDashboardId = current.default_dashboard_id;
-//
-//   if (userDefaultDashboardId) {
-//     return await findDefaultDashboardById(context, user, userDefaultDashboardId);
-//   }
-//
-//   return null;
-// }
 
 export const findDefaultDashboards = async (context, user, currentUser) => {
   const groupsDefaultDashboards = await findGroupDefaultDashboards(currentUser, context, user);

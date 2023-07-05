@@ -87,8 +87,7 @@ const groupFragment = graphql`
         }
       }
     }
-    default_dashboard_id
-    defaultDashboard {
+    default_dashboard {
       id
       name
     }
@@ -261,7 +260,7 @@ const Group = ({ groupData }: { groupData: Group_group$key }) => {
                 <Typography variant="h3">
                   {t('dashboard')}
                 </Typography>
-                {group.defaultDashboard?.name ?? 'default'}
+                {group.default_dashboard?.name ?? 'default'}
               </Grid>
               <Grid item={true} xs={6}>
                 <Typography variant="h3" gutterBottom={true}>

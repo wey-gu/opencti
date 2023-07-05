@@ -85,6 +85,7 @@ const userResolvers = {
     objectOrganization: (current, args, context) => organizationsLoader.load(current.id, context, context.user, { ...args, withInferences: false }),
     editContext: (current) => fetchEditContext(current.id),
     sessions: (current) => findUserSessions(current.id),
+    default_dashboards: (current, _, context) => findDefaultDashboards(context, context.user, current),
   },
   Member: {
     name: (current, _, context) => {
