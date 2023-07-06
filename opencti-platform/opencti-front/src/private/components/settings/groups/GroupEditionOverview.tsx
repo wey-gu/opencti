@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react';
 import { createFragmentContainer, graphql, useMutation } from 'react-relay';
 import { Field, Form, Formik } from 'formik';
-import { pick } from 'ramda';
 import * as Yup from 'yup';
 import MenuItem from '@mui/material/MenuItem';
 import { useFormatter } from '../../../../components/i18n';
@@ -41,17 +40,18 @@ const groupValidation = (t: (value: string) => string) => Yup.object().shape({
   description: Yup.string().nullable(),
   default_assignation: Yup.bool(),
   auto_new_marking: Yup.bool(),
+  default_dashboard: Yup.string().nullable(),
 });
 
 interface GroupEditionOverviewComponentProps {
   group: GroupEditionOverview_group$data,
   context:
-    | readonly ({
+  | readonly ({
     readonly focusOn: string | null;
     readonly name: string;
   } | null)[]
-    | null;
-  workspaces: RootGroupQuery$data['workspaces']
+  | null;
+  workspaces?: RootGroupQuery$data['workspaces']
 }
 
 const GroupEditionOverviewComponent: FunctionComponent<GroupEditionOverviewComponentProps> = ({ group, context, workspaces }) => {
@@ -59,10 +59,14 @@ const GroupEditionOverviewComponent: FunctionComponent<GroupEditionOverviewCompo
   const [commitFocus] = useMutation(groupEditionOverviewFocus);
   const [commitFieldPatch] = useMutation(groupMutationFieldPatch);
 
-  const initialValues = pick(
-    ['name', 'description', 'default_assignation', 'auto_new_marking', 'default_dashboard_id'],
-    group,
-  );
+  const initialValues = {
+    name: group.name,
+    description: group.description,
+    default_assignation: group.default_assignation,
+    auto_new_marking: group.auto_new_marking,
+    default_dashboard: group.default_dashboard?.id,
+  };
+
   const handleChangeFocus = (name: string) => {
     commitFocus({
       variables: {
@@ -132,13 +136,14 @@ const GroupEditionOverviewComponent: FunctionComponent<GroupEditionOverviewCompo
               name="default_dashboard"
               onChange={handleSubmitField}
               label={t('Default dashboard')}
-              inputProps={{
-                id: 'default_dashboard_id',
-              }}
               fullWidth={true}
               containerstyle={{ width: '100%', marginTop: 20 }}
+              inputProps={{
+                name: 'default_dashboard',
+                id: 'default_dashboard',
+              }}
               helperText={
-                <SubscriptionFocus context={context} fieldName="default_dashboard_id" />
+                <SubscriptionFocus context={context} fieldName="default_dashboard" />
               }
             >
               {[
@@ -194,7 +199,10 @@ const GroupEditionOverview = createFragmentContainer(
         description
         default_assignation
         auto_new_marking
-        default_dashboard_id
+        default_dashboard {
+          id
+          name
+        }
       }
     `,
   },

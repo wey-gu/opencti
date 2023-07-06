@@ -1128,8 +1128,8 @@ export const userEditContext = async (context, user, userId, input) => {
 // endregion
 const findGroupDefaultDashboards = async (current, context, user) => {
   const groupDefaultDashboardIds = current.groups
-    .filter((group) => group.default_dashboard_id)
-    .map((group) => group.default_dashboard_id);
+    .filter((group) => group.default_dashboard)
+    .map((group) => group.default_dashboard);
 
   if (groupDefaultDashboardIds.length > 0) {
     return await internalFindByIds(context, user, groupDefaultDashboardIds);

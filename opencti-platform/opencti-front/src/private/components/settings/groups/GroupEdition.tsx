@@ -8,7 +8,7 @@ import { RootGroupQuery$data } from './__generated__/RootGroupQuery.graphql';
 interface GroupEditionProps {
   handleClose: () => void,
   groupId: string,
-  workspaces: RootGroupQuery$data['workspaces'],
+  workspaces?: RootGroupQuery$data['workspaces'],
 }
 
 const GroupEdition: FunctionComponent<GroupEditionProps> = ({ handleClose, groupId, workspaces }) => {

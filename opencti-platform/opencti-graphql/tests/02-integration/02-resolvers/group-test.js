@@ -23,8 +23,7 @@ const READ_QUERY = gql`
       id
       name
       description
-      default_dashboard_id
-      defaultDashboard {
+      default_dashboard {
         name
       }
     }
@@ -65,8 +64,7 @@ describe('Group resolver standard behavior', () => {
       it('returns "null"', async () => {
         const queryResult = await queryAsAdmin({ query: READ_QUERY, variables: { id: groupInternalId } });
 
-        expect(queryResult.data.group.default_dashboard_id).toBeNull();
-        expect(queryResult.data.group.defaultDashboard).toBeNull();
+        expect(queryResult.data.group.default_dashboard).toBeNull();
       });
     });
 
@@ -109,8 +107,8 @@ describe('Group resolver standard behavior', () => {
             mutation setDefaultDashboard($groupId: ID!, $editInput: [EditInput]!) {
               groupEdit(id: $groupId) {
                 fieldPatch(input: $editInput) {
-                  default_dashboard_id
-                  defaultDashboard {
+                  default_dashboard {
+                    id
                     name
                   }
                 }
@@ -119,14 +117,14 @@ describe('Group resolver standard behavior', () => {
           variables: {
             groupId: groupInternalId,
             editInput: [{
-              key: 'default_dashboard_id',
+              key: 'default_dashboard',
               value: dashboardId
             }]
           }
         });
 
-        expect(setDefaultDashboardMutation.data.groupEdit.fieldPatch.default_dashboard_id).toEqual(dashboardId);
-        expect(setDefaultDashboardMutation.data.groupEdit.fieldPatch.defaultDashboard.name).toEqual('dashboard de test');
+        expect(setDefaultDashboardMutation.data.groupEdit.fieldPatch.default_dashboard.id).toEqual(dashboardId);
+        expect(setDefaultDashboardMutation.data.groupEdit.fieldPatch.default_dashboard.name).toEqual('dashboard de test');
       });
 
       it('can remove the reference to the default dashboard', async () => {
@@ -135,8 +133,8 @@ describe('Group resolver standard behavior', () => {
             mutation removeDefaultDashboardMutation($groupId: ID!, $editInput: [EditInput]!) {
               groupEdit(id: $groupId) {
                 fieldPatch(input: $editInput) {
-                  default_dashboard_id
-                  defaultDashboard {
+                  default_dashboard {
+                    id
                     name
                   }
                 }
@@ -145,14 +143,12 @@ describe('Group resolver standard behavior', () => {
           variables: {
             groupId: groupInternalId,
             editInput: [{
-              key: 'default_dashboard_id',
+              key: 'default_dashboard',
               value: [null]
             }]
           }
         });
-
-        expect(removeDefaultDashboardMutation.data.groupEdit.fieldPatch.default_dashboard_id).toBeNull();
-        expect(removeDefaultDashboardMutation.data.groupEdit.fieldPatch.defaultDashboard).toBeNull();
+        expect(removeDefaultDashboardMutation.data.groupEdit.fieldPatch.default_dashboard).toBeNull();
       });
     });
   });

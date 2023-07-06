@@ -79,7 +79,7 @@ const GroupEditionContainerFragment = graphql`
 interface GroupEditionContainerProps {
   groupQueryRef: PreloadedQuery<GroupEditionContainerQuery>,
   handleClose: () => void,
-  workspaces: RootGroupQuery$data['workspaces'],
+  workspaces?: RootGroupQuery$data['workspaces'],
 }
 
 const GroupEditionContainer: FunctionComponent<GroupEditionContainerProps> = ({ groupQueryRef, handleClose, workspaces }) => {

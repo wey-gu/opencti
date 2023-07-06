@@ -1114,7 +1114,6 @@ type Group implements InternalObject & BasicObject {
   default_assignation: Boolean
   auto_new_marking: Boolean
   description: String
-  default_dashboard_id: ID
   default_dashboard: Workspace
   members: UserConnection
   created_at: DateTime
@@ -1250,7 +1249,6 @@ type User implements BasicObject & InternalObject {
   theme: String
   language: String
   external: Boolean
-  default_dashboard_id: ID
   default_dashboards: [Workspace!]!
   roles(orderBy: RolesOrdering, orderMode: OrderingMode): [Role]!
   capabilities: [Capability]!
@@ -1280,7 +1278,6 @@ type MeUser implements BasicObject & InternalObject {
   external: Boolean
   individual_id: String
   api_token: String!
-  default_dashboard_id: ID
   default_dashboards: [Workspace!]!
   objectOrganization: MeOrganizationConnection
   capabilities: [Capability!]!

@@ -6989,7 +6989,6 @@ export type Group = BasicObject & InternalObject & {
   created_at?: Maybe<Scalars['DateTime']>;
   default_assignation?: Maybe<Scalars['Boolean']>;
   default_dashboard?: Maybe<Workspace>;
-  default_dashboard_id?: Maybe<Scalars['ID']>;
   default_marking?: Maybe<Array<DefaultMarking>>;
   description?: Maybe<Scalars['String']>;
   editContext?: Maybe<Array<EditUserContext>>;
@@ -11527,7 +11526,6 @@ export type MeUser = BasicObject & InternalObject & {
   allowed_marking?: Maybe<Array<MarkingDefinition>>;
   api_token: Scalars['String'];
   capabilities: Array<Capability>;
-  default_dashboard_id?: Maybe<Scalars['ID']>;
   default_dashboards: Array<Workspace>;
   default_hidden_types: Array<Maybe<Scalars['String']>>;
   default_marking?: Maybe<Array<DefaultMarking>>;
@@ -24195,7 +24193,6 @@ export type User = BasicObject & InternalObject & {
   api_token: Scalars['String'];
   capabilities: Array<Maybe<Capability>>;
   created_at: Scalars['DateTime'];
-  default_dashboard_id?: Maybe<Scalars['ID']>;
   default_dashboards: Array<Workspace>;
   default_hidden_types: Array<Maybe<Scalars['String']>>;
   description?: Maybe<Scalars['String']>;
@@ -29462,7 +29459,6 @@ export type GroupResolvers<ContextType = any, ParentType extends ResolversParent
   created_at?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>;
   default_assignation?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   default_dashboard?: Resolver<Maybe<ResolversTypes['Workspace']>, ParentType, ContextType>;
-  default_dashboard_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   default_marking?: Resolver<Maybe<Array<ResolversTypes['DefaultMarking']>>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   editContext?: Resolver<Maybe<Array<ResolversTypes['EditUserContext']>>, ParentType, ContextType>;
@@ -30758,7 +30754,6 @@ export type MeUserResolvers<ContextType = any, ParentType extends ResolversParen
   allowed_marking?: Resolver<Maybe<Array<ResolversTypes['MarkingDefinition']>>, ParentType, ContextType>;
   api_token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   capabilities?: Resolver<Array<ResolversTypes['Capability']>, ParentType, ContextType>;
-  default_dashboard_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   default_dashboards?: Resolver<Array<ResolversTypes['Workspace']>, ParentType, ContextType>;
   default_hidden_types?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
   default_marking?: Resolver<Maybe<Array<ResolversTypes['DefaultMarking']>>, ParentType, ContextType>;
@@ -33937,7 +33932,6 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   api_token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   capabilities?: Resolver<Array<Maybe<ResolversTypes['Capability']>>, ParentType, ContextType>;
   created_at?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  default_dashboard_id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   default_dashboards?: Resolver<Array<ResolversTypes['Workspace']>, ParentType, ContextType>;
   default_hidden_types?: Resolver<Array<Maybe<ResolversTypes['String']>>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
