@@ -4,7 +4,6 @@ import {
   created,
   lang,
   modified,
-  relationshipType,
   revoked,
   specVersion,
   xOpenctiStixIds
@@ -20,6 +19,5 @@ const stixRelationshipAttributes: Array<AttributeDefinition> = [
   revoked,
   confidence,
   lang,
-  relationshipType,
 ];
 schemaAttributesDefinition.registerAttributes(ABSTRACT_STIX_RELATIONSHIP, stixRelationshipAttributes);

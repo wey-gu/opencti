@@ -210,7 +210,6 @@ const cleanMarkingValues = async (context, values) => {
 };
 export const groupEditDefaultMarking = async (context, user, groupId, defaultMarking) => {
   const values = (await cleanMarkingValues(context, defaultMarking.values)).map((m) => m.id);
-
   const group = await storeLoadById(context, user, groupId, ENTITY_TYPE_GROUP);
   const existingDefaultMarking = group.default_marking ?? [];
   const existing = existingDefaultMarking.find((r) => r.entity_type === defaultMarking.entity_type);

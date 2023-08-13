@@ -94,8 +94,8 @@ const stixCyberObservablesAttributes: { [k: string]: Array<AttributeDefinition> 
     { name: 'mtime', type: 'date', mandatoryType: 'no', multiple: false, upsert: true },
     { name: 'atime', type: 'date', mandatoryType: 'no', multiple: false, upsert: true },
     { name: 'x_opencti_additional_names', type: 'string', mandatoryType: 'no', multiple: true, upsert: true },
+    { name: 'mime_type', type: 'string', mandatoryType: 'no', multiple: false, upsert: true },
     { name: 'obsContent', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
-    // Missing mime-type
   ],
   [ENTITY_HASHED_OBSERVABLE_X509_CERTIFICATE]: [
     { name: 'hashes', type: 'dictionary', mandatoryType: 'no', multiple: false, upsert: false },

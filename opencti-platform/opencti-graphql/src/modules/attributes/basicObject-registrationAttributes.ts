@@ -1,9 +1,13 @@
 import {
+  _index,
   AttributeDefinition,
+  baseType,
   createdAt,
   creators,
   entityType,
+  id,
   internalId,
+  parentTypes,
   standardId,
   updatedAt
 } from '../../schema/attribute-definition';
@@ -11,8 +15,12 @@ import { schemaAttributesDefinition } from '../../schema/schema-attributes';
 import { ABSTRACT_BASIC_OBJECT } from '../../schema/general';
 
 const basicObjectAttributes: Array<AttributeDefinition> = [
+  _index,
+  id,
   internalId,
   standardId,
+  parentTypes,
+  baseType,
   entityType,
   createdAt,
   updatedAt,
