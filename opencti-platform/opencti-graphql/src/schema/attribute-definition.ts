@@ -70,7 +70,7 @@ export const iAliasedIds: AttributeDefinition = {
 
 export const files: AttributeDefinition = {
   name: 'x_opencti_files',
-  type: 'string',
+  type: 'object',
   mandatoryType: 'no',
   multiple: true,
   upsert: false,
