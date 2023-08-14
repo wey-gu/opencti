@@ -55,6 +55,7 @@ import {
   ES_MAX_CONCURRENCY,
   isImpactedTypeAndSide,
   MAX_BULK_OPERATIONS,
+  prepareDataFromSchemaDefinition,
   ROLE_FROM,
   ROLE_TO,
 } from './engine';
@@ -220,7 +221,6 @@ import {
 } from '../modules/vocabulary/vocabulary-utils';
 import {
   depsKeysRegister,
-  isBooleanAttribute,
   isDateAttribute,
   isDictionaryAttribute,
   isMultipleAttribute,
@@ -884,11 +884,11 @@ export const updatedInputsToData = (instance, inputs) => {
     }
     return { [key]: val };
   }, inputs);
-  return mergeDeepRightAll(...inputPairs);
+  const dataObject = mergeDeepRightAll(...inputPairs);
+  return prepareDataFromSchemaDefinition({ entity_type: instance.entity_type, ...dataObject });
 };
 export const mergeInstanceWithInputs = (instance, inputs) => {
-  // standard_id must be maintained
-  // const inputsWithoutId = inputs.filter((i) => i.key !== ID_STANDARD);
+  // Build object data from inputs
   const data = updatedInputsToData(instance, inputs);
   const updatedInstance = R.mergeRight(instance, data);
   return R.reject(R.equals(null))(updatedInstance);
@@ -1420,12 +1420,7 @@ const transformPatchToInput = (patch, operations = {}) => {
   )(patch);
 };
 const checkAttributeConsistency = (entityType, key) => {
-  if (key.startsWith(RULE_PREFIX)) {
-    return;
-  }
-  // Always ok for creator_id, need a stronger schema definition
-  // Waiting for merge of https://github.com/OpenCTI-Platform/opencti/issues/1850
-  if (key === 'creator_id') {
+  if (key.startsWith(RULE_PREFIX) || key.startsWith(REL_INDEX_PREFIX)) {
     return;
   }
   let masterKey = key;
@@ -1452,29 +1447,10 @@ const innerUpdateAttribute = (instance, rawInput) => {
   }
   return updatedInputs;
 };
-const prepareAttributes = (instance, elements) => {
+export const normalizeUpdateInputs = (instance, inputs) => {
   const instanceType = instance.entity_type;
-  return elements.map((input) => {
-    // Check integer
-    if (isNumericAttribute(input.key)) {
-      return {
-        key: input.key,
-        value: R.map((value) => {
-          const parsedValue = parseInt(value, 10);
-          return Number.isNaN(parsedValue) ? null : parsedValue;
-        }, input.value),
-      };
-    }
-    // Check boolean
-    if (isBooleanAttribute(input.key)) {
-      return {
-        key: input.key,
-        value: R.map((value) => {
-          return value === true || value === 'true';
-        }, input.value),
-      };
-    }
-    // Check dates for empty values
+  return inputs.map((input) => {
+    // Apply some internal logic to set default values and prevent some behaviors
     if (dateForStartAttributes.includes(input.key)) {
       const emptyValue = isEmptyField(input.value) || isEmptyField(input.value.at(0));
       return {
@@ -1493,7 +1469,7 @@ const prepareAttributes = (instance, elements) => {
     if (input.key === VALUE_FIELD && instanceType === ENTITY_TYPE_LABEL) {
       return {
         key: input.key,
-        value: input.value.map((v) => v.toLowerCase())
+        value: input.value.map((v) => v.toLowerCase().trim())
       };
     }
     // Specific case for name in aliased entities
@@ -1537,7 +1513,7 @@ const updateAttributeRaw = async (context, user, instance, inputs, opts = {}) =>
   const elements = Array.isArray(inputs) ? inputs : [inputs];
   const instanceType = instance.entity_type;
   // Prepare attributes
-  const preparedElements = prepareAttributes(instance, elements);
+  const preparedElements = normalizeUpdateInputs(instance, elements);
   // region Check date range
   const inputKeys = inputs.map((i) => i.key);
   if (inputKeys.includes(START_TIME) || inputKeys.includes(STOP_TIME)) {
