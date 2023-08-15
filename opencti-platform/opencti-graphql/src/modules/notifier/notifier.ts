@@ -24,6 +24,8 @@ const NOTIFIER_DEFINITION: ModuleDefinition<StoreEntityNotifier, StixNotifier> =
   },
   attributes: [
     { name: 'name', type: 'string', mandatoryType: 'internal', multiple: false, upsert: false },
+    { name: 'created', type: 'date', mandatoryType: 'external', multiple: false, upsert: true },
+    { name: 'updated', type: 'date', mandatoryType: 'external', multiple: false, upsert: false },
     { name: 'description', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'built_in', type: 'boolean', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'notifier_connector_id', type: 'string', mandatoryType: 'internal', multiple: false, upsert: false },
