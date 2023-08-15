@@ -28,7 +28,7 @@ const NOTIFIER_DEFINITION: ModuleDefinition<StoreEntityNotifier, StixNotifier> =
     { name: 'built_in', type: 'boolean', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'notifier_connector_id', type: 'string', mandatoryType: 'internal', multiple: false, upsert: false },
     { name: 'notifier_configuration', type: 'json', mandatoryType: 'no', multiple: false, upsert: false },
-    { name: 'authorized_members', type: 'json', mandatoryType: 'no', multiple: true, upsert: false },
+    { name: 'authorized_members', type: 'object', mandatoryType: 'no', multiple: true, upsert: false },
     { name: 'authorized_authorities', type: 'string', mandatoryType: 'no', multiple: true, upsert: false },
   ],
   relations: [],
