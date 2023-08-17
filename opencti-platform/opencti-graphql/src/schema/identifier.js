@@ -186,16 +186,16 @@ const stixBaseEntityContribution = {
     [D.ENTITY_TYPE_CONTAINER_OPINION]: [{ src: 'opinion' }, { src: 'created' }],
     [D.ENTITY_TYPE_CONTAINER_REPORT]: [{ src: NAME_FIELD }, { src: 'published' }],
     [D.ENTITY_TYPE_COURSE_OF_ACTION]: [[{ src: X_MITRE_ID_FIELD }], [{ src: NAME_FIELD }]],
-    [D.ENTITY_TYPE_IDENTITY_INDIVIDUAL]: [{ src: NAME_FIELD }, { src: 'identity_class' }],
-    [D.ENTITY_TYPE_IDENTITY_ORGANIZATION]: [{ src: NAME_FIELD }, { src: 'identity_class' }],
-    [D.ENTITY_TYPE_IDENTITY_SECTOR]: [{ src: NAME_FIELD }, { src: 'identity_class' }],
-    [D.ENTITY_TYPE_IDENTITY_SYSTEM]: [{ src: NAME_FIELD }, { src: 'identity_class' }],
+    [D.ENTITY_TYPE_IDENTITY_INDIVIDUAL]: [{ src: NAME_FIELD, dependencies: ['identity_class'] }, { src: 'identity_class' }],
+    [D.ENTITY_TYPE_IDENTITY_ORGANIZATION]: [{ src: NAME_FIELD, dependencies: ['identity_class'] }, { src: 'identity_class' }],
+    [D.ENTITY_TYPE_IDENTITY_SECTOR]: [{ src: NAME_FIELD, dependencies: ['identity_class'] }, { src: 'identity_class' }],
+    [D.ENTITY_TYPE_IDENTITY_SYSTEM]: [{ src: NAME_FIELD, dependencies: ['identity_class'] }, { src: 'identity_class' }],
     [D.ENTITY_TYPE_INDICATOR]: [{ src: 'pattern' }],
     [D.ENTITY_TYPE_INFRASTRUCTURE]: [{ src: NAME_FIELD }],
     [D.ENTITY_TYPE_INTRUSION_SET]: [{ src: NAME_FIELD }],
-    [D.ENTITY_TYPE_LOCATION_CITY]: [{ src: NAME_FIELD }, { src: 'x_opencti_location_type' }],
-    [D.ENTITY_TYPE_LOCATION_COUNTRY]: [{ src: NAME_FIELD }, { src: 'x_opencti_location_type' }],
-    [D.ENTITY_TYPE_LOCATION_REGION]: [{ src: NAME_FIELD }, { src: 'x_opencti_location_type' }],
+    [D.ENTITY_TYPE_LOCATION_CITY]: [{ src: NAME_FIELD, dependencies: ['x_opencti_location_type'] }, { src: 'x_opencti_location_type' }],
+    [D.ENTITY_TYPE_LOCATION_COUNTRY]: [{ src: NAME_FIELD, dependencies: ['x_opencti_location_type'] }, { src: 'x_opencti_location_type' }],
+    [D.ENTITY_TYPE_LOCATION_REGION]: [{ src: NAME_FIELD, dependencies: ['x_opencti_location_type'] }, { src: 'x_opencti_location_type' }],
     [D.ENTITY_TYPE_LOCATION_POSITION]: [[{ src: 'latitude' }, { src: 'longitude' }], [{ src: NAME_FIELD }]],
     [D.ENTITY_TYPE_MALWARE]: [{ src: NAME_FIELD }],
     [D.ENTITY_TYPE_THREAT_ACTOR_GROUP]: [{ src: NAME_FIELD }, { src: INNER_TYPE }],
@@ -314,10 +314,12 @@ const filteredIdContributions = (contrib, way, data) => {
     const [key, value] = entry;
     const prop = R.find((e) => R.includes(key, e.src), way);
     const { src, dest, dependencies = [] } = prop;
-    const dataDependencies = Object.values(R.pick(dependencies, data));
-    const isEmptyValueInDependencies = dataDependencies.filter((n) => isEmptyField(n)).length !== 0;
-    if (isEmptyValueInDependencies) {
-      return {};
+    if (dependencies.length > 0) {
+      const dataDependencies = Object.values(R.pick(dependencies, data));
+      const isEmptyValueInDependencies = dataDependencies.length === 0 || dataDependencies.filter((n) => isEmptyField(n)).length !== 0;
+      if (isEmptyValueInDependencies) {
+        return {};
+      }
     }
     const destKey = dest || src;
     const resolver = contrib.resolvers[src];
