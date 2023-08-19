@@ -1,7 +1,7 @@
-import { elIndex, elPaginate } from '../database/engine';
-import { INDEX_INTERNAL_OBJECTS, READ_DATA_INDICES, READ_DATA_INDICES_WITHOUT_INFERRED, } from '../database/utils';
+import { elPaginate } from '../database/engine';
+import { READ_DATA_INDICES, READ_DATA_INDICES_WITHOUT_INFERRED, } from '../database/utils';
 import { ENTITY_TYPE_BACKGROUND_TASK } from '../schema/internalObject';
-import { deleteElementById, patchAttribute } from '../database/middleware';
+import { createEntity, deleteElementById, patchAttribute } from '../database/middleware';
 import { convertFiltersFrontendFormat, GlobalFilters, TYPE_FILTER } from '../utils/filtering';
 import { getUserAccessRight, MEMBER_ACCESS_RIGHT_ADMIN, SYSTEM_USER } from '../utils/access';
 import { ABSTRACT_STIX_DOMAIN_OBJECT, RULE_PREFIX } from '../schema/general';
@@ -112,10 +112,18 @@ export const createRuleTask = async (context, user, ruleDefinition, input) => {
   const opts = enable ? buildEntityFilters(scan) : { filters: [{ key: `${RULE_PREFIX}${rule}`, values: ['EXISTS'] }] };
   const queryData = await elPaginate(context, user, READ_DATA_INDICES, { ...opts, first: 1 });
   const countExpected = queryData.pageInfo.globalCount;
-  const task = createDefaultTask(user, input, TASK_TYPE_RULE, countExpected);
+  const task = createDefaultTask(user, TASK_TYPE_RULE, countExpected);
   const ruleTask = { ...task, rule, enable };
-  await elIndex(INDEX_INTERNAL_OBJECTS, ruleTask);
-  return ruleTask;
+  const created = await createEntity(context, user, ruleTask, ENTITY_TYPE_BACKGROUND_TASK);
+  await publishUserAction({
+    user,
+    event_type: 'mutation',
+    event_scope: 'create',
+    event_access: 'extended',
+    message: 'creates `rule task`',
+    context_data: { id: created.id, entity_type: ENTITY_TYPE_BACKGROUND_TASK, input: ruleTask }
+  });
+  return created;
 };
 
 export const createQueryTask = async (context, user, input) => {
@@ -123,7 +131,7 @@ export const createQueryTask = async (context, user, input) => {
   await checkActionValidity(context, user, input, scope, TASK_TYPE_QUERY);
   const queryData = await executeTaskQuery(context, user, filters, search);
   const countExpected = queryData.pageInfo.globalCount - excluded_ids.length;
-  const task = createDefaultTask(user, input, TASK_TYPE_QUERY, countExpected, scope);
+  const task = createDefaultTask(user, TASK_TYPE_QUERY, countExpected, scope);
   const queryTask = {
     ...task,
     actions,
@@ -131,16 +139,16 @@ export const createQueryTask = async (context, user, input) => {
     task_search: search,
     task_excluded_ids: excluded_ids,
   };
+  const created = await createEntity(context, user, input, ENTITY_TYPE_BACKGROUND_TASK);
   await publishUserAction({
     user,
     event_type: 'mutation',
     event_scope: 'create',
     event_access: 'extended',
     message: 'creates `background task`',
-    context_data: { entity_type: ENTITY_TYPE_BACKGROUND_TASK, input: queryTask }
+    context_data: { id: created.id, entity_type: ENTITY_TYPE_BACKGROUND_TASK, input: queryTask }
   });
-  await elIndex(INDEX_INTERNAL_OBJECTS, queryTask);
-  return queryTask;
+  return created;
 };
 
 export const deleteRuleTasks = async (context, user, ruleId) => {

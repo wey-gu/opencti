@@ -24,7 +24,7 @@ export const settingsMessagesQuery = graphql`
   query SettingsMessagesBannerQuery {
     settings {
       id
-      messages {
+      platform_messages {
         id
         message
         activated
@@ -39,7 +39,7 @@ export const settingsMessagesQuery = graphql`
 const settingsSubscription = graphql`
   subscription SettingsMessagesBannerSubscription($id: ID!) {
     settingsMessages(id: $id) {
-      messages {
+      platform_messages {
         id
         message
         activated
@@ -145,7 +145,7 @@ const SettingsMessagesBannerComponent = ({
     [settings, settingsSubscription],
   );
   useSubscription(config);
-  const messagesSettings = (settings.messages
+  const messagesSettings = (settings.platform_messages
     ?? []) as MessageFromLocalStorage[];
   const [{ messages: messagesLocalStorage }, setMessages] = useLocalStorage(
     BANNER_LOCAL_STORAGE_KEY,

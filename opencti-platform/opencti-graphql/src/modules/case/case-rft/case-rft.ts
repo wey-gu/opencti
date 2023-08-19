@@ -31,7 +31,6 @@ const CASE_RFT_DEFINITION: ModuleDefinition<StoreEntityCaseRft, StixCaseRft> = {
     },
   },
   attributes: [
-    { name: 'name', type: 'string', mandatoryType: 'external', multiple: false, upsert: true },
     { name: 'created', type: 'date', mandatoryType: 'external', multiple: false, upsert: true },
     { name: 'takedown_types', type: 'string', mandatoryType: 'customizable', multiple: true, upsert: true, label: 'takedown_types' },
     { name: 'severity', type: 'string', mandatoryType: 'customizable', multiple: false, upsert: true },

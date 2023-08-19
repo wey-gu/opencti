@@ -1,28 +1,38 @@
+export const textMapping = {
+  type: 'text',
+  fields: {
+    keyword: {
+      type: 'keyword',
+      normalizer: 'string_normalizer'
+    },
+  },
+};
+export const dateMapping = { type: 'date' };
+
 export type AttrType = 'string' | 'date' | 'numeric' | 'boolean' | 'dictionary' | 'json' | 'object';
 export type MandatoryType = 'internal' | 'external' | 'customizable' | 'no';
 
-export interface AttributeDefinition {
+type BasicDefinition = {
   name: string
-  type: AttrType
+  label?: string
   mandatoryType: MandatoryType
   multiple: boolean
   upsert: boolean
   update?: boolean
-  label?: string
-  description?: string
-  scalable?: boolean
-  schemaDef?: Record<string, any>
-}
+};
+
+export type StringAttribute = { type: 'string' } & BasicDefinition;
+export type DateAttribute = { type: 'date' } & BasicDefinition;
+export type DictionaryAttribute = { type: 'dictionary' } & BasicDefinition;
+export type BooleanAttribute = { type: 'boolean' } & BasicDefinition;
+export type NumericAttribute = { type: 'numeric', scalable?: boolean } & BasicDefinition;
+export type JsonAttribute = { type: 'json', schemaDef?: Record<string, any> } & BasicDefinition;
+export type ObjectAttribute = { type: 'object', mapping: Record<string, any> } & BasicDefinition;
+
+export type AttributeDefinition = StringAttribute | JsonAttribute | ObjectAttribute | DictionaryAttribute |
+NumericAttribute | DateAttribute | BooleanAttribute;
 
 // -- GLOBAL --
-
-export const _index: AttributeDefinition = {
-  name: '_index',
-  type: 'string',
-  mandatoryType: 'no',
-  multiple: false,
-  upsert: false
-};
 
 export const id: AttributeDefinition = {
   name: 'id',
@@ -75,6 +85,34 @@ export const files: AttributeDefinition = {
   multiple: true,
   upsert: false,
   update: false,
+  mapping: {
+    id: textMapping,
+    name: textMapping,
+    version: textMapping,
+    mime_type: textMapping,
+  }
+};
+
+export const authorizedMembers: AttributeDefinition = {
+  name: 'authorized_members',
+  type: 'object',
+  mandatoryType: 'no',
+  multiple: true,
+  upsert: false,
+  mapping: {
+    id: textMapping,
+    name: textMapping,
+    entity_type: textMapping,
+    access_right: textMapping,
+  }
+};
+
+export const authorizedAuthorities: AttributeDefinition = {
+  name: 'authorized_authorities',
+  type: 'string',
+  mandatoryType: 'no',
+  multiple: true,
+  upsert: false
 };
 
 // -- ENTITY TYPE --
@@ -120,6 +158,21 @@ export const relationshipType: AttributeDefinition = {
   upsert: false
 };
 
+export const errors: AttributeDefinition = {
+  name: 'errors',
+  type: 'object',
+  mandatoryType: 'no',
+  multiple: true,
+  upsert: false,
+  mapping: {
+    id: textMapping,
+    message: textMapping,
+    error: textMapping,
+    source: textMapping,
+    timestamp: dateMapping,
+  }
+};
+
 // -- STIX DOMAIN OBJECT --
 
 // IDS
@@ -154,14 +207,6 @@ export const aliases: AttributeDefinition = {
 };
 
 // OTHERS
-
-export const specVersion: AttributeDefinition = {
-  name: 'spec_version',
-  type: 'string',
-  mandatoryType: 'no',
-  multiple: false,
-  upsert: false
-};
 
 export const created: AttributeDefinition = {
   name: 'created',

@@ -1,10 +1,9 @@
 /* eslint-disable camelcase */
 import * as R from 'ramda';
-import { elIndex } from '../database/engine';
-import { extractEntityRepresentative, INDEX_INTERNAL_OBJECTS } from '../database/utils';
-import { generateInternalId, generateStandardId } from '../schema/identifier';
+import { extractEntityRepresentative } from '../database/utils';
 import { ENTITY_TYPE_GROUP, ENTITY_TYPE_STREAM_COLLECTION } from '../schema/internalObject';
 import {
+  createEntity,
   createRelation,
   createRelations,
   deleteElementById,
@@ -15,37 +14,27 @@ import {
 import { listEntities, storeLoadById } from '../database/middleware-loader';
 import { delEditContext, notify, setEditContext } from '../database/redis';
 import { BUS_TOPICS } from '../config/conf';
-import { ABSTRACT_INTERNAL_RELATIONSHIP, BASE_TYPE_ENTITY, buildRefRelationKey } from '../schema/general';
-import { getParentTypes } from '../schema/schemaUtils';
+import { ABSTRACT_INTERNAL_RELATIONSHIP, buildRefRelationKey } from '../schema/general';
 import { RELATION_ACCESSES_TO } from '../schema/internalRelationship';
 import { isUserHasCapability, SYSTEM_USER, TAXIIAPI_SETCOLLECTIONS } from '../utils/access';
 import { publishUserAction } from '../listener/UserActionListener';
 
 // Stream graphQL handlers
 export const createStreamCollection = async (context, user, input) => {
-  const collectionId = generateInternalId();
   const relatedGroups = input.groups || [];
   // Insert the collection
-  const data = {
-    id: collectionId,
-    internal_id: collectionId,
-    standard_id: generateStandardId(ENTITY_TYPE_STREAM_COLLECTION, input),
-    entity_type: ENTITY_TYPE_STREAM_COLLECTION,
-    parent_types: getParentTypes(ENTITY_TYPE_STREAM_COLLECTION),
-    base_type: BASE_TYPE_ENTITY,
-    ...R.dissoc('groups', input),
-  };
-  await elIndex(INDEX_INTERNAL_OBJECTS, data);
+  const data = R.dissoc('groups', input);
+  const created = await createEntity(context, user, data, ENTITY_TYPE_STREAM_COLLECTION);
   await publishUserAction({
     user,
     event_type: 'mutation',
     event_scope: 'create',
     event_access: 'administration',
     message: `creates live stream \`${data.name}\``,
-    context_data: { id: collectionId, entity_type: ENTITY_TYPE_STREAM_COLLECTION, input }
+    context_data: { id: created.id, entity_type: ENTITY_TYPE_STREAM_COLLECTION, input }
   });
   // Create groups relations
-  const relBuilder = (g) => ({ fromId: g, toId: collectionId, relationship_type: RELATION_ACCESSES_TO });
+  const relBuilder = (g) => ({ fromId: g, toId: created.id, relationship_type: RELATION_ACCESSES_TO });
   await createRelations(context, user, relatedGroups.map((g) => relBuilder(g)));
   return notify(BUS_TOPICS[ENTITY_TYPE_STREAM_COLLECTION].ADDED_TOPIC, data, user);
 };

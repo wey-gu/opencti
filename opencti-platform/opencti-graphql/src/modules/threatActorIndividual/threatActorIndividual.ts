@@ -43,7 +43,8 @@ const THREAT_ACTOR_INDIVIDUAL_DEFINITION: ModuleDefinition<StoreEntityThreatActo
   type: {
     id: 'threat-actor-individual',
     name: ENTITY_TYPE_THREAT_ACTOR_INDIVIDUAL,
-    category: ENTITY_TYPE_THREAT_ACTOR
+    category: ENTITY_TYPE_THREAT_ACTOR,
+    aliased: true
   },
   graphql: {
     schema: threatActorIndividualTypeDefs,
@@ -62,7 +63,6 @@ const THREAT_ACTOR_INDIVIDUAL_DEFINITION: ModuleDefinition<StoreEntityThreatActo
   attributes: [
     { name: 'name', type: 'string', mandatoryType: 'external', multiple: false, upsert: true },
     { name: 'description', type: 'string', mandatoryType: 'customizable', multiple: false, upsert: true },
-    { name: 'aliases', type: 'string', mandatoryType: 'no', multiple: true, upsert: true },
     {
       name: 'threat_actor_types',
       type: 'string',

@@ -45,7 +45,7 @@ export const queryAttributesDefinition = async (context: AuthContext, user: Auth
     // From schema attributes
     const attributesDefinition = schemaAttributesDefinition.getAttributes(entitySetting.target_type);
     attributesDefinition.forEach((attr) => {
-      if (attr.mandatoryType === 'external' || attr.mandatoryType === 'customizable' || attr.scalable) {
+      if (attr.mandatoryType === 'external' || attr.mandatoryType === 'customizable' || (attr.type === 'numeric' && attr.scalable)) {
         const attributeConfig: AttributeConfigMeta = {
           name: attr.name,
           label: attr.label,
@@ -57,7 +57,7 @@ export const queryAttributesDefinition = async (context: AuthContext, user: Auth
         if (attr.mandatoryType === 'external') {
           attributeConfig.mandatory = true;
         }
-        if (attr.scalable) { // return default scale
+        if (attr.type === 'numeric' && attr.scalable) { // return default scale
           attributeConfig.scale = defaultScale;
         }
         attributesConfiguration.push(attributeConfig);

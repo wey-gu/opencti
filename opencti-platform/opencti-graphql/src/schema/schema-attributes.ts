@@ -1,3 +1,4 @@
+import * as R from 'ramda';
 import { RULE_PREFIX } from './general';
 import { UnsupportedError } from '../config/errors';
 import type { AttributeDefinition, AttrType } from './attribute-definition';
@@ -52,7 +53,26 @@ export const schemaAttributesDefinition = {
           entityType
         });
       }
-
+      // Check if attribute is not already part of a parent
+      const parentTypes = getParentTypes(entityType);
+      for (let i = 0; i < parentTypes.length; i += 1) {
+        const parentType = parentTypes[i];
+        const attrList = Array.from((this.attributes[parentType] ?? new Map()).values()).flat();
+        const attrMap = new Map(attrList.map((e) => [e.name, e]));
+        const parentAttribute = attrMap.get(attribute.name);
+        // We throw if we found the exact same definition (to allow attribute override)
+        const uniqAttribute = R.omit(['mandatoryType'], attribute);
+        const uniqParentAttribute = R.omit(['mandatoryType'], parentAttribute);
+        if (parentAttribute && R.equals(uniqAttribute, uniqParentAttribute)) {
+          throw UnsupportedError('Attribute already defined by one of its parent', {
+            entityType,
+            parentType,
+            attribute,
+            parentAttribute,
+          });
+        }
+      }
+      // Set the attribute in list
       directAttributes.set(attribute.name, attribute);
     });
     this.attributes[entityType] = directAttributes;
@@ -86,6 +106,10 @@ export const schemaAttributesDefinition = {
         this.upsertByEntity.set(entityType, [...this.upsertByEntity.get(entityType) ?? [], attr.name]);
       }
     });
+  },
+
+  getAllAttributes() {
+    return R.uniqBy((a) => a.name, Object.values(this.attributes).map((a) => Array.from(a.values())).flat());
   },
 
   getAttributes(entityType: string): Map<string, AttributeDefinition> {
@@ -132,6 +156,9 @@ export const isStringAttribute = (k: string): boolean => (
 );
 export const isDictionaryAttribute = (k: string): boolean => (
   schemaAttributesDefinition.isSpecificTypeAttribute(k, 'dictionary')
+);
+export const isObjectAttribute = (k: string): boolean => (
+  schemaAttributesDefinition.isSpecificTypeAttribute(k, 'object')
 );
 export const isJsonAttribute = (k: string): boolean => (
   schemaAttributesDefinition.isSpecificTypeAttribute(k, 'json')

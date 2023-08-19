@@ -1,18 +1,13 @@
 import * as R from 'ramda';
 import { uniq } from 'ramda';
 import { ENTITY_TYPE_CASE_TEMPLATE } from '../modules/case/case-template/case-template-types';
-import { generateInternalId, generateStandardId } from '../schema/identifier';
-import { ENTITY_TYPE_BACKGROUND_TASK } from '../schema/internalObject';
 import { now } from '../utils/format';
 import { BYPASS, MEMBER_ACCESS_RIGHT_ADMIN, SETTINGS_SET_ACCESSES } from '../utils/access';
 import { ABSTRACT_STIX_OBJECT, isKnowledge, KNOWLEDGE_DELETE, KNOWLEDGE_UPDATE } from '../schema/general';
 import { ForbiddenAccess } from '../config/errors';
-import { elIndex } from '../database/engine';
-import { INDEX_INTERNAL_OBJECTS } from '../database/utils';
 import { ENTITY_TYPE_NOTIFICATION } from '../modules/notification/notification-types';
 import { isStixCoreObject } from '../schema/stixCoreObject';
 import { isStixCoreRelationship } from '../schema/stixCoreRelationship';
-import { publishUserAction } from '../listener/UserActionListener';
 import { storeLoadById } from '../database/middleware-loader';
 import { getParentTypes } from '../schema/schemaUtils';
 
@@ -96,13 +91,8 @@ export const checkActionValidity = async (context, user, input, scope, taskType)
   }
 };
 
-export const createDefaultTask = (user, input, taskType, taskExpectedNumber, scope = undefined) => {
-  const taskId = generateInternalId();
-  let task = {
-    id: taskId,
-    internal_id: taskId,
-    standard_id: generateStandardId(ENTITY_TYPE_BACKGROUND_TASK, input),
-    entity_type: ENTITY_TYPE_BACKGROUND_TASK,
+export const createDefaultTask = (user, taskType, taskExpectedNumber, scope = undefined) => {
+  const task = {
     initiator_id: user.internal_id,
     created_at: now(),
     completed: false,
@@ -115,12 +105,9 @@ export const createDefaultTask = (user, input, taskType, taskExpectedNumber, sco
     errors: [], // To stock the errors
   };
   if (scope) { // add rights for query tasks and list tasks
-    task = {
-      ...task,
-      scope,
-      authorized_members: authorizedMembersForTask(user, scope),
-      authorized_authorities: authorizedAuthoritiesForTask(scope),
-    };
+    task.scope = scope;
+    task.authorized_members = authorizedMembersForTask(user, scope);
+    task.authorized_authorities = authorizedAuthoritiesForTask(scope);
   }
   return task;
 };
@@ -144,27 +131,6 @@ const authorizedMembersForTask = (user, scope) => {
     default:
       return [];
   }
-};
-
-export const createListTask = async (context, user, input) => {
-  const { actions, ids, scope } = input;
-  await checkActionValidity(context, user, input, scope, TASK_TYPE_LIST);
-  const task = createDefaultTask(user, input, TASK_TYPE_LIST, ids.length, scope);
-  const listTask = {
-    ...task,
-    actions,
-    task_ids: ids,
-  };
-  await publishUserAction({
-    user,
-    event_type: 'mutation',
-    event_scope: 'create',
-    event_access: 'extended',
-    message: 'creates `background task`',
-    context_data: { entity_type: ENTITY_TYPE_BACKGROUND_TASK, input: listTask }
-  });
-  await elIndex(INDEX_INTERNAL_OBJECTS, listTask);
-  return listTask;
 };
 
 export const isTaskEnabledEntity = (entityType) => {

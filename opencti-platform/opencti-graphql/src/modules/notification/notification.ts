@@ -11,6 +11,7 @@ import {
 import { ABSTRACT_INTERNAL_OBJECT } from '../../schema/general';
 import type { ModuleDefinition } from '../../schema/module';
 import { registerDefinition } from '../../schema/module';
+import { authorizedAuthorities, authorizedMembers } from '../../schema/attribute-definition';
 
 // Outcomes
 // TODO
@@ -41,14 +42,14 @@ const TRIGGER_DEFINITION: ModuleDefinition<StoreEntityTrigger, StixTrigger> = {
     { name: 'trigger_type', type: 'string', mandatoryType: 'internal', multiple: false, upsert: false },
     { name: 'outcomes', type: 'string', mandatoryType: 'external', multiple: true, upsert: false },
     { name: 'notifiers', type: 'string', mandatoryType: 'external', multiple: true, upsert: false },
-    { name: 'filters', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'filters', type: 'json', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'recipients', type: 'string', mandatoryType: 'no', multiple: true, upsert: false },
     { name: 'trigger_ids', type: 'string', mandatoryType: 'no', multiple: true, upsert: false },
     { name: 'period', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'trigger_time', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
-    { name: 'authorized_members', type: 'object', mandatoryType: 'no', multiple: true, upsert: false },
-    { name: 'authorized_authorities', type: 'string', mandatoryType: 'no', multiple: true, upsert: false },
     { name: 'instance_trigger', type: 'boolean', mandatoryType: 'external', multiple: false, upsert: false },
+    authorizedMembers,
+    authorizedAuthorities,
   ],
   relations: [],
   representative: (stix: StixTrigger) => {

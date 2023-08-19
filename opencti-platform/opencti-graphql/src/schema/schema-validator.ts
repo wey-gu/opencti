@@ -9,7 +9,7 @@ import type { AuthContext, AuthUser } from '../types/user';
 import { getAttributesConfiguration } from '../modules/entitySetting/entitySetting-utils';
 import { externalReferences } from './stixRefRelationship';
 import { telemetry } from '../config/tracing';
-import type { AttributeDefinition } from './attribute-definition';
+import type { AttributeDefinition, JsonAttribute } from './attribute-definition';
 
 const ajv = new Ajv();
 
@@ -22,14 +22,15 @@ export const validateFormatSchemaAttribute = (
   value: unknown
 ) => {
   if (isJsonAttribute(attributeName)) {
-    if (!attributeDefinition) {
+    const jsonAttribute = attributeDefinition as JsonAttribute;
+    if (!jsonAttribute) {
       throw ValidationError(attributeName, {
         message: 'This attribute is not declared for this type',
         data: { attribute: attributeName, entityType: instanceType }
       });
     }
-    if (attributeDefinition.schemaDef) {
-      const validate = ajv.compile(attributeDefinition.schemaDef);
+    if (jsonAttribute.schemaDef) {
+      const validate = ajv.compile(jsonAttribute.schemaDef);
       const valid = validate(JSON.parse(value as string));
       if (!valid) {
         throw ValidationError(attributeName, { message: 'The JSON Schema is not valid', data: validate.errors });

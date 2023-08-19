@@ -31,7 +31,6 @@ const CASE_RFI_DEFINITION: ModuleDefinition<StoreEntityCaseRfi, StixCaseRfi> = {
     },
   },
   attributes: [
-    { name: 'name', type: 'string', mandatoryType: 'external', multiple: false, upsert: true },
     { name: 'created', type: 'date', mandatoryType: 'external', multiple: false, upsert: true },
     { name: 'information_types', type: 'string', mandatoryType: 'customizable', multiple: true, upsert: true, label: 'information_types' },
     { name: 'severity', type: 'string', mandatoryType: 'customizable', multiple: false, upsert: true },

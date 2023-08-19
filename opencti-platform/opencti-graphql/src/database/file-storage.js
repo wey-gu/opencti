@@ -147,7 +147,7 @@ export const storeFileConverter = (user, file) => {
   };
 };
 
-export const loadFile = async (context, user, filename) => {
+export const loadFile = async (_, user, filename) => {
   try {
     const object = await s3Client.send(new s3.HeadObjectCommand({
       Bucket: bucketName,

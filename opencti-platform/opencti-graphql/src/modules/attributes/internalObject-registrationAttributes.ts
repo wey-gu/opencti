@@ -1,5 +1,6 @@
 import * as R from 'ramda';
 import type { AttributeDefinition } from '../../schema/attribute-definition';
+import { dateMapping, errors, textMapping } from '../../schema/attribute-definition';
 import { schemaAttributesDefinition } from '../../schema/schema-attributes';
 import {
   ENTITY_TYPE_CAPABILITY,
@@ -18,7 +19,7 @@ import {
   ENTITY_TYPE_SYNC,
   ENTITY_TYPE_BACKGROUND_TASK,
   ENTITY_TYPE_TAXII_COLLECTION,
-  ENTITY_TYPE_USER, ENTITY_TYPE_HISTORY,
+  ENTITY_TYPE_USER, ENTITY_TYPE_HISTORY, ENTITY_TYPE_WORK,
 } from '../../schema/internalObject';
 import { settingsMessages } from '../../domain/settings';
 
@@ -63,7 +64,7 @@ const internalObjectsAttributes: { [k: string]: Array<AttributeDefinition> } = {
     { name: 'password_policy_min_uppercase', type: 'numeric', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'enterprise_edition', type: 'date', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'activity_listeners_ids', type: 'string', mandatoryType: 'no', multiple: true, upsert: false },
-    { name: 'messages', type: 'json', mandatoryType: 'no', multiple: false, upsert: false, schemaDef: settingsMessages },
+    { name: 'platform_messages', type: 'json', mandatoryType: 'no', multiple: false, upsert: false, schemaDef: settingsMessages },
   ],
   [ENTITY_TYPE_MIGRATION_STATUS]: [
     { name: 'lastRun', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
@@ -78,7 +79,16 @@ const internalObjectsAttributes: { [k: string]: Array<AttributeDefinition> } = {
     { name: 'description', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'default_assignation', type: 'boolean', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'auto_new_marking', type: 'boolean', mandatoryType: 'no', multiple: false, upsert: false },
-    { name: 'default_marking', type: 'object', mandatoryType: 'no', multiple: true, upsert: false },
+    { name: 'default_marking',
+      type: 'object',
+      mandatoryType: 'no',
+      multiple: true,
+      upsert: false,
+      mapping: {
+        entity_type: textMapping,
+        values: textMapping
+      }
+    },
     { name: 'default_dashboard', type: 'string', mandatoryType: 'no', multiple: false, upsert: true },
     { name: 'default_hidden_types', type: 'string', mandatoryType: 'no', multiple: true, upsert: false },
   ],
@@ -92,7 +102,16 @@ const internalObjectsAttributes: { [k: string]: Array<AttributeDefinition> } = {
     { name: 'theme', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'language', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'external', type: 'boolean', mandatoryType: 'no', multiple: false, upsert: false },
-    { name: 'bookmarks', type: 'json', mandatoryType: 'no', multiple: true, upsert: false },
+    { name: 'bookmarks',
+      type: 'object',
+      mandatoryType: 'no',
+      multiple: true,
+      upsert: false,
+      mapping: {
+        id: textMapping,
+        type: textMapping
+      }
+    },
     { name: 'api_token', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'otp_secret', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'otp_qr', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
@@ -109,7 +128,7 @@ const internalObjectsAttributes: { [k: string]: Array<AttributeDefinition> } = {
   ],
   [ENTITY_TYPE_RULE_MANAGER]: [
     { name: 'lastEventId', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
-    { name: 'errors', type: 'string', mandatoryType: 'no', multiple: true, upsert: false }
+    errors
   ],
   [ENTITY_TYPE_CAPABILITY]: [
     { name: 'name', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
@@ -130,12 +149,12 @@ const internalObjectsAttributes: { [k: string]: Array<AttributeDefinition> } = {
   [ENTITY_TYPE_TAXII_COLLECTION]: [
     { name: 'name', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
     { name: 'description', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
-    { name: 'filters', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'filters', type: 'json', mandatoryType: 'no', multiple: false, upsert: false },
   ],
   [ENTITY_TYPE_STREAM_COLLECTION]: [
     { name: 'name', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
     { name: 'description', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
-    { name: 'filters', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'filters', type: 'json', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'stream_public', type: 'boolean', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'stream_live', type: 'boolean', mandatoryType: 'no', multiple: false, upsert: false },
   ],
@@ -148,17 +167,70 @@ const internalObjectsAttributes: { [k: string]: Array<AttributeDefinition> } = {
     { name: 'type', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'order', type: 'numeric', mandatoryType: 'external', multiple: false, upsert: false },
   ],
+  [ENTITY_TYPE_WORK]: [
+    { name: 'name', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
+    { name: 'timestamp', type: 'date', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'updated_at', type: 'date', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'event_source_id', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
+    { name: 'event_type', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
+    { name: 'user_id', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'connector_id', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'status', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
+    { name: 'import_expected_number', type: 'numeric', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'processed_time', type: 'date', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'received_time', type: 'date', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'completed_time', type: 'date', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'completed_number', type: 'numeric', mandatoryType: 'no', multiple: false, upsert: false },
+    {
+      name: 'messages',
+      type: 'object',
+      mandatoryType: 'no',
+      multiple: true,
+      upsert: false,
+      mapping: {
+        timestamp: dateMapping,
+        message: textMapping,
+      }
+    },
+    errors
+  ],
   [ENTITY_TYPE_BACKGROUND_TASK]: [
+    {
+      name: 'actions',
+      type: 'object',
+      mandatoryType: 'internal',
+      multiple: true,
+      upsert: false,
+      mapping: {
+        type: textMapping,
+        context: {
+          properties: {
+            field: textMapping,
+            type: textMapping,
+            values: textMapping
+          }
+        }
+      }
+    },
+    { name: 'type', type: 'string', mandatoryType: 'internal', multiple: false, upsert: false },
+    { name: 'scope', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
+    { name: 'rule', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'enable', type: 'boolean', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'completed', type: 'boolean', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'initiator_id', type: 'string', mandatoryType: 'internal', multiple: false, upsert: false },
+    { name: 'task_filters', type: 'json', mandatoryType: 'external', multiple: false, upsert: false },
+    { name: 'task_search', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
     { name: 'task_position', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
+    { name: 'task_excluded_ids', type: 'string', mandatoryType: 'no', multiple: true, upsert: false },
     { name: 'task_processed_number', type: 'numeric', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'task_expected_number', type: 'numeric', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'last_execution_date', type: 'date', mandatoryType: 'no', multiple: false, upsert: false },
-    { name: 'completed', type: 'boolean', mandatoryType: 'no', multiple: false, upsert: false },
+    errors,
   ],
   [ENTITY_TYPE_RETENTION_RULE]: [
     { name: 'name', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
-    { name: 'filters', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
-    { name: 'max_retention', type: 'string', mandatoryType: 'external', multiple: false, upsert: false },
+    { name: 'filters', type: 'json', mandatoryType: 'external', multiple: false, upsert: false },
+    { name: 'max_retention', type: 'numeric', mandatoryType: 'external', multiple: false, upsert: false },
     { name: 'last_execution_date', type: 'date', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'last_deleted_count', type: 'numeric', mandatoryType: 'no', multiple: false, upsert: false },
     { name: 'remaining_count', type: 'numeric', mandatoryType: 'no', multiple: false, upsert: false },

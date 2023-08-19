@@ -53,7 +53,7 @@ import {
   ID_INFERRED,
   ID_INTERNAL,
   ID_STANDARD,
-  IDS_STIX,
+  IDS_STIX, INDEX_FIELD,
   INTERNAL_IDS_ALIASES,
   isAbstract,
   REL_INDEX_PREFIX,
@@ -89,6 +89,7 @@ import {
 } from '../schema/schema-attributes';
 import { convertTypeToStixType } from './stix-converter';
 import { ENTITY_TYPE_IDENTITY_ORGANIZATION } from '../modules/organization/organization-types';
+import { dateMapping, textMapping } from '../schema/attribute-definition';
 
 const ELK_ENGINE = 'elk';
 const OPENSEARCH_ENGINE = 'opensearch';
@@ -514,6 +515,7 @@ const elCreateCoreSettings = async () => {
     throw DatabaseError('[SEARCH] Error creating component template', { error: e });
   });
 };
+
 const elCreateIndexTemplate = async (index) => {
   let settings;
   if (engine instanceof ElkClient) {
@@ -534,155 +536,88 @@ const elCreateIndexTemplate = async (index) => {
       }
     };
   }
+  const entityAttributes = schemaAttributesDefinition.getAllAttributes();
+  const schemaProperties = {};
+  for (let attrIndex = 0; attrIndex < entityAttributes.length; attrIndex += 1) {
+    const entityAttribute = entityAttributes[attrIndex];
+    if (entityAttribute.type === 'string') {
+      schemaProperties[entityAttribute.name] = textMapping;
+    }
+    if (entityAttribute.type === 'date') {
+      schemaProperties[entityAttribute.name] = dateMapping;
+    }
+    if (entityAttribute.type === 'numeric') {
+      schemaProperties[entityAttribute.name] = { type: 'integer', coerce: false };
+    }
+    if (entityAttribute.type === 'boolean') {
+      schemaProperties[entityAttribute.name] = { type: 'boolean' };
+    }
+    if (entityAttribute.type === 'object') {
+      schemaProperties[entityAttribute.name] = { dynamic: 'strict', properties: entityAttribute.mapping };
+    }
+    if (entityAttribute.type === 'json') {
+      schemaProperties[entityAttribute.name] = { type: 'keyword' };
+    }
+    if (entityAttribute.type === 'dictionary') {
+      schemaProperties[entityAttribute.name] = { dynamic: true, properties: {} };
+    }
+    if (!schemaProperties[entityAttribute.name]) {
+      throw UnsupportedError(`Cant generated mapping based on type ${entityAttribute.type}`);
+    }
+  }
+  const mappings = {
+    // Some dynamic mapping are required because key are generated
+    dynamic_templates: [
+      {
+        i_rule_: {
+          match: 'i_rule_*',
+          mapping: {
+            dynamic: 'strict',
+            properties: {
+              explanation: textMapping,
+              dependencies: textMapping,
+              hash: textMapping,
+              data: { dynamic: true, properties: {} },
+            }
+          }
+        }
+      },
+      {
+        rel_: {
+          match: 'rel_*',
+          mapping: {
+            dynamic: 'strict',
+            properties: {
+              internal_id: textMapping,
+              inferred_id: textMapping,
+            }
+          }
+        }
+      },
+    ],
+    properties: {
+      ...schemaProperties,
+      // Internal case not defined in any schema definitions
+      // For standard and inferred relations
+      i_inference_weight: { type: 'integer', coerce: false },
+      connections: {
+        type: 'nested',
+        dynamic: 'strict',
+        properties: {
+          internal_id: textMapping,
+          name: textMapping,
+          role: textMapping,
+          types: textMapping,
+        }
+      },
+    },
+  };
   await engine.indices.putIndexTemplate({
     name: index,
     create: false,
     body: {
       index_patterns: [`${index}*`],
-      template: {
-        settings,
-        mappings: {
-          dynamic_templates: [
-            {
-              integers: {
-                match_mapping_type: 'long',
-                mapping: {
-                  type: 'integer',
-                },
-              },
-            },
-            {
-              strings: {
-                match_mapping_type: 'string',
-                mapping: {
-                  type: 'text',
-                  fields: {
-                    keyword: {
-                      type: 'keyword',
-                      normalizer: 'string_normalizer',
-                      ignore_above: 512,
-                    },
-                  },
-                },
-              },
-            },
-          ],
-          properties: {
-            standard_id: {
-              type: 'text',
-              fields: {
-                keyword: {
-                  type: 'keyword',
-                  normalizer: 'string_normalizer',
-                  ignore_above: 512,
-                },
-              },
-            },
-            timestamp: {
-              type: 'date',
-            },
-            created: {
-              type: 'date',
-            },
-            created_at: {
-              type: 'date',
-            },
-            modified: {
-              type: 'date',
-            },
-            modified_at: {
-              type: 'date',
-            },
-            first_seen: {
-              type: 'date',
-            },
-            last_seen: {
-              type: 'date',
-            },
-            start_time: {
-              type: 'date',
-            },
-            stop_time: {
-              type: 'date',
-            },
-            published: {
-              type: 'date',
-            },
-            valid_from: {
-              type: 'date',
-            },
-            valid_until: {
-              type: 'date',
-            },
-            observable_date: {
-              type: 'date',
-            },
-            event_date: {
-              type: 'date',
-            },
-            received_time: {
-              type: 'date',
-            },
-            processed_time: {
-              type: 'date',
-            },
-            completed_time: {
-              type: 'date',
-            },
-            ctime: {
-              type: 'date',
-            },
-            mtime: {
-              type: 'date',
-            },
-            atime: {
-              type: 'date',
-            },
-            current_state_date: {
-              type: 'date',
-            },
-            confidence: {
-              type: 'integer',
-            },
-            attribute_order: {
-              type: 'integer',
-            },
-            base_score: {
-              type: 'integer',
-            },
-            is_family: {
-              type: 'boolean',
-            },
-            number_observed: {
-              type: 'integer',
-            },
-            x_opencti_negative: {
-              type: 'boolean',
-            },
-            default_assignation: {
-              type: 'boolean',
-            },
-            x_opencti_detection: {
-              type: 'boolean',
-            },
-            x_opencti_order: {
-              type: 'integer',
-            },
-            import_expected_number: {
-              type: 'integer',
-            },
-            import_processed_number: {
-              type: 'integer',
-            },
-            x_opencti_score: {
-              type: 'integer',
-            },
-            connections: {
-              type: 'nested',
-            },
-          },
-        },
-      },
+      template: { settings, mappings },
       composed_of: [`${ES_INDEX_PREFIX}-core-settings`],
       version: 3,
       _meta: {
@@ -1889,40 +1824,23 @@ export const elBulk = async (args) => {
   });
 };
 /* istanbul ignore next */
-export const elReindex = async (indices) => {
-  return Promise.all(
-    indices.map((indexMap) => {
-      return engine.reindex({
-        timeout: '60m',
-        body: {
-          source: {
-            index: indexMap.source,
-          },
-          dest: {
-            index: indexMap.dest,
-          },
-        },
-      });
-    })
-  );
-};
 export const elIndex = async (indexName, documentBody, refresh = true) => {
-  const internalId = documentBody.internal_id;
-  const entityType = documentBody.entity_type ? documentBody.entity_type : '';
-  logApp.debug(`[SEARCH] index > ${entityType} ${internalId} in ${indexName}`, documentBody);
+  const doc = prepareDataFromSchemaDefinition(documentBody);
+  const internalId = doc.internal_id;
+  logApp.debug(`[SEARCH] index > ${doc.entity_type} ${internalId} in ${indexName}`, documentBody);
   await engine.index({
     index: indexName,
-    id: documentBody.internal_id,
+    id: doc.internal_id,
     refresh,
     timeout: '60m',
-    body: R.dissoc('_index', documentBody),
+    body: R.dissoc('_index', doc),
   }).catch((err) => {
-    throw DatabaseError('[SEARCH] Error updating elastic (index)', { error: err, body: documentBody });
+    throw DatabaseError('[SEARCH] Error updating elastic (index)', { error: err, body: doc });
   });
   return documentBody;
 };
 /* istanbul ignore next */
-export const elUpdate = (indexName, documentId, documentBody, retry = ES_RETRY_ON_CONFLICT) => {
+export const elUpdate = async (indexName, documentId, documentBody, retry = ES_RETRY_ON_CONFLICT) => {
   return engine.update({
     id: documentId,
     index: indexName,
@@ -1934,8 +1852,9 @@ export const elUpdate = (indexName, documentId, documentBody, retry = ES_RETRY_O
     throw DatabaseError('[SEARCH] Error updating elastic (update)', { error: err, documentId, body: documentBody });
   });
 };
-export const elReplace = (indexName, documentId, documentBody) => {
-  const doc = R.dissoc('_index', documentBody.doc);
+export const elReplace = async (indexName, instance, update) => {
+  const data = prepareDataFromSchemaDefinition({ ...update, entity_type: instance.entity_type });
+  const doc = R.dissoc('_index', data);
   const entries = Object.entries(doc);
   const rawSources = [];
   for (let index = 0; index < entries.length; index += 1) {
@@ -1948,7 +1867,7 @@ export const elReplace = (indexName, documentId, documentBody) => {
     }
   }
   const source = R.join(';', rawSources);
-  return elUpdate(indexName, documentId, {
+  return elUpdate(indexName, instance.internal_id, {
     script: { source, params: doc },
   });
 };
@@ -2182,7 +2101,10 @@ export const prepareDataFromSchemaDefinition = (element) => {
   Object.keys(element).forEach((key) => {
     const value = element[key];
     const attrDefinition = schemaAttributesDefinition.getAttribute(element.entity_type, key);
-    if (attrDefinition) {
+    if (key === INDEX_FIELD || key.startsWith(REL_INDEX_PREFIX) || key.startsWith(RULE_PREFIX)) {
+      // _index, rel_ and i_rule are internal object not referenced in the schema because purely internal
+      thing[key] = value;
+    } else if (attrDefinition) {
       if (attrDefinition.multiple) {
         if (value && !Array.isArray(value)) { // If not empty but not really an array
           throw UnsupportedError('Invalid data type for array preparation', { type: element.entity_type, value_type: typeof value, attribute: key, value });
@@ -2197,9 +2119,6 @@ export const prepareDataFromSchemaDefinition = (element) => {
       } else {
         thing[key] = prepareElementFromDefinition(element.entity_type, attrDefinition, value);
       }
-    } else if (key.startsWith(REL_INDEX_PREFIX) || key.startsWith(RULE_PREFIX)) {
-      // Rules and Rels are managed internally and their dynamic nature is hard to check
-      thing[key] = value;
     } else {
       throw UnsupportedError(`Cant find attribute definition for ${element.entity_type} / ${key}`);
     }
@@ -2422,14 +2341,12 @@ export const elUpdateConnectionsOfElement = async (documentId, documentBody) => 
   });
 };
 export const elUpdateElement = async (instance) => {
-  // Update the element it self
-  const esData = prepareDataFromSchemaDefinition(instance);
   // Set the cache
-  const replacePromise = elReplace(instance._index, instance.internal_id, { doc: esData });
+  const replacePromise = elReplace(instance._index, instance, instance);
   // If entity with a name, must update connections
   let connectionPromise = Promise.resolve();
-  if (esData.name && isStixObject(instance.entity_type)) {
-    connectionPromise = elUpdateConnectionsOfElement(instance.internal_id, { name: esData.name });
+  if (instance.name && isStixObject(instance.entity_type)) {
+    connectionPromise = elUpdateConnectionsOfElement(instance.internal_id, { name: instance.name });
   }
   return Promise.all([replacePromise, connectionPromise]);
 };

@@ -1,19 +1,14 @@
 import moment from 'moment';
 import * as R from 'ramda';
 import { elDeleteInstances, elIndex, elLoadById, elPaginate, elUpdate, } from '../database/engine';
-import { generateWorkId } from '../schema/identifier';
 import { INDEX_HISTORY, isNotEmptyField, READ_INDEX_HISTORY } from '../database/utils';
-import {
-  redisDeleteWorks,
-  redisGetWork,
-  redisUpdateActionExpectation,
-  redisUpdateWorkFigures
-} from '../database/redis';
+import { redisDeleteWorks, redisGetWork, redisUpdateActionExpectation, redisUpdateWorkFigures } from '../database/redis';
 import { ENTITY_TYPE_CONNECTOR, ENTITY_TYPE_WORK } from '../schema/internalObject';
 import { now, sinceNowInMinutes } from '../utils/format';
 import { CONNECTOR_INTERNAL_EXPORT_FILE } from '../schema/general';
 import { publishUserAction } from '../listener/UserActionListener';
 import { AlreadyDeletedError } from '../config/errors';
+import { generateWorkId } from '../schema/identifier';
 
 export const workToExportFile = (work) => {
   const lastModifiedSinceMin = sinceNowInMinutes(work.updated_at);

@@ -35,7 +35,7 @@ const settingsMessagesPopoverPatch = graphql`
   ) {
     settingsEdit(id: $id) {
       deleteMessage(input: $input) {
-        messages {
+        platform_messages {
           ...SettingsMessagesLine_settingsMessage
         }
       }

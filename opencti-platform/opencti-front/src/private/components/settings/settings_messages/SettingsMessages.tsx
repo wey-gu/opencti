@@ -49,7 +49,7 @@ const useStyles = makeStyles<Theme>((theme) => ({
 
 const settingsMessagesFragment = graphql`
   fragment SettingsMessages_settingsMessages on Settings {
-    messages {
+    platform_messages {
       ...SettingsMessagesLine_settingsMessage
     }
   }
@@ -65,7 +65,7 @@ const SettingsMessages = ({
   const messages = useFragment<SettingsMessages_settingsMessages$key>(
     settingsMessagesFragment,
     settings,
-  )?.messages ?? [];
+  )?.platform_messages ?? [];
   const dataColumns: DataColumns = {
     color: {
       label: 'Color',

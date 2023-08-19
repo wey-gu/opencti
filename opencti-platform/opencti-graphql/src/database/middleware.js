@@ -131,6 +131,7 @@ import {
   STIX_REF_RELATIONSHIP_TYPES
 } from '../schema/stixRefRelationship';
 import {
+  ENTITY_TYPE_BACKGROUND_TASK,
   ENTITY_TYPE_STATUS,
   ENTITY_TYPE_USER,
   isDatedInternalObject,
@@ -211,7 +212,12 @@ import {
 } from './middleware-loader';
 import { checkRelationConsistency, isRelationConsistent } from '../utils/modelConsistency';
 import { getEntitiesListFromCache } from './cache';
-import { ACTION_TYPE_SHARE, ACTION_TYPE_UNSHARE, createListTask } from '../domain/backgroundTask-common';
+import {
+  ACTION_TYPE_SHARE,
+  ACTION_TYPE_UNSHARE,
+  checkActionValidity, createDefaultTask,
+  TASK_TYPE_LIST
+} from '../domain/backgroundTask-common';
 import { ENTITY_TYPE_VOCABULARY, vocabularyDefinitions } from '../modules/vocabulary/vocabulary-types';
 import {
   getVocabulariesCategories,
@@ -236,6 +242,7 @@ import { schemaRelationsRefDefinition } from '../schema/schema-relationsRef';
 import { validateInputCreation, validateInputUpdate } from '../schema/schema-validator';
 import { getMandatoryAttributesForSetting } from '../domain/attribute';
 import { telemetry } from '../config/tracing';
+import { publishUserAction } from '../listener/UserActionListener';
 
 // region global variables
 export const MAX_BATCH_SIZE = 300;
@@ -821,6 +828,22 @@ const isRelationTargetGrants = (elementGrants, relation, type) => {
     .some((r) => STIX_ORGANIZATIONS_UNRESTRICTED.includes(r));
   if (isUnrestricted) return false;
   return type === ACTION_TYPE_UNSHARE || !elementGrants.every((v) => (relation.to[RELATION_GRANTED_TO] ?? []).includes(v));
+};
+export const createListTask = async (context, user, input) => {
+  const { actions, ids, scope } = input;
+  await checkActionValidity(context, user, input, scope, TASK_TYPE_LIST);
+  const task = createDefaultTask(user, TASK_TYPE_LIST, ids.length, scope);
+  const listTask = { ...task, actions, task_ids: ids };
+  const created = await createEntity(context, user, input, ENTITY_TYPE_BACKGROUND_TASK);
+  await publishUserAction({
+    user,
+    event_type: 'mutation',
+    event_scope: 'create',
+    event_access: 'extended',
+    message: 'creates `background task`',
+    context_data: { id: created.id, entity_type: ENTITY_TYPE_BACKGROUND_TASK, input: listTask }
+  });
+  return listTask;
 };
 const createContainerSharingTask = (context, type, element, relations) => {
   // If object_refs relations are newly created

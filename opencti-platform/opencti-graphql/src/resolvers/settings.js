@@ -45,7 +45,7 @@ const settingsResolvers = {
     password_policy_min_lowercase: (settings) => settings.password_policy_min_lowercase ?? 0,
     password_policy_min_uppercase: (settings) => settings.password_policy_min_uppercase ?? 0,
     editContext: (settings) => fetchEditContext(settings.id),
-    messages: (settings) => getMessages(settings),
+    platform_messages: (settings) => getMessages(settings),
   },
   Mutation: {
     settingsEdit: (_, { id }, context) => ({
