@@ -1028,9 +1028,7 @@ describe('Upsert and merge entities', () => {
     const sha1Input = { key: 'hashes.SHA-1', value: [SHA1] };
     const sha256Input = { key: 'hashes.SHA-256', value: [SHA256] };
     const patchSha1 = updateAttribute(testContext, SYSTEM_USER, md5.internal_id, ENTITY_HASHED_OBSERVABLE_STIX_FILE, [sha1Input]);
-    const patchSha256 = updateAttribute(testContext, SYSTEM_USER, md5.internal_id, ENTITY_HASHED_OBSERVABLE_STIX_FILE, [
-      sha256Input,
-    ]);
+    const patchSha256 = updateAttribute(testContext, SYSTEM_USER, md5.internal_id, ENTITY_HASHED_OBSERVABLE_STIX_FILE, [sha256Input]);
     await Promise.all([patchSha1, patchSha256]);
     // Check
     const idsThatShouldNotExists = [sha1.internal_id, sha256.internal_id];

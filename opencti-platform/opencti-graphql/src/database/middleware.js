@@ -43,7 +43,8 @@ import {
 import {
   elAggregationCount,
   elAggregationRelationsCount,
-  elDeleteElements, elFindByFromAndTo,
+  elDeleteElements,
+  elFindByFromAndTo,
   elFindByIds,
   elHistogramCount,
   elIndexElements,
@@ -108,7 +109,8 @@ import {
   buildRefRelationKey,
   ID_INTERNAL,
   ID_STANDARD,
-  IDS_STIX, INPUT_EXTERNAL_REFS,
+  IDS_STIX,
+  INPUT_EXTERNAL_REFS,
   INPUT_GRANTED_REFS,
   INPUT_LABELS,
   INPUT_MARKINGS,
@@ -215,7 +217,8 @@ import { getEntitiesListFromCache } from './cache';
 import {
   ACTION_TYPE_SHARE,
   ACTION_TYPE_UNSHARE,
-  checkActionValidity, createDefaultTask,
+  checkActionValidity,
+  createDefaultTask,
   TASK_TYPE_LIST
 } from '../domain/backgroundTask-common';
 import { ENTITY_TYPE_VOCABULARY, vocabularyDefinitions } from '../modules/vocabulary/vocabulary-types';
@@ -1024,8 +1027,8 @@ const listEntitiesByHashes = async (context, user, type, hashes) => {
     return [];
   }
   const searchHashes = extractNotFuzzyHashValues(hashes); // Search hashes must filter the fuzzy hashes
-  return listEntities(context, user, [type], {
-    filters: [{ key: 'hashes.*', values: searchHashes, operator: 'wildcard' }],
+  return await listEntities(context, user, [type], {
+    filters: [{ key: 'hashes', values: searchHashes, operator: 'match' }],
     connectionFormat: false,
   });
 };
