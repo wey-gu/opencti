@@ -95,7 +95,7 @@ const internalObjectsAttributes: { [k: string]: AttributeDefinition[] } = {
     { name: 'default_marking',
       type: 'object',
       mandatoryType: 'no',
-      multiple: false,
+      multiple: true,
       upsert: false,
       mapping: {
         entity_type: textMapping,
@@ -118,7 +118,7 @@ const internalObjectsAttributes: { [k: string]: AttributeDefinition[] } = {
     { name: 'bookmarks',
       type: 'object',
       mandatoryType: 'no',
-      multiple: false,
+      multiple: true,
       upsert: false,
       mapping: {
         id: textMapping,
@@ -198,7 +198,7 @@ const internalObjectsAttributes: { [k: string]: AttributeDefinition[] } = {
       name: 'messages',
       type: 'object',
       mandatoryType: 'no',
-      multiple: false,
+      multiple: true,
       upsert: false,
       mapping: {
         timestamp: dateMapping,
@@ -212,7 +212,7 @@ const internalObjectsAttributes: { [k: string]: AttributeDefinition[] } = {
       name: 'actions',
       type: 'object',
       mandatoryType: 'internal',
-      multiple: false,
+      multiple: true,
       upsert: false,
       mapping: {
         type: textMapping,
