@@ -78,7 +78,7 @@ describe('Settings Messages', () => {
       id: '01',
       message: 'This is a default broadcast message.',
       activated: true,
-      dismissible: false,
+      dismissible: true,
       updated_at: new Date().toString(),
       dismiss: true,
     };
@@ -87,7 +87,7 @@ describe('Settings Messages', () => {
       return MockPayloadGenerator.generate(operation, {
         Settings() {
           return {
-            messages: [message],
+            platform_messages: [message],
           };
         },
       });
@@ -115,7 +115,7 @@ describe('Settings Messages', () => {
       return MockPayloadGenerator.generate(operation, {
         Settings() {
           return {
-            messages: [message],
+            platform_messages: [message],
           };
         },
       });
