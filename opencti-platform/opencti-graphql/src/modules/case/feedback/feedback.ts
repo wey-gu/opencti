@@ -30,7 +30,7 @@ const FEEDBACK_DEFINITION: ModuleDefinition<StoreEntityFeedback, StixFeedback> =
     },
   },
   attributes: [
-    { name: 'rating', type: 'numeric', mandatoryType: 'external', multiple: false, upsert: true },
+    { name: 'rating', type: 'numeric', precision: 'integer', mandatoryType: 'external', multiple: false, upsert: true },
   ],
   relations: [],
   relationsRefs: [

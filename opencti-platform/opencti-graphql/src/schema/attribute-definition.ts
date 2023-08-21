@@ -3,6 +3,7 @@ export const textMapping = {
   fields: {
     keyword: {
       type: 'keyword',
+      ignore_above: 512,
       normalizer: 'string_normalizer'
     },
   },
@@ -25,7 +26,7 @@ export type StringAttribute = { type: 'string' } & BasicDefinition;
 export type DateAttribute = { type: 'date' } & BasicDefinition;
 export type DictionaryAttribute = { type: 'dictionary' } & BasicDefinition;
 export type BooleanAttribute = { type: 'boolean' } & BasicDefinition;
-export type NumericAttribute = { type: 'numeric', scalable?: boolean } & BasicDefinition;
+export type NumericAttribute = { type: 'numeric', precision: 'integer' | 'long' | 'float', scalable?: boolean } & BasicDefinition;
 export type JsonAttribute = { type: 'json', multiple: false, schemaDef?: Record<string, any> } & BasicDefinition;
 export type ObjectAttribute = { type: 'object', nested?: boolean, mapping: Record<string, any> } & BasicDefinition;
 
@@ -253,6 +254,7 @@ export const revoked: AttributeDefinition = {
 export const confidence: AttributeDefinition = {
   name: 'confidence',
   type: 'numeric',
+  precision: 'integer',
   mandatoryType: 'no',
   multiple: false,
   scalable: true,
