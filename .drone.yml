@@ -33,7 +33,8 @@ steps:
       - CLIENT_PYTHON_BRANCH=$([[ "$(echo "$(git ls-remote --heads https://github.com/OpenCTI-Platform/client-python.git opencti/$BRANCH)")" != '' ]] && echo opencti/$BRANCH || echo 'master')
       - CONNECTOR_BRANCH=$([[ $(git ls-remote --heads https://github.com/OpenCTI-Platform/connectors.git opencti/$BRANCH) ]] && echo opencti/$BRANCH || echo 'master')
       - git clone -b $CONNECTOR_BRANCH https://github.com/OpenCTI-Platform/connectors.git opencti-connectors
-      - cd opencti-platform/opencti-graphql
+      - cp -a opencti-platform /tmp/opencti-platform
+      - cd /tmp/opencti-platform/opencti-graphql
       - yarn install
       - yarn build
       - yarn check-ts
@@ -54,7 +55,8 @@ steps:
     commands:
       - apk add --no-cache git tini gcc g++ make musl-dev cargo python3 python3-dev postfix postfix-pcre
       - npm install -g node-gyp
-      - cd opencti-platform/opencti-front
+      - cp -a opencti-platform /tmp/opencti-platform
+      - cd /tmp/opencti-platform/opencti-front
       - yarn install
       - yarn build
       - yarn check-ts
