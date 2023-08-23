@@ -116,7 +116,7 @@ import { getParentTypes } from '../../../src/schema/schemaUtils';
 import { ENTITY_TYPE_RULE } from '../../../src/schema/internalObject';
 import { RELATION_MIGRATES } from '../../../src/schema/internalRelationship';
 import { STIX_SIGHTING_RELATIONSHIP } from '../../../src/schema/stixSightingRelationship';
-import { ENTITY_TYPE_IDENTITY_ORGANIZATION } from "../../../src/modules/organization/organization-types";
+import { ENTITY_TYPE_IDENTITY_ORGANIZATION } from '../../../src/modules/organization/organization-types';
 
 describe('Testing relation consistency', () => {
   it.concurrent.each([

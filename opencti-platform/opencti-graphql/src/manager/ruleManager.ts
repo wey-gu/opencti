@@ -44,9 +44,10 @@ import type {
   StreamDataEvent,
   UpdateEvent
 } from '../types/event';
-import { getActivatedRules, RULES_DECLARATION } from '../domain/rules';
+import { getActivatedRules } from '../domain/rules';
 import { executionContext, RULE_MANAGER_USER } from '../utils/access';
 import { isModuleActivated } from '../domain/settings';
+import { RULES } from '../rules/rules';
 
 const MIN_LIVE_STREAM_EVENT_VERSION = 4;
 
@@ -185,7 +186,7 @@ const applyCleanupOnDependencyIds = async (deletionIds: Array<string>) => {
   const filters = [{ key: `${RULE_PREFIX}*.dependencies`, values: deletionIds, operator: 'wildcard' }];
   const callback = async (elements: Array<BasicStoreCommon>) => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    await rulesCleanHandler(context, RULE_MANAGER_USER, elements, RULES_DECLARATION, deletionIds);
+    await rulesCleanHandler(context, RULE_MANAGER_USER, elements, RULES, deletionIds);
   };
   await elList<BasicStoreCommon>(context, RULE_MANAGER_USER, READ_DATA_INDICES, { filters, callback });
 };

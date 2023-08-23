@@ -46,6 +46,7 @@ import {
 } from '../schema/stixRefRelationship';
 import {
   ABSTRACT_BASIC_RELATIONSHIP,
+  ABSTRACT_STIX_REF_RELATIONSHIP,
   BASE_TYPE_RELATION,
   buildRefRelationKey,
   buildRefRelationSearchKey,
@@ -63,9 +64,6 @@ import {
 import { isModifiedObject, isUpdatedAtObject, } from '../schema/fieldDataAdapter';
 import { getParentTypes } from '../schema/schemaUtils';
 import {
-  ATTRIBUTE_ABSTRACT,
-  ATTRIBUTE_DESCRIPTION,
-  ATTRIBUTE_EXPLANATION,
   ATTRIBUTE_NAME,
   ENTITY_TYPE_IDENTITY_INDIVIDUAL,
   ENTITY_TYPE_IDENTITY_SYSTEM,
@@ -74,7 +72,7 @@ import {
 } from '../schema/stixDomainObject';
 import { isStixObject } from '../schema/stixCoreObject';
 import { isBasicRelationship, isStixRelationshipExceptRef } from '../schema/stixRelationship';
-import { RELATION_INDICATES } from '../schema/stixCoreRelationship';
+import { RELATION_INDICATES, STIX_CORE_RELATIONSHIPS } from '../schema/stixCoreRelationship';
 import { INTERNAL_FROM_FIELD, INTERNAL_TO_FIELD } from '../schema/identifier';
 import { BYPASS, computeUserMemberAccessIds, INTERNAL_USERS, isBypassUser, MEMBER_ACCESS_ALL, } from '../utils/access';
 import { isSingleRelationsRef } from '../schema/stixEmbeddedRelationship';
@@ -91,6 +89,10 @@ import {
 import { convertTypeToStixType } from './stix-converter';
 import { ENTITY_TYPE_IDENTITY_ORGANIZATION } from '../modules/organization/organization-types';
 import { dateMapping, textMapping } from '../schema/attribute-definition';
+import { INTERNAL_RELATIONSHIPS } from '../schema/internalRelationship';
+import { schemaTypesDefinition } from '../schema/schema-types';
+import { RULES } from '../rules/rules';
+import { STIX_SIGHTING_RELATIONSHIP } from '../schema/stixSightingRelationship';
 
 const ELK_ENGINE = 'elk';
 const OPENSEARCH_ENGINE = 'opensearch';
@@ -517,42 +519,6 @@ const elCreateCoreSettings = async () => {
   });
 };
 
-// Some dynamic mapping are required because key are generated
-const schemaDynamicTemplates = [
-  {
-    accept_rules: {
-      match: 'i_rule_*',
-      mapping: {
-        dynamic: 'strict',
-        properties: {
-          explanation: textMapping,
-          dependencies: textMapping,
-          hash: textMapping,
-          data: { type: 'flattened' },
-        }
-      }
-    }
-  },
-  {
-    accept_denormalize_relations: {
-      match: 'rel_*',
-      mapping: {
-        dynamic: 'strict',
-        properties: {
-          internal_id: textMapping,
-          inferred_id: textMapping,
-        }
-      }
-    }
-  },
-  {
-    reject_others: {
-      match: '*',
-      mapping: { dynamic: 'strict' }
-    }
-  }
-];
-
 // Engine mapping generation on attributes definition
 const attributeMappingGenerator = (entityAttribute) => {
   if (entityAttribute.type === 'string') {
@@ -579,9 +545,45 @@ const attributeMappingGenerator = (entityAttribute) => {
   }
   if (entityAttribute.type === 'dictionary') {
     // content of dictionary cannot be predicted
-    return { type: 'flattened' };
+    return { type: engine instanceof ElkClient ? 'flattened' : 'flat_object' };
   }
   throw UnsupportedError(`Cant generated mapping based on type ${entityAttribute.type}`);
+};
+const ruleMappingGenerator = () => {
+  const schemaProperties = {};
+  for (let attrIndex = 0; attrIndex < RULES.length; attrIndex += 1) {
+    const rule = RULES[attrIndex];
+    schemaProperties[`i_rule_${rule.id}`] = {
+      dynamic: 'strict',
+      properties: {
+        explanation: textMapping,
+        dependencies: textMapping,
+        hash: textMapping,
+        data: { type: engine instanceof ElkClient ? 'flattened' : 'flat_object' },
+      }
+    };
+  }
+  return schemaProperties;
+};
+const denormalizeRelationsMappingGenerator = () => {
+  const databaseRelationshipsName = [
+    STIX_SIGHTING_RELATIONSHIP,
+    ...STIX_CORE_RELATIONSHIPS,
+    ...INTERNAL_RELATIONSHIPS,
+    ...schemaTypesDefinition.get(ABSTRACT_STIX_REF_RELATIONSHIP)
+  ];
+  const schemaProperties = {};
+  for (let attrIndex = 0; attrIndex < databaseRelationshipsName.length; attrIndex += 1) {
+    const relName = databaseRelationshipsName[attrIndex];
+    schemaProperties[`rel_${relName}`] = {
+      dynamic: 'strict',
+      properties: {
+        internal_id: textMapping,
+        inferred_id: textMapping,
+      }
+    };
+  }
+  return schemaProperties;
 };
 const attributesMappingGenerator = () => {
   const entityAttributes = schemaAttributesDefinition.getAllAttributes();
@@ -591,6 +593,9 @@ const attributesMappingGenerator = () => {
     schemaProperties[entityAttribute.name] = attributeMappingGenerator(entityAttribute);
   }
   return schemaProperties;
+};
+export const engineMappingGenerator = () => {
+  return { ...attributesMappingGenerator(), ...ruleMappingGenerator(), ...denormalizeRelationsMappingGenerator() };
 };
 
 const elGetDatabaseTemplates = async () => {
@@ -604,7 +609,6 @@ export const elAnalyzeDatabaseMappings = async () => {
   // Schema
   const schemaDefinitionProperties = attributesMappingGenerator();
   const schemaProperties = Object.entries(schemaDefinitionProperties);
-  // console.log(schemaProperties);
   // Database
   const mappingsPerTemplates = await elGetDatabaseTemplates();
   // Analysis
@@ -614,7 +618,6 @@ export const elAnalyzeDatabaseMappings = async () => {
       const mappingsPerTemplate = mappingsPerTemplates[templateIndex];
       const { mappings } = mappingsPerTemplate.index_template.template;
       const databaseConfig = mappings.properties[name];
-      // console.log(name, databaseConfig);
       if (!databaseConfig) {
         const indexProperties = missingAttributesMap.get(mappingsPerTemplate.name) ?? [];
         indexProperties.push({ name, schema: schemaConfig });
@@ -660,6 +663,13 @@ const elCreateIndexTemplate = async (index) => {
     };
   } else {
     settings = {
+      index: {
+        mapping: {
+          total_fields: {
+            limit: '2500'
+          }
+        }
+      },
       plugins: {
         index_state_management: {
           rollover_alias: index,
@@ -669,10 +679,10 @@ const elCreateIndexTemplate = async (index) => {
   }
   const mappings = {
     // Global option to prevent elastic to try any magic
+    dynamic: 'strict',
     date_detection: false,
     numeric_detection: false,
-    properties: attributesMappingGenerator(),
-    dynamic_templates: schemaDynamicTemplates,
+    properties: engineMappingGenerator(),
   };
   await engine.indices.putIndexTemplate({
     name: index,
@@ -715,6 +725,21 @@ export const elDeleteIndices = async (indexesToDelete) => {
           /* istanbul ignore next */
           if (err.meta.body && err.meta.body.error.type !== 'index_not_found_exception') {
             logApp.error('[SEARCH] Delete indices fail', { error: err });
+          }
+        });
+    })
+  );
+};
+export const elDeleteTemplates = async () => {
+  const templates = await elGetDatabaseTemplates();
+  return Promise.all(
+    templates.map((template) => {
+      return engine.indices.delete_index_template({ name: template.name })
+        .then((response) => oebp(response))
+        .catch((err) => {
+          /* istanbul ignore next */
+          if (err.meta.body && err.meta.body.error.type !== 'index_template_missing_exception') {
+            logApp.error('[SEARCH] Delete templates fail', { error: err });
           }
         });
     })
@@ -1100,19 +1125,9 @@ export const specialElasticCharsEscape = (query) => {
 
 const BASE_SEARCH_CONNECTIONS = [
   // Pounds for connections search
-  `connections.${ATTRIBUTE_NAME}^5`,
-  // Add all other attributes
-  'connections.*',
+  `connections.${ATTRIBUTE_NAME}^100`,
 ];
-const BASE_SEARCH_ATTRIBUTES = [
-  // Pounds for attributes search
-  `${ATTRIBUTE_NAME}^5`,
-  `${ATTRIBUTE_DESCRIPTION}^2`,
-  `${ATTRIBUTE_ABSTRACT}^5`,
-  `${ATTRIBUTE_EXPLANATION}^5`,
-  // Add all other attributes
-  '*',
-];
+
 export const elGenerateFullTextSearchShould = (search, args = {}) => {
   const { useWildcardPrefix = false, useWildcardSuffix = true } = args;
   let decodedSearch;
@@ -1149,7 +1164,7 @@ export const elGenerateFullTextSearchShould = (search, args = {}) => {
           type: 'phrase',
           query: ex,
           lenient: true,
-          fields: BASE_SEARCH_ATTRIBUTES,
+          fields: schemaAttributesDefinition.getSearchAttributes(),
         },
       },
       {
@@ -1181,7 +1196,7 @@ export const elGenerateFullTextSearchShould = (search, args = {}) => {
         query_string: {
           query: searchPhrase,
           analyze_wildcard: true,
-          fields: BASE_SEARCH_ATTRIBUTES,
+          fields: schemaAttributesDefinition.getSearchAttributes(),
         },
       },
       {
@@ -1189,7 +1204,7 @@ export const elGenerateFullTextSearchShould = (search, args = {}) => {
           type: 'phrase',
           query: searchPhrase,
           lenient: true,
-          fields: BASE_SEARCH_ATTRIBUTES,
+          fields: schemaAttributesDefinition.getSearchAttributes(),
         },
       },
       {

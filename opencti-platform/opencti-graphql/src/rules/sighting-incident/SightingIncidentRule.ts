@@ -7,7 +7,7 @@ import {
 } from '../../database/middleware';
 import def from './SightingIncidentDefinition';
 import { ENTITY_TYPE_INCIDENT, ENTITY_TYPE_INDICATOR } from '../../schema/stixDomainObject';
-import { createRuleContent } from '../rules';
+import { createRuleContent, RULES } from '../rules';
 import { STIX_SIGHTING_RELATIONSHIP } from '../../schema/stixSightingRelationship';
 import { ENTITY_TYPE_IDENTITY } from '../../schema/general';
 import { generateInternalType } from '../../schema/schemaUtils';
@@ -97,4 +97,5 @@ const ruleSightingIncidentBuilder = () => {
 };
 const RuleSightingIncident = ruleSightingIncidentBuilder();
 
+RULES.push(RuleSightingIncident);
 export default RuleSightingIncident;

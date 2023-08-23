@@ -18,6 +18,7 @@ type BasicDefinition = {
   label?: string
   multiple: boolean,
   mandatoryType: MandatoryType
+  baseSearch?: boolean
   upsert: boolean
   update?: boolean
 };
