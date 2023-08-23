@@ -145,8 +145,7 @@ import {
   dateForEndAttributes,
   dateForLimitsAttributes,
   dateForStartAttributes,
-  extractNotFuzzyHash,
-  extractNotFuzzyHashValues,
+  extractKeyHashValues,
   isModifiedObject,
   isUpdatedAtObject,
   noReferenceAttributes,
@@ -1027,10 +1026,12 @@ const listEntitiesByHashes = async (context, user, type, hashes) => {
   if (isEmptyField(hashes)) {
     return [];
   }
-  const keyHashes = extractNotFuzzyHash(hashes); // Search hashes must filter the fuzzy hashes
-  const searchHashes = extractNotFuzzyHashValues(hashes); // Search hashes must filter the fuzzy hashes
+  const searchHashes = extractKeyHashValues(hashes);
+  if (searchHashes.length === 0) {
+    return [];
+  }
   return await listEntities(context, user, [type], {
-    filters: [{ key: keyHashes, values: searchHashes, operator: 'match' }],
+    filters: [{ key: 'hashes.*', values: searchHashes, operator: 'wildcard' }],
     connectionFormat: false,
   });
 };

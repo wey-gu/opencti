@@ -80,9 +80,6 @@ const THREAT_ACTOR_INDIVIDUAL_DEFINITION: ModuleDefinition<StoreEntityThreatActo
     { name: 'primary_motivation', type: 'string', mandatoryType: 'no', multiple: false, upsert: true },
     { name: 'secondary_motivations', type: 'string', mandatoryType: 'no', multiple: true, upsert: true },
     { name: 'personal_motivations', type: 'string', mandatoryType: 'no', multiple: true, upsert: false },
-    { name: 'confidence', type: 'numeric', precision: 'integer', mandatoryType: 'no', multiple: false, upsert: false },
-    { name: 'revoked', type: 'boolean', mandatoryType: 'no', multiple: false, upsert: false },
-    { name: 'lang', type: 'string', mandatoryType: 'no', multiple: false, upsert: true },
   ],
   relations: [
     { name: RELATION_USES,

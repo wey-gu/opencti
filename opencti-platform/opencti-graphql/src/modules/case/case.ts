@@ -34,7 +34,6 @@ const CASE_DEFINITION: ModuleDefinition<StoreEntityCase, StixCase> = {
     { name: 'description', type: 'string', mandatoryType: 'customizable', multiple: false, upsert: true },
     { name: 'content', type: 'string', mandatoryType: 'customizable', multiple: false, upsert: true },
     { name: 'content_mapping', type: 'string', mandatoryType: 'no', multiple: false, upsert: true },
-    { name: 'caseTemplate', type: 'string', mandatoryType: 'no', multiple: false, upsert: true },
   ],
   relations: [],
   relationsRefs: [objectOrganization],

@@ -6338,12 +6338,7 @@ type ThreatActorGroupEdge {
   node: ThreatActorGroup!
 }
 
-type ThreatActorGroupEdge {
-  cursor: String!
-  node: ThreatActorGroup!
-}
-
-type  ThreatActorConnection {
+type ThreatActorConnection {
   pageInfo: PageInfo!
   edges: [ThreatActorEdge]
 }
@@ -9242,7 +9237,6 @@ type Process implements BasicObject & StixObject & StixCoreObject & StixCyberObs
   priority: String
   owner_sid: String
   window_title: String
-  startup_info: [Dictionary]
   integrity_level: String
   ## windows-service-ext
   service_name: String

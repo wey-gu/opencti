@@ -15,7 +15,9 @@ export interface UserSearchAction extends BasicUserAction {
   event_type: 'command'
   event_scope: 'search'
   context_data: {
-    input: unknown,
+    types: string
+    search: string
+    filters: string
   }
 }
 export interface UserEnrichAction extends BasicUserAction {
