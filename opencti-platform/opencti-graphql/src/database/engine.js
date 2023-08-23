@@ -110,6 +110,7 @@ const ES_MAX_AGE = conf.get('elasticsearch:max_age') || '365d';
 const ES_MAX_DOCS = conf.get('elasticsearch:max_docs') || 75000000;
 
 const ES_RETRY_ON_CONFLICT = 5;
+const ES_TOTAL_INDEX_FIELD = 4000;
 export const MAX_TERMS_SPLIT = 65000; // By default, Elasticsearch limits the terms query to a maximum of 65,536 terms. You can change this limit using the index.
 export const MAX_BULK_OPERATIONS = 250;
 export const BULK_TIMEOUT = '5m';
@@ -655,7 +656,7 @@ const elCreateIndexTemplate = async (index) => {
     index: {
       mapping: {
         total_fields: {
-          limit: '2500'
+          limit: ES_TOTAL_INDEX_FIELD
         }
       }
     }
