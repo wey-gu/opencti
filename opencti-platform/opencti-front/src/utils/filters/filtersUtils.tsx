@@ -1,9 +1,30 @@
+import { truncate } from '../String';
+
 export const FiltersVariant = {
   list: 'list',
   dialog: 'dialog',
 };
 
-export type BackendFilters = {
+export type BaseFilterObject = {
+  mode: string;
+  filters: (FilterGroup | Filter)[];
+};
+
+export type FilterGroup = {
+  mode: string;
+  type: 'group';
+  filters: (FilterGroup | Filter)[]
+};
+
+export type Filter = {
+  type: 'filter';
+  key: string;
+  values: string[];
+  operator?: string;
+  mode?: string;
+};
+
+export type BackendFilters = { // TODO to be removed
   key: string | string[];
   values: string[];
   operator?: string;
@@ -57,6 +78,16 @@ export const EqFilters = [
   'objectContains',
   'indicates',
 ];
+// filters that represents a date, can have lt (end date) or gt (start date) operators
+export const dateFilters = [
+  'published',
+  'created',
+  'created_at',
+  'modified',
+  'valid_from',
+  'start_time',
+  'stop_time',
+];
 const uniqFilters = [
   'revoked',
   'x_opencti_detection',
@@ -87,6 +118,42 @@ export const entityFilters = [
   'indicates_not_eq',
 ];
 
-export const isUniqFilter = (key: string) => uniqFilters.includes(key)
-  || key.endsWith('start_date')
-  || key.endsWith('end_date');
+export const isUniqFilter = (key: string) => uniqFilters.includes(key) || dateFilters.includes(key);
+
+export const findFilterFromKey = (baseFilters: { filters: Filter[] }, key: string, operator?: string) => {
+  const { filters } = baseFilters;
+  for (const filter of filters) {
+    if (filter.type === 'filter' && filter.key === key) {
+      if (operator && filter.operator === operator) {
+        return filter;
+      }
+      if (!operator) {
+        return filter;
+      }
+    }
+  }
+  return null;
+};
+
+export const filtersWithEntityType = (filters: BaseFilterObject | undefined, type: string) => {
+  const entityTypeFilter = {
+    key: 'entity_type',
+    values: [type],
+    operator: 'eq',
+    mode: 'or',
+    type: 'filter' as const,
+  };
+  return (filters
+    ? {
+      mode: filters.mode,
+      filters: [
+        ...filters.filters,
+        entityTypeFilter,
+      ],
+    }
+    : undefined);
+};
+
+export const filterValue = (id: string) => {
+  return truncate(id, 5); // TODO implement correctly
+};
