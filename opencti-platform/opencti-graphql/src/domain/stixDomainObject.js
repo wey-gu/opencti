@@ -123,13 +123,7 @@ export const stixDomainObjectExportAsk = async (context, user, stixDomainObjectI
 
 // endregion
 
-// region mutation
-export const addStixDomainObject = async (context, user, stixDomainObject) => {
-  const innerType = stixDomainObject.type;
-  if (!isStixDomainObject(innerType)) {
-    throw UnsupportedError('This method can only create Stix domain');
-  }
-  const data = stixDomainObject;
+export const handleInnerType = (data, innerType) => {
   if (isStixDomainObjectIdentity(innerType)) {
     data.identity_class = innerType === ENTITY_TYPE_IDENTITY_SECTOR ? 'class' : innerType.toLowerCase();
   }
@@ -139,6 +133,17 @@ export const addStixDomainObject = async (context, user, stixDomainObject) => {
   if (isStixDomainObjectThreatActor(innerType)) {
     data.x_opencti_type = innerType;
   }
+};
+
+// region mutation
+export const addStixDomainObject = async (context, user, stixDomainObject) => {
+  const innerType = stixDomainObject.type;
+  if (!isStixDomainObject(innerType)) {
+    throw UnsupportedError('This method can only create Stix domain');
+  }
+  const data = stixDomainObject;
+  handleInnerType(data, innerType);
+
   if (innerType === ENTITY_TYPE_CONTAINER_REPORT) {
     data.published = utcDate();
   }
