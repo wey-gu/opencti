@@ -115,7 +115,7 @@ const stixDomainObjectsListQuery = graphql`
     $first: Int
     $orderBy: StixDomainObjectsOrdering
     $orderMode: OrderingMode
-    $filters: StixDomainObjectBaseFilterObject
+    $filters: StixDomainObjectsGroupFiltering
   ) {
     stixDomainObjects(
       types: $types
