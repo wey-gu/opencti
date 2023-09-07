@@ -16,6 +16,7 @@ type DataComponent implements BasicObject & StixObject & StixCoreObject & StixDo
 
     # StixCoreObject
     representative: Representative!
+    is_from_relation_inferred: Boolean
     createdBy: Identity
     objectMarking: MarkingDefinitionConnection
     objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])

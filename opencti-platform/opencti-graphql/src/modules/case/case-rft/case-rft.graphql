@@ -96,6 +96,7 @@ type CaseRft implements BasicObject & StixObject & StixCoreObject & StixDomainOb
   avatar: OpenCtiFile
   # Container
   representative: Representative!
+  is_from_relation_inferred: Boolean
   objects(
     first: Int
     after: ID

@@ -1978,6 +1978,7 @@ interface StixCoreObject {
   created_at: DateTime!
   updated_at: DateTime!
   # StixCoreObject
+  is_from_relation_inferred: Boolean
   representative: Representative!
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
@@ -2177,6 +2178,7 @@ interface StixDomainObject {
   updated_at: DateTime!
   # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -2353,6 +2355,7 @@ type AttackPattern implements BasicObject & StixObject & StixCoreObject & StixDo
   x_opencti_inferences: [Inference]
   # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -2546,6 +2549,7 @@ type Campaign implements BasicObject & StixObject & StixCoreObject & StixDomainO
   x_opencti_inferences: [Inference]
   # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -2736,6 +2740,7 @@ interface Container {
   updated_at: DateTime!
   # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -2910,6 +2915,7 @@ type Note implements BasicObject & StixObject & StixCoreObject & StixDomainObjec
   x_opencti_inferences: [Inference]
   # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -3138,6 +3144,7 @@ type ObservedData implements BasicObject & StixObject & StixCoreObject & StixDom
   x_opencti_inferences: [Inference]
   # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -3343,6 +3350,7 @@ type Opinion implements BasicObject & StixObject & StixCoreObject & StixDomainOb
   x_opencti_inferences: [Inference]
   # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -3568,6 +3576,7 @@ type Report implements BasicObject & StixObject & StixCoreObject & StixDomainObj
   x_opencti_inferences: [Inference]
   # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -3779,6 +3788,7 @@ type CourseOfAction implements BasicObject & StixObject & StixCoreObject & StixD
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -3963,6 +3973,7 @@ interface Identity {
   updated_at: DateTime!
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -4145,6 +4156,7 @@ type Individual implements BasicObject & StixObject & StixCoreObject & StixDomai
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -4332,6 +4344,7 @@ type Sector implements BasicObject & StixObject & StixCoreObject & StixDomainObj
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -4515,6 +4528,7 @@ type System implements BasicObject & StixObject & StixCoreObject & StixDomainObj
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -4725,6 +4739,7 @@ type Indicator implements BasicObject & StixObject & StixCoreObject & StixDomain
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -4931,6 +4946,7 @@ type Infrastructure implements BasicObject & StixObject & StixCoreObject & StixD
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -5114,6 +5130,7 @@ type IntrusionSet implements BasicObject & StixObject & StixCoreObject & StixDom
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -5302,6 +5319,7 @@ interface Location {
   updated_at: DateTime!
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -5480,6 +5498,7 @@ type Position implements BasicObject & StixObject & StixCoreObject & StixDomainO
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -5667,6 +5686,7 @@ type City implements BasicObject & StixObject & StixCoreObject & StixDomainObjec
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -5848,6 +5868,7 @@ type Country implements BasicObject & StixObject & StixCoreObject & StixDomainOb
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -6025,6 +6046,7 @@ type Region implements BasicObject & StixObject & StixCoreObject & StixDomainObj
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -6217,6 +6239,7 @@ type Malware implements BasicObject & StixObject & StixCoreObject & StixDomainOb
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -6412,6 +6435,7 @@ interface ThreatActor implements BasicObject & StixObject & StixCoreObject & Sti
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -6548,6 +6572,7 @@ type ThreatActorGroup implements BasicObject & StixObject & StixCoreObject & Sti
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -6744,6 +6769,7 @@ type Tool implements BasicObject & StixObject & StixCoreObject & StixDomainObjec
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -6930,6 +6956,7 @@ type Vulnerability implements BasicObject & StixObject & StixCoreObject & StixDo
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -7128,6 +7155,7 @@ type Incident implements BasicObject & StixObject & StixCoreObject & StixDomainO
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -7326,6 +7354,7 @@ interface StixCyberObservable {
   updated_at: DateTime!
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -7429,6 +7458,7 @@ type AutonomousSystem implements BasicObject & StixObject & StixCoreObject & Sti
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -7542,6 +7572,7 @@ type Directory implements BasicObject & StixObject & StixCoreObject & StixCyberO
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -7659,6 +7690,7 @@ type DomainName implements BasicObject & StixObject & StixCoreObject & StixCyber
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -7768,6 +7800,7 @@ type EmailAddr implements BasicObject & StixObject & StixCoreObject & StixCyberO
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -7879,6 +7912,7 @@ type EmailMessage implements BasicObject & StixObject & StixCoreObject & StixCyb
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -8000,6 +8034,7 @@ type EmailMimePartType implements BasicObject & StixObject & StixCoreObject & St
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -8129,6 +8164,7 @@ interface HashedObservable {
   updated_at: DateTime!
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -8234,6 +8270,7 @@ type Artifact implements BasicObject & StixObject & StixCoreObject & StixCyberOb
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -8356,6 +8393,7 @@ type StixFile implements BasicObject & StixObject & StixCoreObject & StixCyberOb
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -8487,6 +8525,7 @@ type X509Certificate implements BasicObject & StixObject & StixCoreObject & Stix
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -8653,6 +8692,7 @@ type IPv4Addr implements BasicObject & StixObject & StixCoreObject & StixCyberOb
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -8765,6 +8805,7 @@ type IPv6Addr implements BasicObject & StixObject & StixCoreObject & StixCyberOb
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -8875,6 +8916,7 @@ type MacAddr implements BasicObject & StixObject & StixCoreObject & StixCyberObs
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -8984,6 +9026,7 @@ type Mutex implements BasicObject & StixObject & StixCoreObject & StixCyberObser
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -9093,6 +9136,7 @@ type NetworkTraffic implements BasicObject & StixObject & StixCoreObject & StixC
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -9221,6 +9265,7 @@ type Process implements BasicObject & StixObject & StixCoreObject & StixCyberObs
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -9376,6 +9421,7 @@ type Software implements BasicObject & StixObject & StixCoreObject & StixCyberOb
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -9504,6 +9550,7 @@ type Url implements BasicObject & StixObject & StixCoreObject & StixCyberObserva
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -9613,6 +9660,7 @@ type UserAccount implements BasicObject & StixObject & StixCoreObject & StixCybe
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -9749,6 +9797,7 @@ type WindowsRegistryKey implements BasicObject & StixObject & StixCoreObject & S
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -9862,6 +9911,7 @@ type WindowsRegistryValueType implements BasicObject & StixObject & StixCoreObje
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -9975,6 +10025,7 @@ type CryptographicKey implements BasicObject & StixObject & StixCoreObject & Sti
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -10084,6 +10135,7 @@ type CryptocurrencyWallet implements BasicObject & StixObject & StixCoreObject &
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -10193,6 +10245,7 @@ type Hostname implements BasicObject & StixObject & StixCoreObject & StixCyberOb
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -10302,6 +10355,7 @@ type Text implements BasicObject & StixObject & StixCoreObject & StixCyberObserv
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -10411,6 +10465,7 @@ type UserAgent implements BasicObject & StixObject & StixCoreObject & StixCyberO
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -10520,6 +10575,7 @@ type BankAccount implements BasicObject & StixObject & StixCoreObject & StixCybe
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -10634,6 +10690,7 @@ type PhoneNumber implements BasicObject & StixObject & StixCoreObject & StixCybe
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -10743,6 +10800,7 @@ type PaymentCard implements BasicObject & StixObject & StixCoreObject & StixCybe
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectOrganization: OrganizationConnection @auth(for: [KNOWLEDGE_KNUPDATE_KNORGARESTRICT])
@@ -10858,6 +10916,7 @@ type MediaContent implements BasicObject & StixObject & StixCoreObject & StixCyb
   x_opencti_inferences: [Inference]
     # StixCoreObject
   representative: Representative!
+  is_from_relation_inferred: Boolean
   createdBy: Identity
   objectMarking: MarkingDefinitionConnection
   objectLabel: LabelConnection
@@ -11477,6 +11536,7 @@ type StixCoreRelationship implements BasicRelationship & StixRelationship {
   objectMarking: MarkingDefinitionConnection
   # StixCoreRelationship
   representative: Representative!
+  is_from_relation_inferred: Boolean
   description: String
   start_time: DateTime
   stop_time: DateTime
@@ -11629,6 +11689,7 @@ type StixSightingRelationship implements BasicRelationship & StixRelationship {
   objectMarking: MarkingDefinitionConnection
   # StixSightingRelationship
   representative: Representative!
+  is_from_relation_inferred: Boolean
   description: String
   first_seen: DateTime
   last_seen: DateTime
