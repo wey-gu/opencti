@@ -1749,7 +1749,7 @@ enum ExternalReferencesFilter {
   created
 }
 input ExternalReferencesGroupFiltering {
-  mode: String!
+  mode: FilterMode!
   filters: [ExternalReferencesFilterFiltering]!
   filterGroups: [ExternalReferencesGroupFiltering]!
 }
@@ -2162,7 +2162,7 @@ enum StixDomainObjectsFilter {
   operatingSystem
 }
 input StixDomainObjectsGroupFiltering {
-  mode: String!
+  mode: FilterMode!
   filters: [StixDomainObjectsFilterFiltering]!
   filterGroups: [StixDomainObjectsGroupFiltering]!
 }
@@ -3556,7 +3556,7 @@ enum ReportsFilter {
   creator
 }
 input ReportsGroupFiltering {
-  mode: String!
+  mode: FilterMode!
   filters: [ReportsFilterFiltering]!
   filterGroups: [ReportsGroupFiltering]!
 }

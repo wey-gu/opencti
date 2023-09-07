@@ -1818,7 +1818,7 @@ enum ExternalReferencesFilter {
 }
 
 input ExternalReferencesGroupFiltering {
-  mode: String!
+  mode: FilterMode!
   filters: [ExternalReferencesFilterFiltering]!
   filterGroups: [ExternalReferencesGroupFiltering]!
 }
@@ -2177,7 +2177,7 @@ enum StixDomainObjectsFilter {
 }
 
 input StixDomainObjectsGroupFiltering {
-  mode: String!
+  mode: FilterMode!
   filters: [StixDomainObjectsFilterFiltering]!
   filterGroups: [StixDomainObjectsGroupFiltering]!
 }
@@ -3089,7 +3089,7 @@ enum ReportsFilter {
 }
 
 input ReportsGroupFiltering {
-  mode: String!
+  mode: FilterMode!
   filters: [ReportsFilterFiltering]!
   filterGroups: [ReportsGroupFiltering]!
 }
@@ -9445,7 +9445,7 @@ enum GroupingsFilter {
 }
 
 input GroupingsGroupFiltering {
-  mode: String!
+  mode: FilterMode!
   filters: [GroupingsFilterFiltering]!
   filterGroups: [GroupingsGroupFiltering]!
 }
@@ -11406,7 +11406,7 @@ enum MalwareAnalysesFilter {
 }
 
 input MalwareAnalysesGroupFiltering {
-  mode: String!
+  mode: FilterMode!
   filters: [MalwareAnalysesFilterFiltering]!
   filterGroups: [MalwareAnalysesGroupFiltering]!
 }
