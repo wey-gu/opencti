@@ -153,6 +153,8 @@ class ListLines extends Component {
       handleAddFilter,
       handleRemoveFilter,
       handleSwitchFilter,
+      handleSwitchGlobalMode,
+      handleSwitchLocalMode,
       handleToggleExports,
       handleToggleSelectAll,
       selectAll,
@@ -226,6 +228,8 @@ class ListLines extends Component {
                 handleAddFilter={handleAddFilter}
                 handleSwitchFilter={handleSwitchFilter}
                 handleRemoveFilter={handleRemoveFilter}
+                handleSwitchGlobalMode={handleSwitchGlobalMode}
+                handleSwitchLocalMode={handleSwitchLocalMode}
                 availableEntityTypes={availableEntityTypes}
                 availableRelationshipTypes={availableRelationshipTypes}
                 availableRelationFilterTypes={availableRelationFilterTypes}
@@ -241,6 +245,8 @@ class ListLines extends Component {
                 availableFilterKeys={availableFilterKeys}
                 filters={filters}
                 handleRemoveFilter={handleRemoveFilter}
+                handleSwitchGlobalMode={handleSwitchGlobalMode}
+                handleSwitchLocalMode={handleSwitchLocalMode}
                 redirection
               />
             }
@@ -606,6 +612,8 @@ ListLines.propTypes = {
   handleAddFilter: PropTypes.func,
   handleRemoveFilter: PropTypes.func,
   handleSwitchFilter: PropTypes.func,
+  handleSwitchGlobalMode: PropTypes.func,
+  handleSwitchLocalMode: PropTypes.func,
   handleToggleExports: PropTypes.func,
   selectAll: PropTypes.bool,
   openExports: PropTypes.bool,
