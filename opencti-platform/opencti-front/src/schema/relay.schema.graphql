@@ -453,11 +453,13 @@ type TaxiiCollection {
   name: String
   description: String
   filters: String
+  taxii_public: Boolean
+  authorized_members: [MemberAccess!]
 }
 
 type TaxiiCollectionConnection {
   pageInfo: PageInfo!
-  edges: [TaxiiCollectionEdge]
+  edges: [TaxiiCollectionEdge]!
 }
 
 type TaxiiCollectionEdge {
@@ -469,6 +471,8 @@ input TaxiiCollectionAddInput {
   name: String!
   description: String
   filters: String
+  taxii_public: Boolean
+  authorized_members: [MemberAccessInput!]
 }
 
 enum TaxiiCollectionOrdering {
@@ -490,12 +494,15 @@ type Feed {
   id: ID!
   standard_id: ID!
   name: String!
+  description: String
   filters: String
   separator: String!
   rolling_time: Int!
   include_header: Boolean!
   feed_types: [String!]!
   feed_attributes: [FeedAttribute!]!
+  feed_public: Boolean
+  authorized_members: [MemberAccess!]
 }
 
 input FeedMappingInput {
@@ -510,12 +517,15 @@ input FeedAttributeMappingInput {
 
 input FeedAddInput {
   name: String!
+  description: String
   filters: String
   separator: String!
   rolling_time: Int!
   include_header: Boolean!
   feed_types: [String!]!
+  feed_public: Boolean
   feed_attributes: [FeedAttributeMappingInput!]!
+  authorized_members: [MemberAccessInput!]
 }
 
 enum FeedOrdering {
@@ -529,7 +539,7 @@ type FeedEdge {
 
 type FeedConnection {
   pageInfo: PageInfo!
-  edges: [FeedEdge]
+  edges: [FeedEdge]!
 }
 
 type RemoteStreamCollection {
@@ -544,9 +554,9 @@ type StreamCollection {
   name: String
   description: String
   filters: String
-  groups: [Group]
   stream_live: Boolean
   stream_public: Boolean
+  authorized_members: [MemberAccess!]
 }
 
 type StreamCollectionConnection {
@@ -562,10 +572,10 @@ type StreamCollectionEdge {
 input StreamCollectionAddInput {
   name: String!
   description: String
-  groups: [String]
   filters: String
   stream_live: Boolean
   stream_public: Boolean
+  authorized_members: [MemberAccessInput!]
 }
 
 enum StreamCollectionOrdering {
@@ -582,6 +592,30 @@ enum StreamCollectionFilter {
 
 input StreamCollectionFiltering {
   key: [StreamCollectionFilter!]!
+  values: [String]
+  operator: String
+  filterMode: FilterMode
+}
+
+enum TaxiiCollectionFilter {
+  name
+  taxii_public
+}
+
+input TaxiiCollectionFiltering {
+  key: [TaxiiCollectionFilter!]!
+  values: [String]
+  operator: String
+  filterMode: FilterMode
+}
+
+enum FeedFilter {
+  name
+  feed_public
+}
+
+input FeedFiltering {
+  key: [FeedFilter!]!
   values: [String]
   operator: String
   filterMode: FilterMode
@@ -8025,10 +8059,10 @@ type Query {
   retentionRule(id: String!): RetentionRule
   retentionRules(first: Int, after: ID, search: String): RetentionRuleConnection
   taxiiCollection(id: String!): TaxiiCollection
-  taxiiCollections(first: Int, after: ID, orderBy: TaxiiCollectionOrdering, orderMode: OrderingMode, search: String): TaxiiCollectionConnection
+  taxiiCollections(first: Int, after: ID, orderBy: TaxiiCollectionOrdering, orderMode: OrderingMode, search: String, filters: [TaxiiCollectionFiltering]): TaxiiCollectionConnection
   streamCollection(id: String!): StreamCollection
   feed(id: String!): Feed
-  feeds(first: Int, after: ID, orderBy: FeedOrdering, orderMode: OrderingMode, search: String): FeedConnection
+  feeds(first: Int, after: ID, orderBy: FeedOrdering, orderMode: OrderingMode, search: String, filters: [FeedFiltering]): FeedConnection
   streamCollections(first: Int, after: ID, orderBy: StreamCollectionOrdering, orderMode: OrderingMode, search: String, filters: [StreamCollectionFiltering]): StreamCollectionConnection!
   statusTemplate(id: String!): StatusTemplate
   statusTemplates(first: Int, after: ID, orderBy: StatusTemplateOrdering, orderMode: OrderingMode, search: String): StatusTemplateConnection
