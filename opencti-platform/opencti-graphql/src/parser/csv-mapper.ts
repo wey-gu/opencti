@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import moment from 'moment';
 import type {
   AttributeDefinition,
@@ -24,7 +25,8 @@ import { isStixObject } from '../schema/stixCoreObject';
 // Back-End
 //  Flat types, validation info, elasticSearch/OpenSearch -> flat object/flatten, GraphQL real object
 
-type IColumn = { multiple: true, column_name: string, configuration: { seperator: string, pattern_date?: string, timezone?: string } } | { multiple: false, column_name: string, configuration?: { pattern_date?: string, timezone?: string } };
+type IColumn = { multiple: true, column_name: string, configuration: { seperator: string, pattern_date?: string, timezone?: string } }
+| { multiple: false, column_name: string, configuration?: { pattern_date?: string, timezone?: string } };
 type IBasedOn = { multiple: true, representation: string[] } | { multiple: false, representation: string };
 type IRef = { multiple: true, id: string[] } | { multiple: false, id: string };
 interface CsvMapperRepresentationAttribute {
@@ -59,7 +61,61 @@ export interface CsvMapperDefinition {
   representations: CsvMapperRepresentation[]
 }
 
-type InputType = string | string[] | {};
+type InputType = string | string[] | number | Record<string, any>;
+
+// -- HANDLE VALUE --
+
+/*
+  Format value depending on type
+ */
+const formatValue = (value: string, type: AttrType, column: IColumn) => {
+  const pattern_date = column.configuration?.pattern_date;
+  const timezone = column.configuration?.timezone;
+  if (type === 'string') {
+    return value.trim();
+  } if (type === 'numeric') {
+    const formatedValue = Number(value);
+    return Number.isNaN(formatedValue) ? formatedValue : null;
+  } if (type === 'date') {
+    if (isEmptyField(pattern_date)) {
+      throw Error('A pattern date is required for a date attribute');
+    }
+    if (isNotEmptyField(timezone)) {
+      return moment(value, pattern_date, timezone).toISOString();
+    }
+    return moment(value, pattern_date).toISOString();
+  }
+  return value;
+};
+
+/*
+  Compute value depending on multiplicity of attribute
+ */
+const computeValue = (value: string, column: IColumn, attributeDef: AttributeDefinition) => {
+  if (isEmptyField(value)) {
+    return null;
+  }
+  // Handle multiple or simple attribute
+  if (attributeDef.multiple ?? false) {
+    if (column.multiple && column.configuration.seperator) {
+      return value.split(column.configuration.seperator).map((v) => formatValue(v, attributeDef.type, column));
+    }
+    return [formatValue(value, attributeDef.type, column)];
+  }
+  return formatValue(value, attributeDef.type, column);
+};
+
+/*
+  Extract value from csv cell
+ */
+const extractValueFromCsv = (record: string[], columnName: string) => {
+  const idx = columnNameToIdx(columnName); // Handle letter to idx here & remove headers
+  if (isEmptyField(idx)) {
+    throw Error(`Unknown column name ${columnName}`);
+  } else {
+    return record[idx as number];
+  }
+};
 
 // -- VALIDATION --
 
@@ -109,59 +165,6 @@ const isFilledInput = (representation: CsvMapperRepresentation, input: Record<st
   return keys.some((key) => isNotEmptyField(input[key]));
 };
 
-// -- HANDLE VALUE --
-
-/*
-  Format value depending on type
- */
-const formatValue = (value: string, type: AttrType, column: IColumn) => {
-  const pattern_date = column.configuration?.pattern_date;
-  const timezone = column.configuration?.timezone;
-  if (type === 'string') {
-    return value.trim();
-  } if (type === 'numeric') {
-    const formatValue = Number(value);
-    return Number.isNaN(formatValue) ? formatValue : null;
-  } if (type === 'date') {
-    if (isEmptyField(pattern_date)) {
-      throw Error('A pattern date is required for a date attribute');
-    }
-    if (isNotEmptyField(timezone)) {
-      return moment(value, pattern_date, timezone).toISOString();
-    }
-    return moment(value, pattern_date).toISOString();
-  }
-};
-
-/*
-  Compute value depending on multiplicity of attribute
- */
-const computeValue = (value: string, column: IColumn, attributeDef: AttributeDefinition) => {
-  if (isEmptyField(value)) {
-    return null;
-  }
-  // Handle multiple or simple attribute
-  if (attributeDef.multiple ?? false) {
-    if (column.multiple && column.configuration.seperator) {
-      return value.split(column.configuration.seperator).map((v) => formatValue(v, attributeDef.type, column));
-    }
-    return [formatValue(value, attributeDef.type, column)];
-  }
-  return formatValue(value, attributeDef.type, column);
-};
-
-/*
-  Extract value from csv cell
- */
-const extractValueFromCsv = (record: string[], columnName: string) => {
-  const idx = columnNameToIdx(columnName); // Handle letter to idx here & remove headers
-  if (isEmptyField(idx)) {
-    throw Error(`Unknown column name ${columnName}`);
-  } else {
-    return record[idx as number];
-  }
-};
-
 // -- COMPUTE properties for input --
 
 const handleType = (representation: CsvMapperRepresentation, input: Record<string, InputType>) => {
@@ -172,7 +175,7 @@ const handleType = (representation: CsvMapperRepresentation, input: Record<strin
   }
 };
 const handleOpenCtiProperties = (representation: CsvMapperRepresentation, input: Record<string, InputType>) => {
-  handleInnerType(input, representation.target.entity_type);
+  return handleInnerType(input, representation.target.entity_type);
 };
 const handleId = (representation: CsvMapperRepresentation, input: Record<string, InputType>) => {
   input[standardId.name] = generateStandardId(representation.target.entity_type, input);
@@ -246,10 +249,10 @@ const mapRecord = (record: string[], representation: CsvMapperRepresentation, ma
   if (!isValidTargetType(record, representation)) {
     return null;
   }
-  const input: Record<string, InputType> = {};
+  let input: Record<string, InputType> = {};
 
   handleType(representation, input);
-  handleOpenCtiProperties(representation, input);
+  input = handleOpenCtiProperties(representation, input);
   handleAttributes(record, representation, input, map);
 
   if (!isFilledInput(representation, input)) {

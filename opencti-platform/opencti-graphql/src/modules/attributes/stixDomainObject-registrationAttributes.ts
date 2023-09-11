@@ -49,11 +49,18 @@ const stixDomainObjectAttributes: Array<AttributeDefinition> = [
 ];
 schemaAttributesDefinition.registerAttributes(ABSTRACT_STIX_DOMAIN_OBJECT, stixDomainObjectAttributes);
 
+export const identityClass: AttributeDefinition = {
+  name: 'identity_class',
+  type: 'string',
+  mandatoryType: 'no',
+  multiple: false,
+  upsert: false
+};
 const stixDomainObjectIdentityAttributes: Array<AttributeDefinition> = [
   { name: 'name', type: 'string', mandatoryType: 'external', multiple: false, upsert: true },
   { name: 'description', type: 'string', mandatoryType: 'customizable', multiple: false, upsert: true },
   { name: 'contact_information', type: 'string', mandatoryType: 'no', multiple: false, upsert: true },
-  { name: 'identity_class', type: 'string', mandatoryType: 'no', multiple: false, upsert: false },
+  identityClass,
   { name: 'roles', type: 'string', mandatoryType: 'no', multiple: true, upsert: false },
 ];
 schemaAttributesDefinition.registerAttributes(ENTITY_TYPE_IDENTITY, stixDomainObjectIdentityAttributes);

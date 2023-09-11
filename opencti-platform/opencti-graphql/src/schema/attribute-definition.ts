@@ -87,6 +87,14 @@ export const relationshipType: AttributeDefinition = {
   upsert: false
 };
 
+export const xOpenctiType: AttributeDefinition = {
+  name: 'x_opencti_type',
+  type: 'string',
+  mandatoryType: 'no',
+  multiple: false,
+  upsert: false
+};
+
 // -- STIX DOMAIN OBJECT --
 
 // IDS

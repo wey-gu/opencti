@@ -26,6 +26,8 @@ import { ENTITY_TYPE_USER } from '../schema/internalObject';
 import { schemaRelationsRefDefinition } from '../schema/schema-relationsRef';
 import { stixDomainObjectOptions } from '../schema/stixDomainObjectOptions';
 import { stixObjectOrRelationshipAddRefRelation, stixObjectOrRelationshipDeleteRefRelation } from './stixObjectOrStixRelationship';
+import { identityClass } from '../modules/attributes/stixDomainObject-registrationAttributes';
+import { entityLocationType, xOpenctiType } from '../schema/attribute-definition';
 
 export const findAll = async (context, user, args) => {
   let types = [];
@@ -125,14 +127,24 @@ export const stixDomainObjectExportAsk = async (context, user, stixDomainObjectI
 
 export const handleInnerType = (data, innerType) => {
   if (isStixDomainObjectIdentity(innerType)) {
-    data.identity_class = innerType === ENTITY_TYPE_IDENTITY_SECTOR ? 'class' : innerType.toLowerCase();
+    return {
+      ...data,
+      [identityClass.name]: innerType === ENTITY_TYPE_IDENTITY_SECTOR ? 'class' : innerType.toLowerCase()
+    };
   }
   if (isStixDomainObjectLocation(innerType)) {
-    data.x_opencti_location_type = innerType;
+    return {
+      ...data,
+      [entityLocationType.name]: innerType
+    };
   }
   if (isStixDomainObjectThreatActor(innerType)) {
-    data.x_opencti_type = innerType;
+    return {
+      ...data,
+      [xOpenctiType.name]: innerType
+    };
   }
+  return data;
 };
 
 // region mutation
@@ -141,8 +153,8 @@ export const addStixDomainObject = async (context, user, stixDomainObject) => {
   if (!isStixDomainObject(innerType)) {
     throw UnsupportedError('This method can only create Stix domain');
   }
-  const data = stixDomainObject;
-  handleInnerType(data, innerType);
+  let data = stixDomainObject;
+  data = handleInnerType(data, innerType);
 
   if (innerType === ENTITY_TYPE_CONTAINER_REPORT) {
     data.published = utcDate();

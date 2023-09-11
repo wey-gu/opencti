@@ -21,15 +21,13 @@ const parseCsvFile = (parser: Parser, callback: (record: any) => void) => {
   // Use the readable stream api to consume records
   parser.on('readable', () => {
     let record;
+    /* eslint-disable no-cond-assign */
     while ((record = parser.read()) !== null) {
       callback(record);
     }
   })
     .on('error', (err) => {
-      console.error(err.message);
-    })
-    .on('end', () => {
-      console.info('Parsing - End');
+      throw Error(`CSV Parser : ${err}`);
     });
 };
 
