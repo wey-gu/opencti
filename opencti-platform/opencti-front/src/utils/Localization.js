@@ -693,6 +693,12 @@ const i18n = {
       SETTINGS: 'PARÁMETROS',
       'Entity settings': 'Configuración de la entidad',
       'Dashboard settings': 'Cuadro de mando de configuración',
+      // Ingestion Menu
+      Ingestion: 'Ingestión',
+      'Remote OCTI Streams': 'Flujos OCTI Remotos',
+      'TAXII Feeds': 'Suministros TAXII',
+      'RSS Feeds': 'Suministros RSS',
+      'CSV Mappers': 'Mapeadores CSV',
       // Settings Messages
       'Platform announcement': 'Anuncio de plataforma',
       Dismissible: 'Despedir',
@@ -2798,6 +2804,12 @@ const i18n = {
       SETTINGS: 'PARAMÈTRES',
       'Entity settings': "Paramètres de l'entité",
       'Dashboard settings': 'Paramètres du tableau de bord',
+      // Ingestion Menu
+      Ingestion: 'Ingestion',
+      'Remote OCTI Streams': 'Flux OCTI à distance',
+      'TAXII Feeds': 'Flux TAXII',
+      'RSS Feeds': 'Flux RSS',
+      'CSV Mappers': 'Mappeurs CSV',
       // Settings Messages
       'Platform announcement': 'Annonce de la plateforme',
       Dismissible: 'Rejetable',
@@ -4851,6 +4863,12 @@ const i18n = {
       SETTINGS: '設定',
       'Entity settings': 'エンティティ設定',
       'Dashboard settings': 'ダッシュボードの設定',
+      // Ingestion Menu
+      Ingestion: '摂取',
+      'Remote OCTI Streams': 'リモート OCTI ストリーム',
+      'TAXII Feeds': 'TAXII フィード',
+      'RSS Feeds': 'RSSフィード',
+      'CSV Mappers': 'CSV マッパー',
       // Settings Messages
       'Platform announcement': 'プラットフォームの発表',
       Dismissible: '無視可能',
@@ -6803,6 +6821,12 @@ const i18n = {
       SETTINGS: '設置',
       'Entity settings': '实体设置',
       'Dashboard settings': '仪表盘设置',
+      // Ingestion Menu
+      Ingestion: '食入',
+      'Remote OCTI Streams': '远程 OCTI 流',
+      'TAXII Feeds': 'TAXII 饲料',
+      'RSS Feeds': 'RSS订阅',
+      'CSV Mappers': 'CSV 映射器',
       // Settings Messages
       'Platform announcement': '平台公告',
       Dismissible: '可驳回',

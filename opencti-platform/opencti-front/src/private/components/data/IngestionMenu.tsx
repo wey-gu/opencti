@@ -15,6 +15,10 @@ const SharingMenu = () => {
       path: '/dashboard/data/ingestion/rss',
       label: 'RSS Feeds',
     },
+    {
+      path: '/dashboard/data/ingestion/csv_mapper',
+      label: 'CSV Mappers',
+    },
   ];
 
   return <NavToolbarMenu entries={entries} />;
