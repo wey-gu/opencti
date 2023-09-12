@@ -10,8 +10,9 @@ import retentionManager from './retentionManager';
 import publisherManager from './publisherManager';
 import notificationManager from './notificationManager';
 import ingestionManager from './ingestionManager';
-import { registerClusterInstance } from '../database/redis';
 import activityManager from './activityManager';
+import fileIndexManager from './fileIndexManager';
+import { registerClusterInstance } from '../database/redis';
 import { getEntityFromCache } from '../database/cache';
 import { executionContext, SYSTEM_USER } from '../utils/access';
 import { ENTITY_TYPE_SETTINGS } from '../schema/internalObject';
@@ -45,6 +46,7 @@ const initClusterManager = () => {
       notificationManager.status(),
       ingestionManager.status(),
       activityManager.status(settings),
+      fileIndexManager.status(settings),
     ];
     const configData: ClusterConfig = { platform_id: platformId, managers };
     await registerClusterInstance(platformId, configData);
