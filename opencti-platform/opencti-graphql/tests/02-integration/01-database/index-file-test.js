@@ -42,33 +42,26 @@ const testFilesSearching = async (search, expectedFilesIds) => {
   expect(resultIds).toEqual(expectedFilesIds);
 };
 
-const filesIds = [];
+const filesIds = ['TEST_FILE_1', 'TEST_FILE_2', 'TEST_FILE_3', 'TEST_FILE_4', 'TEST_FILE_5'];
 describe('Indexing file test', () => {
   afterAll(async () => {
     // cleanup : delete file in elastic
-    await Promise.all(filesIds.map(async ({ fileId }) => {
-      await elDelete(INDEX_FILES, fileId);
-    }));
+    await Promise.all(filesIds.map((fileId) => elDelete(INDEX_FILES, fileId)));
   });
   it('Should index small pdf file', async () => {
     await testFileIndexing('test-report-to-index.pdf', 'application/pdf', 'TEST_FILE_1');
-    filesIds.push('TEST_FILE_1');
   });
   it('Should index large pdf file', async () => {
     await testFileIndexing('test-large-report-to-index.pdf', 'application/pdf', 'TEST_FILE_2');
-    filesIds.push('TEST_FILE_2');
   });
   it('Should index txt file', async () => {
     await testFileIndexing('test-file-to-index.txt', 'text/plain', 'TEST_FILE_3');
-    filesIds.push('TEST_FILE_3');
   });
   it('Should index csv file', async () => {
     await testFileIndexing('test-file-to-index.csv', 'text/plain', 'TEST_FILE_4');
-    filesIds.push('TEST_FILE_4');
   });
   it('Should index xls file', async () => {
     await testFileIndexing('test-file-to-index.xls', 'application/vnd.ms-excel', 'TEST_FILE_5');
-    filesIds.push('TEST_FILE_5');
   });
   it('Should find document by search query', async () => {
     await testFilesSearching('elastic', ['TEST_FILE_1']);
