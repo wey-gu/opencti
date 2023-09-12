@@ -55,6 +55,7 @@ enum Capabilities {
   SETTINGS_SETMARKINGS
   SETTINGS_SETLABELS
   TAXIIAPI_SETCOLLECTIONS
+  TAXIIAPI_SETCSVMAPPERS
 }
 enum MemberType {
   User
@@ -11151,6 +11152,7 @@ union StixObjectOrStixRelationshipOrCreator =
   | Creator
   | Group
   | Workspace
+  | CsvMapper
 union StixObjectOrStixRelationship =
   MarkingDefinition
   | Label
@@ -11229,6 +11231,7 @@ union StixObjectOrStixRelationship =
   | Task
   | EntitySetting
   | Workspace
+  | CsvMapper
 union StixCoreObjectOrStixCoreRelationship =
 #### Stix Core Objects
 ## Stix Domain Objects

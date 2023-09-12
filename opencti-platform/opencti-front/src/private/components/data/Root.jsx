@@ -12,6 +12,7 @@ import Feed from './Feed';
 import Sync from './Sync';
 import IngestionRss from './IngestionRss';
 import IngestionTaxiis from './IngestionTaxiis';
+import CsvMappers from "@components/data/CsvMappers";
 
 const Root = () => (
   <Switch>
@@ -55,6 +56,11 @@ const Root = () => (
       exact
       path="/dashboard/data/ingestion/taxii"
       component={IngestionTaxiis}
+    />
+    <BoundaryRoute
+      exact
+      path="/dashboard/data/ingestion/csv_mapper"
+      component={CsvMappers}
     />
     <BoundaryRoute
       exact

@@ -1,7 +1,7 @@
 import React from 'react';
 import NavToolbarMenu, { MenuEntry } from '@components/common/menus/NavToolbarMenu';
 
-const SharingMenu = () => {
+const IngestionMenu = () => {
   const entries: MenuEntry[] = [
     {
       path: '/dashboard/data/ingestion/sync',
@@ -24,4 +24,4 @@ const SharingMenu = () => {
   return <NavToolbarMenu entries={entries} />;
 };
 
-export default SharingMenu;
+export default IngestionMenu;
