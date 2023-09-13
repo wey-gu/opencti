@@ -416,11 +416,16 @@ export const isUriProxyExcluded = (hostname, exclusions) => {
   return false;
 };
 export const getPlatformHttpProxies = () => {
-  const proxies = {};
-  const exclusions = (nconf.get('no_proxy') ?? '').split(',');
+  const http = nconf.get('http_proxy');
   const https = nconf.get('https_proxy');
+  const exclusions = (nconf.get('no_proxy') ?? '').split(',');
+  const proxyCA = nconf.get('https_proxy_ca').map((caPath) => loadCert(caPath));
+  // To prevent any configuration clash with node, we reset the proxy env variables
+  process.env.HTTP_PROXY = '';
+  process.env.HTTPS_PROXY = '';
+  process.env.NO_PROXY = '';
+  const proxies = {};
   if (https) {
-    const proxyCA = nconf.get('https_proxy_ca').map((caPath) => loadCert(caPath));
     proxies['https:'] = {
       build: () => new ExtendedHttpsProxyAgent(https, {
         rejectUnauthorized: booleanConf('https_proxy_reject_unauthorized', false),
@@ -429,7 +434,6 @@ export const getPlatformHttpProxies = () => {
       isExcluded: (hostname) => isUriProxyExcluded(hostname, exclusions),
     };
   }
-  const http = nconf.get('http_proxy');
   if (http) {
     proxies['http:'] = {
       build: () => new HttpProxyAgent(http),
@@ -448,17 +452,7 @@ export const getPlatformHttpProxyAgent = (uri) => {
       return undefined;
     }
     // If not generate the agent accordingly
-    const httpAgent = targetProxy.build();
-
-    return {
-      ...httpAgent,
-      secureProxy: httpAgent.proxy.protocol === 'https:',
-      proxy: {
-        ...httpAgent.proxy,
-        host: httpAgent.proxy.hostname,
-        port: Number(httpAgent.proxy.port),
-      }
-    };
+    return targetProxy.build();
   }
   return undefined;
 };
