@@ -78,7 +78,7 @@ export const resetStateConnector = async (context, user, id) => {
 };
 export const registerConnector = async (context, user, connectorData) => {
   // eslint-disable-next-line camelcase
-  const { id, name, type, scope, auto = null, only_contextual = null } = connectorData;
+  const { id, name, type, scope, auto = null, only_contextual = null, built_in = false } = connectorData;
   const connector = await storeLoadById(context, user, id, ENTITY_TYPE_CONNECTOR);
   // Register queues
   await registerConnectorQueues(id, name, type, scope);
@@ -106,6 +106,7 @@ export const registerConnector = async (context, user, connectorData) => {
     auto,
     only_contextual,
     connector_user_id: user.id,
+    built_in: built_in
   };
   const createdConnector = await createEntity(context, user, connectorToCreate, ENTITY_TYPE_CONNECTOR);
   await publishUserAction({

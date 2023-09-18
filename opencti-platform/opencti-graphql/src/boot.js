@@ -1,5 +1,6 @@
 import conf, {
   ENABLED_API,
+  ENABLED_CONNECTOR_BUILT_IN_MANAGER,
   ENABLED_CONNECTOR_MANAGER,
   ENABLED_EXPIRED_MANAGER,
   ENABLED_HISTORY_MANAGER, ENABLED_INGESTION_MANAGER,
@@ -30,6 +31,7 @@ import notificationManager from './manager/notificationManager';
 import publisherManager from './manager/publisherManager';
 import activityListener from './manager/activityListener';
 import activityManager from './manager/activityManager';
+import connectorBuiltInManager from "./manager/connectorBuiltInManager";
 
 // region dynamic modules
 const startModules = async () => {
@@ -53,6 +55,13 @@ const startModules = async () => {
     await connectorManager.start();
   } else {
     logApp.info('[OPENCTI-MODULE] Connector manager not started (disabled by configuration)');
+  }
+  // endregion
+  // region connector built in manager
+  if (ENABLED_CONNECTOR_BUILT_IN_MANAGER) {
+    connectorBuiltInManager.start();
+  } else {
+    logApp.info('[OPENCTI-MODULE] Connector built in manager not started (disabled by configuration)');
   }
   // endregion
   // region Retention manager
@@ -131,6 +140,11 @@ const shutdownModules = async () => {
   // region Connector manager
   if (ENABLED_CONNECTOR_MANAGER) {
     stoppingPromises.push(connectorManager.shutdown());
+  }
+  // endregion
+  // region Connector built in manager
+  if (ENABLED_CONNECTOR_BUILT_IN_MANAGER) {
+    stoppingPromises.push(connectorBuiltInManager.shutdown());
   }
   // endregion
   // region Retention manager

@@ -108,7 +108,7 @@ export const deleteFiles = async (context, user, ids) => {
   return true;
 };
 
-export const downloadFile = async (context, id) => {
+export const downloadFile = async (_, id) => {
   try {
     const object = await s3Client.send(new s3.GetObjectCommand({
       Bucket: bucketName,
@@ -147,7 +147,7 @@ export const storeFileConverter = (user, file) => {
   };
 };
 
-export const loadFile = async (context, user, filename) => {
+export const loadFile = async (_, user, filename) => {
   try {
     const object = await s3Client.send(new s3.HeadObjectCommand({
       Bucket: bucketName,
@@ -221,7 +221,7 @@ export const uploadJobImport = async (context, user, fileId, fileMime, entityId,
       const work = await createWork(context, user, connector, 'Manual import', fileId);
       return { connector, work };
     };
-    const actionList = await Promise.all(R.map((connector) => createConnectorWork(connector), connectors));
+    const actionList = await Promise.all(connectors.map((connector) => createConnectorWork(connector)));
     // Send message to all correct connectors queues
     const buildConnectorMessage = (data) => {
       const { work } = data;
@@ -244,7 +244,7 @@ export const uploadJobImport = async (context, user, fileId, fileMime, entityId,
       const message = buildConnectorMessage(data);
       return pushToConnector(context, connector, message);
     };
-    await Promise.all(R.map((data) => pushMessage(data), actionList));
+    await Promise.all(actionList.map((data) => pushMessage(data)));
   }
   return connectors;
 };

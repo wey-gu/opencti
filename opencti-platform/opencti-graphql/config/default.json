@@ -105,6 +105,11 @@
     "works_day_range": 7,
     "interval": 60000
   },
+  "connector_builtin_manager": {
+    "enabled": true,
+    "lock_key": "connector_builtin_manager_lock",
+    "interval": 60000
+  },
   "task_scheduler": {
     "enabled": true,
     "lock_key": "task_manager_lock",

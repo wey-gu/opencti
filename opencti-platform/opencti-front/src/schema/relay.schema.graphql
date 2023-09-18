@@ -1552,6 +1552,7 @@ type Connector implements BasicObject & InternalObject {
   created_at: DateTime
   config: ConnectorConfig
   works(status: String): [Work]
+  csvMapper: String
 }
 
 type RuleExecutionError {

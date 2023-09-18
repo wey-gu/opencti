@@ -173,7 +173,7 @@ export const pushToSync = (message) => {
   return send(WORKER_EXCHANGE, pushRouting('sync'), JSON.stringify(message));
 };
 
-export const pushToConnector = (context, connector, message) => {
+export const pushToConnector = (_, connector, message) => {
   return send(CONNECTOR_EXCHANGE, listenRouting(connector.internal_id), JSON.stringify(message));
 };
 
@@ -182,3 +182,16 @@ export const getRabbitMQVersion = (context) => {
     .then((data) => data.overview.rabbitmq_version)
     .catch(/* istanbul ignore next */ () => 'Disconnected');
 };
+
+export const consumeQueue = async (context, id, callback) => {
+  const config = connectorConfig(id)
+  const listenQueue = config.listen;
+  await amqpExecute(async (channel) => {
+    await channel.consume(listenQueue, async (msg) => {
+      if (msg !== null) {
+        channel.ack(msg); // TODO: Should be after the callback
+        await callback(context, msg.content.toString());
+      }
+    });
+  });
+}

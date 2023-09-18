@@ -8,10 +8,12 @@ import { extractEntityRepresentativeName } from '../database/entity-representati
 export const askJobImport = async (context, user, args) => {
   const { fileName, connectorId = null, bypassEntityId = null, bypassValidation = false } = args;
   logApp.debug(`[JOBS] ask import for file ${fileName} by ${user.user_email}`);
+  // Retrieve file from MinIO - CAN BE A memory problem because we don't use it entirely
+  // Can we just retrieve file without the content ?
   const file = await loadFile(context, user, fileName);
   const entityId = bypassEntityId || file.metaData.entity_id;
   const opts = { manual: true, connectorId, bypassValidation };
-  const entity = await internalLoadById(context, user, entityId);
+  const entity = await internalLoadById(context, user, entityId); // Resolve entity from Elastic
   const connectors = await uploadJobImport(context, user, file.id, file.metaData.mimetype, entityId, opts);
   const entityName = entityId ? extractEntityRepresentativeName(entity) : 'global';
   const entityType = entityId ? entity.entity_type : 'global';

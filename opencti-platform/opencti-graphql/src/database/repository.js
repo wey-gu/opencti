@@ -28,6 +28,7 @@ export const connectors = (context, user) => {
     .then((elements) => map((conn) => completeConnector(conn), elements));
 };
 
+// TODO: already an internal connector
 export const connectorsForWorker = async (context, user) => {
   const registeredConnectors = await connectors(context, user);
   registeredConnectors.push({

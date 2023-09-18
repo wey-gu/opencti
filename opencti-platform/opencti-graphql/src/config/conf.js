@@ -471,6 +471,7 @@ export const ENABLED_RETENTION_MANAGER = booleanConf('retention_manager:enabled'
 export const ENABLED_NOTIFICATION_MANAGER = booleanConf('notification_manager:enabled', true);
 export const ENABLED_PUBLISHER_MANAGER = booleanConf('publisher_manager:enabled', true);
 export const ENABLED_CONNECTOR_MANAGER = booleanConf('connector_manager:enabled', true);
+export const ENABLED_CONNECTOR_BUILT_IN_MANAGER = booleanConf('connector_builtin_manager:enabled', true);
 
 // Default deactivated managers
 export const ENABLED_EXPIRED_MANAGER = booleanConf('expiration_scheduler:enabled', false);

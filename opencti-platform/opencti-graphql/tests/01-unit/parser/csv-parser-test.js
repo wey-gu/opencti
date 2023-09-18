@@ -1,11 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { parsingProcess } from "../../../src/parser/csv-parser";
-import { BundleBuilder } from "../../../src/parser/bundle-creator";
 import { csvMapperMockSimpleEntity } from "./simple-entity-test/csv-mapper-mock-simple-entity";
-import { mappingProcess } from "../../../src/parser/csv-mapper";
-import { convertStoreToStix } from "../../../src/database/stix-converter";
 import { isNotEmptyField } from "../../../src/database/utils";
-import { ENTITY_TYPE_EXTERNAL_REFERENCE } from '../../../src/schema/stixMetaObject';
 
 import '../../../src/modules';
 import { csvMapperMockSimpleRelationship } from "./simple-relationship-test/csv-mapper-mock-simple-relationship";
@@ -17,35 +12,7 @@ import {
   csvMapperMockSimpleDifferentEntities
 } from "./simple-different-entities-test/csv-mapper-mock-simple-different-entities";
 import { csvMapperMockSimpleSighting } from "./simple-sighting-test/csv-mapper-mock-simple-sighting";
-
-const inlineEntityTypes = [ENTITY_TYPE_EXTERNAL_REFERENCE];
-
-const bundleProcess = async (filPath, mapper, delimiter) => {
-  // TODO: sanity check validation mapper
-
-  const bundleBuilder = new BundleBuilder();
-
-  let skipLine = mapper.has_header;
-  const bundleProcess = (record) => {
-    // Handle header
-    if (skipLine) {
-      skipLine = false;
-    } else {
-      // Compute input by representation
-      const inputs = mappingProcess(mapper, record);
-      // Remove inline elements
-      const withoutInlineInputs = inputs.filter((input) => !inlineEntityTypes.includes(input.entity_type));
-      // Transform entity to stix
-      const stixObjects = withoutInlineInputs.map((input) => convertStoreToStix(input));
-      // Add to builder
-      bundleBuilder.addObjects(stixObjects);
-    }
-  }
-
-  await parsingProcess(filPath, delimiter, (record) => bundleProcess(record));
-
-  return bundleBuilder;
-}
+import { bundleProcess } from "../../../src/parser/csv-parser";
 
 describe('CSV-HELPER', () => {
   it('Column name to idx', async () => {

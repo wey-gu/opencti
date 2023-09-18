@@ -1483,6 +1483,8 @@ type Connector implements BasicObject & InternalObject {
   created_at: DateTime
   config: ConnectorConfig
   works(status: String): [Work]
+  ## Built in Connector
+  csvMapper: String
 }
 
 ############## Rules
