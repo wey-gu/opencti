@@ -65,11 +65,6 @@ export const stixCoreObjectQuickSubscriptionContentQuery = graphql`
                       id
                       name
                     }
-                    resolved_instance_filters {
-                        id
-                        valid
-                        value
-                    }
                 }
             }
         }
@@ -83,7 +78,6 @@ interface InstanceTriggerEditionFormValues {
   event_types: readonly Option[];
   notifiers: readonly Option[];
   filters: string | null,
-  resolved_instance_filters?: TriggerLine_node$data['resolved_instance_filters'],
 }
 
 const useStyles = makeStyles<Theme>((theme) => ({
@@ -361,7 +355,6 @@ const StixCoreObjectQuickSubscriptionContent: FunctionComponent<StixCoreObjectQu
                     classNameNumber={3}
                     styleNumber={3}
                     redirection
-                    resolvedInstanceFilters={instanceTrigger.resolved_instance_filters ?? []}
                   />
                 </div>
               }
@@ -399,7 +392,7 @@ const StixCoreObjectQuickSubscriptionContent: FunctionComponent<StixCoreObjectQu
     const triggerValues = existingInstanceTriggersEdges
       .filter((l) => l)
       .map((n) => ({
-        ...pick(['id', 'name', 'description', 'filters', 'resolved_instance_filters'], n?.node),
+        ...pick(['id', 'name', 'description', 'filters'], n?.node),
         notifiers: convertNotifiers(n?.node),
         event_types: convertEventTypes(n?.node),
       })) as InstanceTriggerEditionFormValues[];
