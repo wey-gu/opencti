@@ -5091,6 +5091,7 @@ enum IntrusionSetsFilter {
   confidence
   source_reliability
   creator
+  targets
 }
 input IntrusionSetsFiltering {
   key: [IntrusionSetsFilter!]!
