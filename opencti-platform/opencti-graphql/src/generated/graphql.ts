@@ -13984,7 +13984,7 @@ export type MutationStixCyberObservablesExportAskArgs = {
   elementId?: InputMaybe<Scalars['String']['input']>;
   exportType: Scalars['String']['input'];
   filterMode?: InputMaybe<FilterMode>;
-  filters?: InputMaybe<Array<InputMaybe<StixCyberObservablesFiltering>>>;
+  filters?: InputMaybe<StixCyberObservablesGroupFiltering>;
   format: Scalars['String']['input'];
   maxMarkingDefinition?: InputMaybe<Scalars['String']['input']>;
   orderBy?: InputMaybe<StixCyberObservablesOrdering>;
@@ -19346,7 +19346,7 @@ export type QueryStixCyberObservableArgs = {
 export type QueryStixCyberObservablesArgs = {
   after?: InputMaybe<Scalars['ID']['input']>;
   filterMode?: InputMaybe<FilterMode>;
-  filters?: InputMaybe<Array<InputMaybe<StixCyberObservablesFiltering>>>;
+  filters?: InputMaybe<StixCyberObservablesGroupFiltering>;
   first?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<StixCyberObservablesOrdering>;
   orderMode?: InputMaybe<OrderingMode>;
@@ -19360,7 +19360,7 @@ export type QueryStixCyberObservablesDistributionArgs = {
   dateAttribute?: InputMaybe<Scalars['String']['input']>;
   field: Scalars['String']['input'];
   filterMode?: InputMaybe<FilterMode>;
-  filters?: InputMaybe<Array<InputMaybe<StixCyberObservablesFiltering>>>;
+  filters?: InputMaybe<StixCyberObservablesGroupFiltering>;
   objectId?: InputMaybe<Scalars['String']['input']>;
   operation: Scalars['String']['input'];
   search?: InputMaybe<Scalars['String']['input']>;
@@ -19377,7 +19377,7 @@ export type QueryStixCyberObservablesNumberArgs = {
   authorId?: InputMaybe<Scalars['String']['input']>;
   endDate?: InputMaybe<Scalars['DateTime']['input']>;
   filterMode?: InputMaybe<FilterMode>;
-  filters?: InputMaybe<Array<InputMaybe<StixCyberObservablesFiltering>>>;
+  filters?: InputMaybe<StixCyberObservablesGroupFiltering>;
   search?: InputMaybe<Scalars['String']['input']>;
   types?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
@@ -19385,7 +19385,7 @@ export type QueryStixCyberObservablesNumberArgs = {
 
 export type QueryStixCyberObservablesTimeSeriesArgs = {
   filterMode?: InputMaybe<FilterMode>;
-  filters?: InputMaybe<Array<InputMaybe<StixCyberObservablesFiltering>>>;
+  filters?: InputMaybe<StixCyberObservablesGroupFiltering>;
   search?: InputMaybe<Scalars['String']['input']>;
   types?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
@@ -22607,11 +22607,17 @@ export enum StixCyberObservablesFilter {
   XOpenctiScore = 'x_opencti_score'
 }
 
-export type StixCyberObservablesFiltering = {
-  filterMode?: InputMaybe<FilterMode>;
+export type StixCyberObservablesFilterFiltering = {
   key: Array<StixCyberObservablesFilter>;
+  mode?: InputMaybe<FilterMode>;
   operator?: InputMaybe<Scalars['String']['input']>;
-  values?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  values: Array<InputMaybe<Scalars['String']['input']>>;
+};
+
+export type StixCyberObservablesGroupFiltering = {
+  filterGroups: Array<InputMaybe<StixCyberObservablesGroupFiltering>>;
+  filters: Array<InputMaybe<StixCyberObservablesFilterFiltering>>;
+  mode: FilterMode;
 };
 
 export enum StixCyberObservablesOrdering {
@@ -29013,7 +29019,8 @@ export type ResolversTypes = ResolversObject<{
   StixCyberObservableEdge: ResolverTypeWrapper<Omit<StixCyberObservableEdge, 'node'> & { node: ResolversTypes['StixCyberObservable'] }>;
   StixCyberObservableEditMutations: ResolverTypeWrapper<Omit<StixCyberObservableEditMutations, 'contextClean' | 'contextPatch' | 'fieldPatch' | 'promote' | 'relationAdd' | 'relationDelete' | 'relationsAdd'> & { contextClean?: Maybe<ResolversTypes['StixCyberObservable']>, contextPatch?: Maybe<ResolversTypes['StixCyberObservable']>, fieldPatch?: Maybe<ResolversTypes['StixCyberObservable']>, promote?: Maybe<ResolversTypes['StixCyberObservable']>, relationAdd?: Maybe<ResolversTypes['StixRefRelationship']>, relationDelete?: Maybe<ResolversTypes['StixCyberObservable']>, relationsAdd?: Maybe<ResolversTypes['StixCyberObservable']> }>;
   StixCyberObservablesFilter: StixCyberObservablesFilter;
-  StixCyberObservablesFiltering: StixCyberObservablesFiltering;
+  StixCyberObservablesFilterFiltering: StixCyberObservablesFilterFiltering;
+  StixCyberObservablesGroupFiltering: StixCyberObservablesGroupFiltering;
   StixCyberObservablesOrdering: StixCyberObservablesOrdering;
   StixDomainObject: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['StixDomainObject']>;
   StixDomainObjectAddInput: StixDomainObjectAddInput;
@@ -29724,7 +29731,8 @@ export type ResolversParentTypes = ResolversObject<{
   StixCyberObservableConnection: Omit<StixCyberObservableConnection, 'edges'> & { edges: Array<ResolversParentTypes['StixCyberObservableEdge']> };
   StixCyberObservableEdge: Omit<StixCyberObservableEdge, 'node'> & { node: ResolversParentTypes['StixCyberObservable'] };
   StixCyberObservableEditMutations: Omit<StixCyberObservableEditMutations, 'contextClean' | 'contextPatch' | 'fieldPatch' | 'promote' | 'relationAdd' | 'relationDelete' | 'relationsAdd'> & { contextClean?: Maybe<ResolversParentTypes['StixCyberObservable']>, contextPatch?: Maybe<ResolversParentTypes['StixCyberObservable']>, fieldPatch?: Maybe<ResolversParentTypes['StixCyberObservable']>, promote?: Maybe<ResolversParentTypes['StixCyberObservable']>, relationAdd?: Maybe<ResolversParentTypes['StixRefRelationship']>, relationDelete?: Maybe<ResolversParentTypes['StixCyberObservable']>, relationsAdd?: Maybe<ResolversParentTypes['StixCyberObservable']> };
-  StixCyberObservablesFiltering: StixCyberObservablesFiltering;
+  StixCyberObservablesFilterFiltering: StixCyberObservablesFilterFiltering;
+  StixCyberObservablesGroupFiltering: StixCyberObservablesGroupFiltering;
   StixDomainObject: ResolversInterfaceTypes<ResolversParentTypes>['StixDomainObject'];
   StixDomainObjectAddInput: StixDomainObjectAddInput;
   StixDomainObjectConnection: Omit<StixDomainObjectConnection, 'edges'> & { edges?: Maybe<Array<Maybe<ResolversParentTypes['StixDomainObjectEdge']>>> };
