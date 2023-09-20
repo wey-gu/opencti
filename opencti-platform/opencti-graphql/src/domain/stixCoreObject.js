@@ -479,6 +479,7 @@ export const findFilterRepresentative = async (context, user, filter) => {
     case 'members_organization':
     case 'assigneeTo':
     case 'participant':
+    case 'creator':
       data = await Promise.all(values.map(async (id) => {
         const result = await storeLoadById(context, user, id, ABSTRACT_INTERNAL_OBJECT);
         return {
@@ -487,7 +488,6 @@ export const findFilterRepresentative = async (context, user, filter) => {
         };
       }));
       return data;
-    case 'creator':
     case 'createdBy':
     case 'sightedBy':
     case 'elementId':
