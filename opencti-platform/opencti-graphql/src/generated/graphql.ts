@@ -18347,6 +18347,7 @@ export type QueryIncidentsTimeSeriesArgs = {
 
 
 export type QueryIndexedFilesArgs = {
+  after?: InputMaybe<Scalars['ID']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   search?: InputMaybe<Scalars['String']['input']>;
 };
