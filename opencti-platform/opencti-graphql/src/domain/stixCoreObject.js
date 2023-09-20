@@ -471,7 +471,6 @@ export const findFilterRepresentative = async (context, user, filter) => {
         return {
           id,
           value: result?.name,
-          type: result?.entity_type,
         };
       }));
       return data;
@@ -485,7 +484,6 @@ export const findFilterRepresentative = async (context, user, filter) => {
         return {
           id,
           value: result?.name,
-          type: result?.entity_type,
         };
       }));
       return data;
@@ -504,7 +502,6 @@ export const findFilterRepresentative = async (context, user, filter) => {
         return {
           id,
           value: result ? extractEntityRepresentativeName(result) : undefined,
-          type: result?.entity_type,
         };
       }));
       return data;
@@ -514,14 +511,12 @@ export const findFilterRepresentative = async (context, user, filter) => {
           return {
             id,
             value: 'No label',
-            type: 'Label',
           };
         }
         const result = await storeLoadById(context, user, id, ENTITY_TYPE_LABEL);
         return {
           id,
           value: result?.value,
-          type: 'Label',
         };
       }));
       return data;
@@ -531,14 +526,12 @@ export const findFilterRepresentative = async (context, user, filter) => {
           return {
             id,
             value: 'No marking',
-            type: 'Marking-Definition',
           };
         }
         const result = await storeLoadById(context, user, id, ENTITY_TYPE_MARKING_DEFINITION);
         return {
           id,
           value: result?.definition,
-          type: 'Marking-Definition',
         };
       }));
       return data;
@@ -548,7 +541,6 @@ export const findFilterRepresentative = async (context, user, filter) => {
         return {
           id,
           value: result ? `[${result.kill_chain_name}] ${result.phase_name}` : undefined,
-          type: 'Kill-Chain-Phase',
         };
       }));
       return data;
@@ -558,7 +550,6 @@ export const findFilterRepresentative = async (context, user, filter) => {
         return {
           id,
           value: result?.name,
-          type: 'Vocabulary',
         };
       }));
       return data;
